@@ -8,16 +8,16 @@
 #include <string>
 #include <vector>
 
-using namespace std;
+
 
 class Card {
     private:
-        string name;  //Name of card
+        std::string name;  //Name of card
 
     public:
-        Card(string name);
+        Card(std::string name);
 
-        string getName() const;
+        std::string getName() const;
 
         void order();
 
@@ -25,10 +25,10 @@ class Card {
 
 class Deck {
     private:
-        vector<Card> cards;  //Deck content
+        std::vector<Card> cards;  //Deck content
 
     public:
-        Deck(vector<Card> cards);
+        Deck(std::vector<Card> cards);
 
         void addCard(Card card);
 
@@ -44,12 +44,12 @@ class Deck {
 
 class Hand {
     private:
-        string player;    //Player name
+        std::string player;    //Player name
 
-        vector<Card> cards;  //Player hand
+        std::vector<Card> cards;  //Player hand
 
     public:
-        Hand(string name);
+        Hand(std::string name);
 
         void addCard(const Card& card);
 
@@ -57,7 +57,7 @@ class Hand {
 
         void draw(Deck& deck);
 
-        void play(Deck& deck, const string& cardName);
+        void play(Deck& deck, const std::string& cardName);
 
         bool isEmpty() const;
 };
