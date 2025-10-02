@@ -119,6 +119,8 @@ class Map {
     //NOTE: in this method, a deep copy is used because there is a full aggregation association between the map and its territories
     void addTerritory(Territory* t){
         territories.push_back(new Territory(*t));
+        int n = territories.size();
+        adjMatrix.resize(n ,vector<int>(n,0));//create a column for the vertices connected to the new territory
     }
 
     //adding Continent instances to the vector continents
@@ -196,6 +198,7 @@ class Map {
                 
             }
         }
+        return out;
     }
 };
 
@@ -305,7 +308,7 @@ class Continent{
         }
 
         if (t1Index==-1||t2Index==-1){
-            cout<<"Either "<<t1<<" or "<<t2<<" is not in this continent";
+            cout<<"Either "<<(t1 ? t1->getName() : "null")<<" or "<<(t2 ? t2->getName() : "null")<<" is not in this continent";
         }
 
         adjMatrix[t1Index][t2Index]=1;
@@ -365,12 +368,7 @@ class Territory{
 
     //comparing operator to make comparison through ==
     bool operator ==(const Territory& otherTerr){
-        if(this->name==otherTerr.name){
-            return true;
-        }
-        if(this->name!=otherTerr.name){
-            return false;
-        }
+        return this->name==otherTerr.name;
     }
 
     //accessors & mutators
@@ -439,5 +437,13 @@ int main() {
     map1->setVertice(Germany, Italy);
 
     cout<<map1;
+
+    delete Europe;
+    delete EuropeCopy;
+    delete France;
+    delete FranceCopy;
+    delete Germany;
+    delete Italy;
+    delete map1;
     return 0;
 }
