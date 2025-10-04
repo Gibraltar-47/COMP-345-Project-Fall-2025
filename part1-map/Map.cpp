@@ -260,10 +260,6 @@ class Continent{
         return territories;
     }
 
-    void setTerritories(int index, Territory* t){
-        territories[index]=t;
-    }
-
     bool isConnected(Territory* t1, Territory* t2){
             int t1Index, t2Index;
             t1Index=-1;
