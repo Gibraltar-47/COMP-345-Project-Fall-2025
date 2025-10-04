@@ -13,150 +13,204 @@
 using namespace std;
 
 //Card Class=====================
-Card::Card(string name) : name(name) {}                                                                              //Constructor
 
-string Card::getName() const {return name;}                                                                          //Getter
-
-
-void Card::order(){
-    cout << name << " is placed into order. " << endl;                                                                  //Replace with actual order later on. Currently just a placeholder
+//Default Constructor
+Card::Card() {
+    this->name = new string("BLANK");
+}
+//Parameterized Constructor
+Card::Card(const string& name) {
+    this->name = new string(name);
+}
+//Copy Constructor
+Card::Card(const Card& other) {
+    this->name = new string(*other.name);
+}
+//Assignment Operator
+Card& Card::operator = (const Card& other) {
+    if (this != &other) {
+        delete this->name;
+        name = new string(*other.name);
+    }
+    return *this;
+}
+//Destructor
+Card::~Card() {
+    delete name;
+}
+//Getter
+string Card::getName() const {
+    return *name;
+}
+//Setter
+void Card::setName(const string& n) {
+    *name = n;
+}
+//Method
+void Card::order() const { //Currently a placeholder function
+    cout << *name << " is placed into order. " << endl;                                                                 //Replace with actual order later on. Currently just a placeholder
+}
+//Stream Insertion Operator
+ostream& operator << (ostream& os, const Card& card) {
+    os << *card.name;
+    return os;
 }
 
 
 //Deck Class=====================
-Deck::Deck(vector<Card> cards):  cards(cards) {}                                                                     //Constructor
-
-void Deck::addCard(Card card) {                                                                                         //Adding cards to the deck
-    cards.push_back(card);
+//Default Constructor
+Deck::Deck(){
 }
-
-void Deck::showDeck() const {                                                                                           //Reveals deck content
-    cout << "Deck contains: ";
-    if (cards.empty()) {
-        cout << "(empty)";
-    } else {
-        for (const auto& c : cards) {
-            cout << c.getName() << " ";
+//Parameterized Constructor
+Deck::Deck(const vector<Card*>& cards) {
+    for (Card* card : cards) {
+        this->cards.push_back(new Card(*card));
+    }
+}
+//Copy Constructor
+Deck::Deck(const Deck &other) {
+    for (const Card* card : other.cards) {
+        cards.push_back(new Card(*card));
+    }
+}
+//Assignment Operator
+Deck& Deck::operator=(const Deck& other) {
+    if (this != &other) {
+        for (Card* card : cards) {
+            delete card;
+        }
+        cards.clear();
+        for (Card* card : other.cards) {
+            cards.push_back(new Card(*card));
         }
     }
-    cout << endl;
+    return *this;
 }
-
+//Destructor
+Deck:: ~Deck() {
+    for (Card* card: cards) {
+        delete card;
+    }
+    cards.clear();
+}
+//Getter
 int Deck::getDeckSize() const {                                                                                         //Deck size
     return cards.size();
 }
 
-Card Deck::draw() {                                                                                                     //Removes a card from the deck and return it
-    if (cards.empty()) {
-        throw out_of_range("Deck is empty");
-    }
-    int index = rand() % cards.size();                                                                                  //RNG
-    Card draw = cards[index];
-    cards.erase(cards.begin() + index);
-    return draw;
+//Methods
+void Deck::addCard(Card* card) {                                                                                        //Adding cards to the deck
+    cards.push_back(card);
 }
+Card* Deck::draw() {                                                                                                    //Removes a card from the deck and return it
+    if (cards.empty()) {throw out_of_range("Deck is empty");}
 
+    int i = rand() % cards.size();                                                                                      //RNG
+    Card* card = cards[i];
+    cards.erase(cards.begin() + i);
+    return card;
+}
+//Boolean Methods
 bool Deck::isEmpty() const {
     return cards.empty();
 }
-
+//Stream Insertion Operator
+ostream& operator << (ostream& os, const Deck& deck) {
+    os << "Deck contains: ";
+    for (size_t i = 0; i < deck.getDeckSize(); i++) {
+        os << *deck.cards[i];
+        if (i < deck.getDeckSize() - 1) {
+            os << ", ";
+        }
+    }
+    return os;
+}
 
 //Hand Class=====================
-Hand::Hand(string name): player(name) {}                                                                             //Constructor
-
-void Hand::addCard(const Card& card) {                                                                                  //Adding cards to the list
-    cards.push_back(card);
-    cout << player << " has drawn " << card.getName() << endl;
+//Default Constructor
+Hand::Hand() {
+    this->player = new string("BLANK");
+}
+//Parameterized Constructor
+Hand::Hand(const string& name) {
+    this->player = new string(name);
+}
+//Copy Constructor
+Hand::Hand(const Hand& other){
+    this->player = new string(*other.player);
+    this->cards = other.cards;
 }
 
+//Assignment Operator
+Hand& Hand::operator=(const Hand& other) {
+    if (this != &other) {
+        delete player;
+        player = new string(*other.player);
+
+        cards = other.cards;
+    }
+    return *this;
+}
+//Destructor
+Hand::~Hand() {                                                                                                         //Since the cards are owned by the Deck,
+    delete player;                                                                                                      //all cards inside a hand vector are borrowed objects
+    cards.clear();                                                                                                      //cards wont be deleted from the hand. (see returnAll())
+}
+//Methods
+void Hand::addCard(Card* card) {                                                                                        //Adding cards to the list
+    cards.push_back(card);
+    cout << *player << " has drawn " << card->getName() << endl;
+}
 void Hand::draw(Deck& deck) {                                                                                           //Draw (RNG)
     cards.push_back(deck.draw());
-    cout << player << " has drawn " << cards.back().getName() << endl;
+    cout << *player << " has drawn " << cards.back()->getName() << endl;
 }
-
-void Hand::showHand() const {                                                                                           //Reveals hand content
-    cout << player << "'s hand" << endl;
-    if (cards.empty()) {
-        cout << player << "'s hand is empty" << endl;
+void Hand::play(Deck& deck, const string& cardName) {                                                                   //Plays a card
+    if (isEmpty()) {                                                                                                    //Checks if hand is empty
+        cout << *player << "'s hand is empty" << endl;
         return;
     }
-    for (const auto& card : cards) {
-        cout << card.getName() << endl;
-    }
-}
 
+    auto it = find_if(cards.begin(), cards.end(),                                   //Locates the played card
+    [&] (Card* c) { return c->getName() == cardName; });
+
+    if (it == cards.end()) {                                                                                            //If played card is not found in hand
+        cout << *player << " does not have " << cardName << endl;
+        return;
+    }
+
+    Card* used = *it;
+    cout << *player << " has played " << used->getName() << "!" << endl;
+    used->order();                                                                                                      //Sends the card to order list (placeholder for now)
+
+    cards.erase(it);                                                                                                 //Removes from hand
+    deck.addCard(used);                                                                                                 //Returns the card back to the deck
+    cout << used->getName() << " goes back into the deck." << endl;
+}
+void Hand::returnAll(Deck& deck) {                                                                                      //Whenever a player loses, all their cards are returned to the deck.
+    for (Card* card : cards) {
+        deck.addCard(card);
+    }
+    cards.clear();
+}
+//Boolean Method
 bool Hand::isEmpty() const {
     return cards.empty();
 }
-
-void Hand::play(Deck& deck, const string& cardName) {                                                                   //Plays a card
-    if (isEmpty()) {                                                                                                    //Checks if hand is empty
-        cout << player << "'s hand is empty" << endl;
-        return;
+//Stream Insertion Operator
+ostream& operator << (ostream& os, const Hand& hand) {
+    os << *hand.player << "'s hand: ";
+    if (hand.cards.empty()) {
+        os << "(EMPTY)";
     }
-
-    auto it = find_if(cards.begin(), cards.end(),                                     //Locates the played card
-    [&](const Card& c) { return c.getName() == cardName; });
-
-    if (it == cards.end()) {                                                                                            //If played card is not found in hand
-        cout << player << " does not have " << cardName << endl;
-        return;
+    else {
+        for (size_t i = 0; i < hand.cards.size(); i++) {
+            os << *hand.cards[i];
+            if (i < hand.cards.size() - 1) {
+                os << ", ";
+            }
+        }
     }
-
-    Card used = *it;
-    cout << player << " has played " << used.getName() << "!" << endl;
-    used.order();                                                                                                       //Sends the card to order list (placeholder for now)
-
-    cards.erase(it);                                                                                                 //Removes from hand
-
-    deck.addCard(used);                                                                                              //Returns the card back to the deck
-    cout << used.getName() << " goes back into the deck." << endl;
+    return os;
 }
 
-//Testing function
-void testCards() {
-    Hand hand("JOHN");
-
-    Card bomb("Bomb");
-    Card airlift("Airlift");
-    Card reinforcement("Reinforcement");
-    Card blockade("Blockade");
-    Card diplomacy("Diplomacy");
-
-    Deck emptyDeck({});
-    emptyDeck.showDeck();
-
-    Deck deck({bomb, airlift, reinforcement, blockade, diplomacy,
-        bomb, airlift, reinforcement, blockade, diplomacy,
-        bomb, airlift, reinforcement, blockade, diplomacy,
-        bomb, airlift, reinforcement, blockade, diplomacy,
-        bomb, airlift, reinforcement, blockade, diplomacy});
-
-    hand.play(deck, "Bomb");
-
-    hand.draw(deck);
-
-    hand.play(deck, "Bomb");
-    hand.play(deck, "Bomb");
-    hand.play(deck, "Bomb");
-
-    cout << endl << endl;
-    hand.addCard(bomb);
-    hand.showHand();
-    deck.showDeck();
-
-    cout << endl << endl;
-    hand.play(deck, "Bomb");
-    deck.showDeck();
-    hand.showHand();
-
-    cout << endl << endl;
-    hand.draw(deck);
-    hand.showHand();
-    deck.showDeck();
-
-    cout << endl << endl;
-    hand.draw(deck);
-    hand.showHand();
-    deck.showDeck();
-}

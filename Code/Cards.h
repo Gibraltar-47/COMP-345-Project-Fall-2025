@@ -9,59 +9,73 @@
 #include <vector>
 
 
-
 class Card {
+    //The Card class is being used by both the Hand class and the Deck class
     private:
-        std::string name;  //Name of card
+        std::string* name;  //Name of card
 
     public:
-        Card(std::string name);
+        Card();
+        Card(const std::string& name);
+        Card(const Card& other);
+        Card& operator=(const Card& other);
+        ~Card();
 
         std::string getName() const;
+        void setName(const std::string& n);
 
-        void order();
+        void order() const; //Placeholder as of now
 
+        friend std::ostream& operator<<(std::ostream& os, const Card& c);
 };
 
 class Deck {
+    //The deck class owns all the card objects. (deep copy)
     private:
-        std::vector<Card> cards;  //Deck content
+    std::vector<Card*> cards;  //Deck content
 
     public:
-        Deck(std::vector<Card> cards);
-
-        void addCard(Card card);
-
-        void showDeck() const;
+        Deck();
+        Deck(const std::vector<Card *> &cards);
+        Deck(const Deck& other);
+        Deck& operator=(const Deck& other);
+        ~Deck();
 
         int getDeckSize() const;
 
-        Card draw();
+        void addCard(Card* card);
+        Card* draw();
+
 
         bool isEmpty() const;
+        friend std::ostream& operator<<(std::ostream& os, const Deck& d);
 
 };
 
 class Hand {
+    //The hand class only borrows cards from the deck (shallow copy)
     private:
-        std::string player;    //Player name
+        std::string* player;    //Player name (currently a placeholder)
 
-        std::vector<Card> cards;  //Player hand
+        std::vector<Card*> cards;  //Player hand
 
     public:
-        Hand(std::string name);
+        Hand();
+        Hand(const std::string& name);
+        Hand(const Hand& other); //It is here for the instructions, but a Hand should not be replicated since it is unique to every player.
+        ~Hand();
+        Hand& operator=(const Hand& other);
 
-        void addCard(const Card& card);
-
-        void showHand() const;
+        void addCard(Card* card);
 
         void draw(Deck& deck);
 
         void play(Deck& deck, const std::string& cardName);
 
+        void returnAll(Deck& deck);
+
         bool isEmpty() const;
+
+        friend std::ostream& operator<<(std::ostream& os, const Hand& hand);
 };
-
-
-void testCards();
 #endif //CLIONPROJECTS_DECK_H
