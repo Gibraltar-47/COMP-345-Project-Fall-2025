@@ -11,13 +11,19 @@ using std::vector;
 using std::string;
 #include <iostream>
 using std::cout;
+using std::ostream;
+
+//forward declaration
+class Territory;
+class Continent;
 
 //placeholder class
-class Player{
+class Player {
 private:
-    string name;
+    std::string name;
 public:
-    Player(string n);
+    Player(std::string n) : name(n) {}
+    std::string getName() const { return name; }
 };
 
 class Map {
