@@ -105,7 +105,11 @@ void Deck::addCard(Card* card) {                                                
 Card* Deck::draw() {                                                                                                    //Removes a card from the deck and return it
     if (cards.empty()) {throw out_of_range("Deck is empty");}
 
-    int i = rand() % cards.size();                                                                                      //RNG
+    static random_device random;
+    static default_random_engine generator(random());
+    uniform_int_distribution<int> distribution(0, cards.size() - 1);
+    int i = distribution(generator);//RNG
+
     Card* card = cards[i];
     cards.erase(cards.begin() + i);
     return card;

@@ -8,8 +8,6 @@ using namespace std;
 
 //Testing function
 void testCards() {
-    srand(static_cast<unsigned int>(time(nullptr))); //random seed generation for the card drawing, else it would always yield the same result.
-
     vector<string> cardNames = {"Bomb", "Airlift", "Diplomacy", "Reinforcement", "Blockade"};
 
     cout << "Deck has been created." << endl;
