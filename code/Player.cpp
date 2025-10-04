@@ -51,14 +51,14 @@ void Player::setName(const string& newName){
 void Player:: addTerritory(Territory* tr){
 if(tr!=nullptr){
 territories.push_back(tr);
-tr->setOwner(this); //make sure the terr knows this player owns it
+tr->setOwner(this); //sets this player as its owner
 }
 }
 //add a card to the player's hand and prints a string
 void Player::addCard(Card* ca){
 if(ca!=nullptr){
  handCards.push_back(ca);
-cout<<name<<" has card: "<<ca->getType()<<endl;
+cout<<name<<" has card: "<<ca->getName()<<endl;
    }
 }
 //add an order to the player's order list. Player owns the order list and it will delete it in the destructor
@@ -87,7 +87,7 @@ delete o;
 orders.clear();
 }
 
-//returns a list of territories the player owns
+//returns a list of territories the player owns(to defend)
  vector<Territory*> Player::toDefend() const{
 //create a new empty vector defendList to store terr
          vector<Territory*> defendList;
@@ -101,7 +101,7 @@ orders.clear();
 return defendList;
 
 }
-//returns list of territories adjacent to player's territories but owned by other players
+//returns list of territories adjacent to player's territories but owned by other player(to attack)
  vector<Territory*> Player::toAttack(const vector<Territory*>& allTerritories) const {
  vector<Territory*> attackList; //create an empty list
  for(Territory* myTerritory: territories){ //loop through the terrs the player owns
