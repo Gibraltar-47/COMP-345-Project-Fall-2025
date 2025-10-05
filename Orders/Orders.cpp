@@ -7,7 +7,9 @@ using namespace std;
 
 Territory::Territory(){}
 Territory::Territory(std::string _name, int _points, Player* _owner) : name(_name), points(_points), owner(_owner) {}
-Player::Player(int id) : id(id) {}
+Player::Player(int id) : id(id) {
+    this->listOfOrders = new OrdersList();
+}
 
 bool Territory::equals(Territory* territory2){
     if (this->name != territory2->name || this->points != territory2->points || !(this->owner->id == territory2->owner->id))
@@ -35,13 +37,13 @@ std::ostream& operator<<(std::ostream &strm, const Orders& order){
 std::ostream& operator<<(std::ostream &strm, const OrdersList& orderList){
     strm << "Order List Contains the Below Orders:\n";
     for (Orders* order : orderList.getList()){
-        strm << *order << endl;
+            strm << *order << endl;
+       
     }
-
     return strm;
 }
 std::ostream& operator<<(std::ostream &strm, const Territory& territory){
-    strm << "Territory: " << territory.name << endl;
+    strm << "Territory: " << territory.name;
     return strm;
 }
 std::ostream& operator<<(std::ostream &strm, const Player& player){
@@ -49,13 +51,13 @@ std::ostream& operator<<(std::ostream &strm, const Player& player){
     return strm;
 }
 Orders::Orders() : issuingPlayer(nullptr) , sourceTerritory(nullptr), isActive(false), isValid(false) {
-    cout << "Orders::Orders()" << endl;
+    // cout << "Orders::Orders()" << endl;
 }
 Orders::Orders(Player* issuingPlayer, Territory* sourceTerritory) : issuingPlayer(issuingPlayer), sourceTerritory(sourceTerritory), isActive(false), isValid(false){
-    cout << "Orders::Orders(Territory* sourceTerritory)\n";
+    // cout << "Orders::Orders(Territory* sourceTerritory)\n";
 }
 Orders::Orders(const Orders& order){
-    cout << "Orders::Orders(const Orders& order)\n";
+    // cout << "Orders::Orders(const Orders& order)\n";
 
     if (order.getIssuingPlayer())
         this->issuingPlayer = new Player(*(order.issuingPlayer)); // might be fine if player class has copy constructor and assignment operator
@@ -76,9 +78,8 @@ Orders::~Orders(){
     // delete issuingPlayer;
 }
 
-
 Orders& Orders::operator=(const Orders& order){
-    cout << "Orders::operator=(const Orders& order)\n";
+    // cout << "Orders::operator=(const Orders& order)\n";
     if (this != &order){
         delete this->getSourceTerritory(); // Free old memory before assignment
         delete this->getIssuingPlayer();
@@ -228,7 +229,7 @@ Orders* OrdersAdvance::allocateClone() const{
 }
 void OrdersAdvance::printOrder(std::ostream& strm) const{
     // IMPLEMENTATION
-    strm << "Player " << this->getIssuingPlayer()->id << " is advancing " << this->getNumArmies() << " armies from " << *this->getSourceTerritory() << "to " << *this->getTargetTerritory();
+    strm << "Player " << this->getIssuingPlayer()->id << " is advancing " << this->getNumArmies() << " armies from " << *this->getSourceTerritory() << " to " << *this->getTargetTerritory();
 }
 bool OrdersAdvance::validate(){
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr || this->getTargetTerritory() == nullptr)
@@ -262,7 +263,7 @@ Orders* OrdersBomb::allocateClone() const{
 }
 void OrdersBomb::printOrder(std::ostream& strm) const{
     // IMPLEMENTATION
-    strm << "Player" << this->getIssuingPlayer()->id << " has sent a bomb to " << *this->getSourceTerritory();
+    strm << "Player " << this->getIssuingPlayer()->id << " has sent a bomb to " << *this->getSourceTerritory();
 }
 bool OrdersBomb::validate(){
     if (this->getSourceTerritory() == nullptr || this->getSourceTerritory()->owner == nullptr || this->getIssuingPlayer() == nullptr)
@@ -411,7 +412,7 @@ Orders* OrdersNegotiate::allocateClone() const{
 }
 void OrdersNegotiate::printOrder(std::ostream& strm) const{
     // IMPLEMENTATION
-    strm << "Player " << this->getIssuingPlayer()->id << " is negotiating with Player " << this->getEnemyToTruce()->id << endl;
+    strm << "Player " << this->getIssuingPlayer()->id << " is negotiating with Player " << this->getEnemyToTruce()->id;
 }
 bool OrdersNegotiate::validate(){
     if (this->getEnemyToTruce() == nullptr || this->getIssuingPlayer() == nullptr)
@@ -499,18 +500,20 @@ Orders* OrdersList::remove(const int index){
     return nullptr;
 
 }
-Orders* OrdersList::move(const Orders& order, int position){
-    return nullptr;
-}
+// Orders* OrdersList::move(const Orders& order, int position){
+//     return nullptr;
+// }
 Orders* OrdersList::move(const int sourceIndex, const int targetIndex){
     auto firstIterator = this->list.begin();
     std::advance(firstIterator, sourceIndex);
 
-    auto secoondIterator = this->list.begin();
-    std::advance(secoondIterator, targetIndex);
+    Orders* movedOrder = *firstIterator;  // save pointer before moving
 
-    this->list.splice(secoondIterator, this->list, firstIterator);
+    auto secondIterator = this->list.begin();
+    std::advance(secondIterator, targetIndex);
 
-    return *firstIterator;
+    this->list.splice(secondIterator, this->list, firstIterator);
+
+    return movedOrder;
 
 }

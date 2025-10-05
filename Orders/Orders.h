@@ -8,6 +8,7 @@
 using namespace std;
 
 class Player;
+class OrdersList;
 
 class Territory{ 
     public:
@@ -23,7 +24,7 @@ class Player{
     public:
         int id;
         std::vector<Territory*> ownedTerritories;
-        //OrdersList olist;
+        OrdersList* listOfOrders;
         Player();
         Player(int id);
         bool equals(Player* player2);
@@ -193,12 +194,13 @@ class OrdersList
         OrdersList(OrdersList& orderList);
         OrdersList& operator=(const OrdersList& orderList);
         ~OrdersList();
+        friend std::ostream& operator<<(std::ostream &strm, const OrdersList& orderList);
         std::list<Orders*> getList() const;
         void setList(std::list<Orders*> list);
         Orders* add(Orders* order);
         Orders* remove(const Orders& order);
         Orders* remove(const int index);
-        Orders* move(const Orders& order, int position);
+        // Orders* move(const Orders& order, int position);
         Orders* move(const int sourceIndex, const int targetIndex);
 };
 
