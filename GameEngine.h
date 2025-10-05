@@ -12,24 +12,28 @@
 class GameEngine {
 
 private:
-    std::ifstream file;
 
-    std::string gameState;
+
+    std::string gameState = "start";
+
+    std::string input;
 
 public:
 
 	GameEngine();
 
+    std::string getGameState();
 
-	void loadMap(std::string mapFileName);
+    void loopEntrance();
+	void loadMap();
 	void validateMap();
 	void addPlayer();
 	void assignCountries();
-	void reinforce();
-	void issueOrders();
+
+	void issueOrder();
 	void endIssueOrders();
-	void executeOrders();
-	void endExecuteOrders();
+	void execOrder();
+	void endExecOrders();
 	void win();
 	void play();
     void end();
@@ -37,7 +41,7 @@ public:
 
 
 
-}
+};
 
 
 #endif //COMP_345_PROJECT_FALL_2025_GAMEENGINE_H
