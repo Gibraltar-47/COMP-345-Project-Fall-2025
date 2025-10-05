@@ -186,9 +186,6 @@
         std::cin >> input;
     }
 
-    if(input == "play"){
-        play();
-    }
 
     if(input == "end"){
         end();
