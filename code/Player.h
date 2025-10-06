@@ -7,22 +7,55 @@
 #include <string>
 #include <vector>
 #include <iostream>
-//forward declaaration
+
+//forward declaration
 class Territory;
-class Card;
+class Cards;
 class Order;
+//placeholder classes
+class Territory {
+public:
+    std::string getName() const { return "Territory"; }
+    std::vector<std::string> getAdjTerritoriesNames() const { return {}; }
+    Player* getOwner() const { return nullptr; }
+    void setOwner(Player*) {}
+};
+class Cards{
+ public:
+ std::string getName() const {return "Card";}
+};
+class Orders {
+public:
+    void execute() {}
+    std::string getName() const { return "Order"; }
+};
+
+class OrdersList {
+public:
+    std::vector<Order*> getList() const { return {}; }
+    void setList() {}
+    OrdersList() {}
+};
+class Deck{
+public:
+std::vector<Card*> getCards() const{return {};}
+void addCard(*Card){}
+Card* draw() const {return nullptr;}
+};
+
 class Player {
 private:
    std::string name;
    std::vector<Territory*> territories; //dynamic array of territory pointers
    std::vector<Card*> handCards;
    std::vector<Order*> orders;
- //constructors, destructor, getters, setters
-
+    //pointer to orderlist, owned by player
+  OrdersList* orderList;
 public:
    Player();
    Player(const std::string& playerName);
    Player(const Player& other); //copy constructor
+   Player& operator =(const Player& other); //assignemnt operator
    ~Player(); //destructor, clears up resources when a player obj is destroyed
    std::string getName() const;
    void setName(const std::string& newName);
@@ -34,6 +67,7 @@ public:
    std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const ;
    void issueOrder(); //execute all orders and clean up memory
    void printStatus() const; //print player's name, territories..
+  friend std::ostream& operator <<(std::ostream& out, const Player& p);
 
 };
 

@@ -3,23 +3,41 @@
 //testing file
 #include "Player.h"
 
+#include <iostream>
+#include <vector>
+using namespace std;
+
 void testPlayers(){
- std::cout<<"Testing Player Class: "<< std::endl;
+//create players
  Player p1("Jack");
  Player p2("Alyssa");
- Territory tr1("North"), tr2("West");
- Card cr1("Bomb");
- std::cout<<"Created players: "<<p1.getName()<<" and "<<p2.getName()<<std::endl;
- //adding cards, orders and territories
- p1.addTerritory(&tr1);
- p2.addTerritory(&tr2);
- p1.addCard(&ca1);
- p2.addCard(&ca2);
- p1.addOrder("Attack South");
- auto defendList=p1.toDefend();
- auto attackList=p1.toAttack();
- std::cout<<p1.getName()<<" has "<<defendList.size()<<" territories to defend."<< std::endl;
- std::cout<<p1.getName()<<" has "<<attackList.size()<<" territories to attack"<<std::endl;
+//create territories
+ Territory* tr1=new Territory();
+Territory* tr2=new Territory();
+//assign terr to players
+p1.addTerritory(tr1);
+p1.addTerritory(tr2);
+p2.addTerritory(tr1);
+//print player status
+p1.printStatus();
+p2.printStatus();
+//add cards
+ Cards c1("Bomb");
+Cards c2("Reinforcement");
+
+ p1.addCard(&c1);
+p1.addCard(&c2);
+//issue orders
+p1.issueOrder();
+p2.issueOrder();
+cout<<p1<<endl;
+cout<<p2<<endl;
+//delete to avoid memory leaks
+delete tr1;
+delete tr2;
+delete c1;
+delete c2;
+
 
 }
  int main(){
