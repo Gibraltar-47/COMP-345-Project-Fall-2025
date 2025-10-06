@@ -31,20 +31,21 @@ void recursDFS(vector <vector<int>> &adjM,vector<bool> &visited,int n){
     }
 }
 
-void isConnectedGraph(vector <vector<int>> &adjM, string n, string type){
+bool isConnectedGraph(vector <vector<int>> &adjM, string n, string type){
     vector<bool> visited(adjM.size(), false);
     recursDFS(adjM, visited, 0);
     for (bool b : visited){
         if (!b){
             cout<<type<<" "<<n<<" is not a connected graph"<<"\n";
-            return;
+            return false;
         }
     }
     cout<<type<<" "<<n<<" is a connected graph"<<"\n";
+    return true;
 }
 
 //constructor with a string name parameter
-Map::Map(string n):name(n){}
+Map::Map(const string& n):name(n){}
 
 //copy constructor of another Map instance
 Map::Map(const Map& otherMap){
@@ -62,10 +63,16 @@ Map::Map(const Map& otherMap){
 }
 
 //comparing method
+bool Map::operator==(const Map& otherMap){
+    if (this->name==otherMap.name&&this->adjMatrix==otherMap.adjMatrix){
+        return true;
+    }
+    return false;
+}
 
 //copy assignment operator
 Map& Map::operator = (const Map& otherMap){
-    //check if this and otherMap are the same
+    if (this==&otherMap){return *this;}
     this->name = (otherMap.name);
 
     //delete the current territories and continents to avoid memory leaks
@@ -79,11 +86,11 @@ Map& Map::operator = (const Map& otherMap){
     }
     continents.clear();
 
-    for (Territory* t: otherMap.territories) {
+    for (const Territory* t: otherMap.territories) {
         this->territories.push_back(new Territory(*t));
     }
 
-    for (Continent* c: otherMap.continents) {
+    for (const Continent* c: otherMap.continents) {
         this->continents.push_back(new Continent(*c));
     }
 
@@ -116,9 +123,10 @@ void Map::setName(string n){
 }
 
 //getter for the collection of the territories attribute
-vector <Territory*> Map::getTerritories(){
+vector<Territory*> Map::getTerritories(){
     return territories;
 }
+
 
 //getter for the collection of the continents attribute
 vector <Continent*> Map::getContinents(){
@@ -141,10 +149,18 @@ void Map::addContinent(Continent* c){
     continents.push_back(new Continent(*c));
 }
 
-Continent* Map::getContinent(const string& n){
+Continent* Map::getContinent(const string& n) const{
     for (Continent* c:continents){
         if (c->getName()==n){
             return c;
+        }
+    }
+    return nullptr;
+}
+Territory* Map::getTerritory(const string& n) const{
+    for (Territory* t: territories){
+        if(t->getName()==n){
+            return t;
         }
     }
     return nullptr;
@@ -211,15 +227,17 @@ void Map::setVertice(Territory* t1, Territory* t2){
 
     adjMatrix[t1Index][t2Index]=1;
     adjMatrix[t2Index][t1Index]=1; //because the graph is undirected
+    cout<<"Map "<<name<<" - Vertice added!"<<std::endl;
 }
 
-void Map::validate()
+bool Map::validate()
 {
+    bool check3=true;
     //1. verify that the map is a connected graph through DFS function isConnectedGraph
-    isConnectedGraph(adjMatrix,name,"Map");
+    const bool check1 = isConnectedGraph(adjMatrix, name, "Map");
 
     //2. verify that the country is a connected graph through DFS function isConnectedGraph
-    isConnectedGraph(adjMatrix,continents[0]->getName(),"Continent");
+    const bool check2 = isConnectedGraph(adjMatrix, continents[0]->getName(), "Continent");
 
     //3.1 check if any territory is being repeated in any continent's territories list
     set <Territory*> setTerr;
@@ -227,7 +245,7 @@ void Map::validate()
         for (Territory* t: c->getTerritories()){
             if (setTerr.count(t)){
                 cout<<t->getName()<<" appears in more than one continent"<<std::endl;
-                return;
+                check3=false;
             }else{setTerr.insert(t);}
         }
     }
@@ -235,11 +253,11 @@ void Map::validate()
     for (Territory* t: territories){
         if (t->getContinent()==nullptr){
             cout<<t->getName()<<" is not associated to any continent"<<std::endl;
-            return;
+            check3=false;
         }
     }
-
-    cout<<"All the territories in "<<name<<" belong to one and exactly one territory!"<<std::endl;
+    if (check1&&check2&&check3){return true;}
+    return false;
 }
 
 ostream& operator <<(ostream& out, const Map& map){
@@ -249,7 +267,7 @@ ostream& operator <<(ostream& out, const Map& map){
         out<<"\t-\t"<<c->getName()<<"\n";
         for(Territory* t: c->getTerritories()){
             out<<"\t\t-\t"<<t->getName()<<" is connected to\n";
-            for (string name: t->getAdjTerritoriesNames()){
+            for (const string& name: t->getAdjTerritoriesNames()){
                 out<<"\t\t\t-\t"<<name<<"\n";
             }
         }
@@ -277,9 +295,7 @@ Continent& Continent::operator =(const Continent& otherContinent){
     return *this;
 }
 
-Continent::~Continent(){
-    //no deep copy, therefore the destructor contains nothing
-}
+Continent::~Continent()=default;//no deep copy, therefore the destructor contains nothing
 
 string Continent::getName(){
     return name;
@@ -289,7 +305,7 @@ void Continent::setName(const string& n){
     name=n;
 }
 
-int Continent::getPointsToConquer(){
+int Continent::getPointsToConquer() const{
     return pointsToConquer;
 }
 
@@ -348,16 +364,28 @@ void Continent::setVertice(Territory* t1, Territory* t2){
     }
 
     if (t1Index==-1||t2Index==-1){
-        cout<<"Either "<<(t1 ? t1->getName() : "null")<<" or "<<(t2 ? t2->getName() : "null")<<" is not in this continent";
+        cout<<"Either "<<(t1 ? t1->getName() : "null")<<" or "<<(t2 ? t2->getName() : "null")<<" is not in this continent"<<"\n";
+        return;
     }
 
     adjMatrix[t1Index][t2Index]=1;
     adjMatrix[t2Index][t1Index]=1; //because the graph is undirected
+    cout<<"Continent "<<name<<" - Vertice added!"<<std::endl;
 }
 //initialize the size of the matrix
 void Continent::initAdjMatrix(){
     const int size=territories.size();
     adjMatrix.resize(size,vector<int> (size, 0));
+}
+
+ostream& operator << (ostream& out, const Continent& continent){
+    out<<"Continent name: "<<continent.name<<std::endl;
+    out<<"Points to conquer: "<<continent.pointsToConquer<<std::endl;
+    out<<"Territories is continent: ";
+    for (Territory* t :continent.territories){
+        out<<"\t-"<<t->getName()<<"\n";
+    }
+    return out;
 }
 
 //constructor
@@ -383,25 +411,13 @@ Territory::Territory(const Territory& otherTerr){
 }
 
 //copy assignment operator
-Territory& Territory::operator = (const Territory& otherTerr){
-    this->name=otherTerr.name;
-    this->continent=otherTerr.continent;
-    this->owner=otherTerr.owner;
-    this->numOfArmies=otherTerr.numOfArmies;
-    this->x=otherTerr.x;
-    this->y=otherTerr.y;
-    this->adjTerritoriesNames=otherTerr.adjTerritoriesNames;
-
-    return *this;
-}
+Territory& Territory::operator = (const Territory& otherTerr)= default;
 
 //destructor
-Territory::~Territory(){
-    //nothing in destructor because there is no deep copy in the construction of a Territory
-}
+Territory::~Territory()=default;//nothing in destructor because there is no deep copy in the construction of a Territory
 
 //comparing operator to make comparison through ==
-bool Territory::operator ==(const Territory& otherTerr){
+bool Territory::operator ==(const Territory& otherTerr) const{
     return this->name==otherTerr.name;
 }
 
@@ -410,11 +426,11 @@ string Territory::getName(){
     return name;
 }
 
-void Territory::setName(string n){
+void Territory::setName(const string& n){
     name=n;
 }
 
-Continent* Territory::getContinent(){
+Continent* Territory::getContinent() const{
     return continent;
 }
 
@@ -422,7 +438,7 @@ void Territory::setContinent(Continent* c){
     continent=c;
 }
 
-Player* Territory::getOwner(){
+Player* Territory::getOwner() const{
     return owner;
 }
 
@@ -430,11 +446,11 @@ void Territory::setOwner(Player* p){
     owner=p;
 }
 
-int Territory::getNumOfArmies() {
+int Territory::getNumOfArmies() const {
     return numOfArmies;
 }
 
-void Territory::setNumOfArmies(const int num){
+void Territory::setNumOfArmies(const int& num){
     numOfArmies=num;
 }
 
@@ -442,56 +458,73 @@ vector<string> Territory::getAdjTerritoriesNames(){
     return adjTerritoriesNames;
 }
 //a method to replace the entire list
-void Territory::setAdjTerritoriesNames(vector <string> list){
+void Territory::setAdjTerritoriesNames(const vector <string>& list){
     adjTerritoriesNames=list;
 }
 //a method to add a single name
 void Territory::addAdjTerritoriesNames(const string& n){
     adjTerritoriesNames.push_back(n);
 }
-MapLoader::MapLoader(){}; //no private member to initialize
+
+ostream& operator << (ostream& out, const Territory& territory){
+    out<<"Territory Name: "<< territory.name<<std::endl;
+    out<<"Belongs in continent: "<<territory.continent->getName()<<std::endl;
+    out<<"Owned by: ";
+        if(territory.owner==nullptr){out<<"None"<<std::endl;}
+        else {out<<territory.owner->getName()<<std::endl;}
+    out<<"Connected to: "<<std::endl;
+    for (const string& name:territory.adjTerritoriesNames){
+        out<<"\t-"<<name<<std::endl;
+    }
+    out<<"X: "<<territory.x<<"\tY: "<<territory.y<<std::endl;
+    out<<"Number of armies: "<<territory.numOfArmies<<std::endl;
+    return out;
+};
+
+MapLoader::MapLoader()= default;                                                                                        //no private member to initialize
 MapLoader::MapLoader(const MapLoader& otherMapLoader){};
-MapLoader::~MapLoader(){}
-MapLoader& MapLoader::operator = (const MapLoader& otherMapLoader){return *this;};//there is no difference between a MapLoader to another
+MapLoader::~MapLoader()= default;
+MapLoader& MapLoader::operator = (const MapLoader& otherMapLoader){return *this;}                                       //there is no difference between a MapLoader to another
 
-void MapLoader::loadMap(const string& filename){
+Map MapLoader::loadMap(const string& filename){
+    Map map("holder");
+
     inputFileStream.open(filename);
-    if (inputFileStream.is_open()){
+    if (inputFileStream.is_open()){                                                                                     //if true, the file was opened successfully and will be read
+        Territory* terrHolder=nullptr;
+        Continent* conHolder=nullptr;
 
-       string line,mapName="",conName="",terrName="";
-       int firstPos=-1, secondPos=-1,step=0,x,y,p;
-       vector <string> adjTerrName,terrInfo;
-       Map map1("holder");
-       Continent* conHolder = new Continent("holder", 0);
-       Territory terrHolder(terrName,conHolder,x,y,adjTerrName);
+        string line,mapName,conName,terrName;
+        int step=0,x,y,p;
+        string::size_type firstPos, secondPos;
+        vector <string> adjTerrName,terrInfo;
 
-       while(getline(inputFileStream,line)){
-            if (line=="[Map]"){
+       while(getline(inputFileStream,line)){                                                                    //reading all the lines until the end of the file
+            if (line=="[Map]"){                                                                                         //if true, the next line will have the name of the map in the image name(i.e. "image=Aldawin.png", Aldawin is the name of the map)
                 getline(inputFileStream, line);
-                firstPos=line.find("=");
-                secondPos=line.find(".");
+                firstPos=line.find('=');                                                                             //truncating the string to find the name by using '=' and '.' as delimiters
+                secondPos=line.find('.');
                 mapName=line.substr(firstPos+1,secondPos-firstPos-1);
-                Map map1(mapName);
-                cout<<mapName<<std::endl;
-                step++;
+                map=Map(mapName);                                                                                       //object map is reinitialized to the right name using a copy constructor
                 continue;
             }
-           if (step==1){
-                if (line=="[Continents]"){
-                    getline(inputFileStream, line);
-                    firstPos=line.find("=");
-                    conName=line.substr(0,firstPos);
-                    p=stoi(line.substr(firstPos+1,line.size()-firstPos-1));
-                    map1.addContinent(new Continent(conName,p));
-                    cout<<conName<<" "<<p<<std::endl;
-                }else if (line=="[Territories]"){
-                    step++;continue;
-                }
+            if (line=="[Continents]"){                                                                                  //unless the ifstream reaches the continent section marked by the string in if cond
+                step++;continue;                                                                                        //the code will never initialize any territory or continent, because step (int 0) needs to be incremented to proceed to the next step
+            }
+           if (step==1){                                                                                                //step is only going to get incremented if it reaches the territories' section
+               if (line.empty()){continue;}
+               if (line=="[Territories]"){step++;continue;}
+                firstPos=line.find('=');                                                                             //each line in the continent section shows 2 things separated by '=': 1. name 2. points to conquer
+                conName=line.substr(0,firstPos);
+                p=stoi(line.substr(firstPos+1,line.size()-firstPos-1));
+                conHolder= new Continent(conName,p);                                                                    //a continent is initialized using the conHolder continent obj placeholder
+                map.addContinent(conHolder);                                                                            //the newly initialized continent is then added to the map's vector of the continents
            }
            if (step==2){
+               if (line.empty()){continue;}
                std::stringstream terrInfoStream(line);
-               while (getline(terrInfoStream,terrName,',')){
-                   terrInfo.push_back(terrName);
+               while (getline(terrInfoStream,terrName,',')){                                               //Once in the territories section, each line is considered as csv in the following order: name,x,y,continent,adjterr1,adjterr2,....ajterrN
+                   terrInfo.push_back(terrName);                                                                        //each string is put in vector terrInfo, then each string in the vector is assigned to a local variable that will be used for object initialization
                }
                for (int i=0;i<terrInfo.size();i++){
                    if (i==0){
@@ -502,64 +535,55 @@ void MapLoader::loadMap(const string& filename){
                        y=stoi(terrInfo[2]);
                    }else if (i==3){
                        conName=terrInfo[3];
-                       conHolder=map1.getContinent(conName);
+                       conHolder= map.getContinent(conName);                                                            //because Continent is a pointer data member of territories we go through the map's collection of continents to find the pointer
                    }else if (i>3){
-                       adjTerrName.push_back(terrInfo[4]);
+                       adjTerrName.push_back(terrInfo[i]);
                    }
                }
-               map1.addTerritory(new Territory(terrName,conHolder,x,y,adjTerrName));
-               break;
+               terrInfo.clear();                                                                                        //after terrInfo was used, it is cleared to make sure there is no value from a previous territory added to the following one
+               terrHolder=new Territory(terrName,conHolder,x,y,adjTerrName);
+               adjTerrName.clear();
+               map.addTerritory(terrHolder);                                                                            //add to map object
+               map.getContinent(conName)->addTerritory(map.getTerritory(terrHolder->getName()));                   //add to continent referencing to the map because it has a deep copy of continent
+               delete terrHolder;                                                                                       //to avoid memory leaks
            }
        }
+    }else{                                                                                                              //if the file was not opened successfully
+        cout<<"Error: file not found"<<std::endl;
     }
     inputFileStream.close();
+
+    //populating the map graph data structure
+    //to populate the graph, we must start with each continent's subgraph
+    map.initAdjMatrix();
+    vector<string>adjTerrName;
+    for (Continent* c:map.getContinents()){
+        c->initAdjMatrix();
+        for (Territory* t:c->getTerritories()){
+            adjTerrName.push_back(t->getName());
+            for (const string& name:t->getAdjTerritoriesNames()){
+                Territory* terr=map.getTerritory(name);
+                if (terr!=nullptr&&terr->getContinent()==c&&!c->isConnected(t,map.getTerritory(name))){                 //3 checks: 1. is the destination territory pointer null 2. is the destination territory in the same continent as its source
+                    c->setVertice(t,map.getTerritory(name));                                                            //3. was the vertice between the 2 territories already created
+                }
+            }
+        }
+    }
+    adjTerrName.clear();
+    //populate the adjacency matrix for the map
+    for (Territory* t:map.getTerritories()){
+        adjTerrName.push_back(t->getName());
+        for (const string& name:t->getAdjTerritoriesNames()){
+            Territory* terr=map.getTerritory(name);
+            if (terr!=nullptr&&!map.isConnected(t,map.getTerritory(name))){
+                map.setVertice(t,map.getTerritory(name));
+            }
+        }
+    }
+    return map;
 };
 
-ostream& operator << (ostream& out, const MapLoader& mapLoader);
-
-int main() {
-    // const auto Europe = new Continent("Europe", 5);
-    // const auto EuropeCopy = new Continent(*Europe);
-    //
-    // const auto France = new Territory("France", Europe, 100, 200, {"Germany", "Italy"});
-    // const auto Germany = new Territory("Germany", Europe, 150, 250, {"France", "Italy"});
-    // const auto Italy = new Territory("Italy", Europe, 200, 300, {"France", "Germany"});
-    // const auto FranceCopy = new Territory(*France);
-    //
-    // const auto map1 = new Map("World Map");
-    // map1->addContinent(Europe);
-    // map1->addTerritory(France);
-    // map1->addTerritory(Germany);
-    // map1->addTerritory(Italy);
-    // map1->getContinents()[0]->addTerritory(France);
-    // map1->getContinents()[0]->addTerritory(Germany);
-    // map1->getContinents()[0]->addTerritory(Italy);
-    //
-    // map1->initAdjMatrix();
-    //
-    // map1->setVertice(France, Germany);
-    // map1->setVertice(France, Italy);
-    // map1->setVertice(Germany, Italy);
-    //
-    // cout<<*map1;
-    // // cout<<map1->getTerritories().size()<<std::endl;
-    // // cout<<map1->getAdjMat()[0].size()<<std::endl;
-    //
-    // if (map1->isConnected(France,Italy))
-    // {
-    //     cout<<"France and Italy are connected"<<std::endl;
-    // }
-    //
-    // map1->validate();
-    //
-    // delete Europe;
-    // delete EuropeCopy;
-    // delete France;
-    // delete FranceCopy;
-    // delete Germany;
-    // delete Italy;
-    // delete map1;
-    auto mapLoader=MapLoader();
-    mapLoader.loadMap("Aldawin.map");
-    return 0;
-}
+ostream& operator << (ostream& out, const MapLoader& mapLoader){
+    out<<"Map loader has a ifstream named inputFileStream"<<std::endl;
+    return out;
+};

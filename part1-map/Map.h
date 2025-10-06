@@ -39,9 +39,10 @@ private:
     vector<vector <int>> adjMatrix; //this represents a matrix of all vertices connected to all nodes in the map (the index in the adjMatrix represents the the index of the corresponding Territory instance in the vector of territories)
 public:
     //constructor with a string name parameter
-    Map(string n);
+    Map(const string& n);
     //copy constructor of another Map instance
     Map(const Map& otherMap);
+    bool operator==(const Map& otherMap);
     //copy assignment operator
     Map& operator = (const Map& otherMap);
     //destructor because Map has attribute that are of user-defined class type (territories and continents)
@@ -67,9 +68,10 @@ public:
     void initAdjMatrix();
     //setter for vertices in adjMatrix
     void setVertice(Territory* t1, Territory* t2);
-    void validate();
+    bool validate();
     friend ostream& operator << (ostream& out, const Map& map);
-    Continent* getContinent(const string& n);
+    Continent* getContinent(const string& n) const;
+    Territory* getTerritory(const string& n) const;
 };
 
 class Continent{
@@ -89,7 +91,7 @@ public:
     ~Continent();
     //accessors
     string getName();
-    int getPointsToConquer();
+    int getPointsToConquer() const;
     vector<Territory*> getTerritories();
     bool isConnected(Territory* t1, Territory* t2);
     //mutators
@@ -99,7 +101,8 @@ public:
     //initialize the size of the matrix
     void initAdjMatrix();
     //setter for vertices in adjMatrix
-    void setVertice(Territory* t1, Territory* t2);
+    void setVertice(Territory* t1, Territory* t2);;
+    friend ostream& operator << (ostream& out, const Continent& continent);
 };
 
 class Territory{
@@ -121,20 +124,21 @@ public:
     //destructor
     ~Territory();
     //comparing operator to make comparison through ==
-    bool operator ==(const Territory& otherTerr);
+    bool operator ==(const Territory& otherTerr) const;
     //accessors
     string getName();
-    Continent* getContinent();
-    Player* getOwner();
-    int getNumOfArmies();
+    Continent* getContinent() const;
+    Player* getOwner() const;
+    int getNumOfArmies() const;
     vector<string> getAdjTerritoriesNames();
     //mutators
-    void setName(string n);
+    void setName(const string& n);
     void setContinent(Continent* c);
     void setOwner(Player* p);
-    void setNumOfArmies(int num);
-    void setAdjTerritoriesNames(vector <string> list);
-    void addAdjTerritoriesNames(const string& name);
+    void setNumOfArmies(const int& num);
+    void setAdjTerritoriesNames(const vector <string>& list);
+    void addAdjTerritoriesNames(const string& name);;
+    friend ostream& operator << (ostream& out, const Territory& terr);
 };
 
 class MapLoader{
@@ -145,7 +149,7 @@ public:
     ~MapLoader();
     MapLoader(const MapLoader& otherMapLoader);
     MapLoader& operator = (const MapLoader& otherMapLoader);
-    void loadMap(const string& filename);
+    Map loadMap(const string& filename);
     friend ostream& operator << (ostream& out, const MapLoader& mapLoader);
 };
 
