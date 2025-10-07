@@ -20,6 +20,7 @@ void testCards() {
     }
 
     cout << "Deck created and 7 copies of each card added (" << cardNames.size() * 7 << " total)." << endl << endl;
+    cout << deck << endl;
 
     OrderList olist;
 
