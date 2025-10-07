@@ -166,13 +166,11 @@ Orders* OrdersDeploy::allocateClone() const{
     return new OrdersDeploy(*this);
 }
 void OrdersDeploy::printOrder(std::ostream& strm) const{
-    // IMPLEMENTATION
     strm << "Player " << this->getIssuingPlayer()->id << " has deployed " <<  this->getNumArmies() << " to " << *this->getSourceTerritory();
 }
 bool OrdersDeploy::validate(){
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr || this->getSourceTerritory()->owner == nullptr)
         return false;
-    // IMPLEMENTATION
     //cout << "OrdersDeploy::validate" << endl;
     // May have to add in equals functions
     if (this->getSourceTerritory()->owner->equals(this->getIssuingPlayer())){
@@ -183,7 +181,6 @@ bool OrdersDeploy::validate(){
     return false;
 }
 void OrdersDeploy::execute(){
-    // IMPLEMENTATION
     cout << "OrdersDeploy::execute" << endl;
 }
 
@@ -228,14 +225,11 @@ Orders* OrdersAdvance::allocateClone() const{
     return new OrdersAdvance(*this);
 }
 void OrdersAdvance::printOrder(std::ostream& strm) const{
-    // IMPLEMENTATION
     strm << "Player " << this->getIssuingPlayer()->id << " is advancing " << this->getNumArmies() << " armies from " << *this->getSourceTerritory() << " to " << *this->getTargetTerritory();
 }
 bool OrdersAdvance::validate(){
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr || this->getTargetTerritory() == nullptr)
         return false;
-    // IMPLEMENTATION
-    //cout << "OrdersAdvance::validate" << endl;
 
     // May need to implement equals
     if (this->getSourceTerritory()->owner->equals(this->getIssuingPlayer())){
@@ -246,7 +240,6 @@ bool OrdersAdvance::validate(){
     return false;
 }
 void OrdersAdvance::execute(){
-    // IMPLEMENTATION
     cout << "OrdersAdvance::execute" << endl;
 }
 
@@ -262,13 +255,11 @@ Orders* OrdersBomb::allocateClone() const{
     return new OrdersBomb(*this);
 }
 void OrdersBomb::printOrder(std::ostream& strm) const{
-    // IMPLEMENTATION
     strm << "Player " << this->getIssuingPlayer()->id << " has sent a bomb to " << *this->getSourceTerritory();
 }
 bool OrdersBomb::validate(){
     if (this->getSourceTerritory() == nullptr || this->getSourceTerritory()->owner == nullptr || this->getIssuingPlayer() == nullptr)
         return false;
-    // IMPLEMENTATION
     //cout << "OrdersBomb::validate" << endl;
 
     if (this->getSourceTerritory()->owner->equals(this->getIssuingPlayer())){
@@ -280,7 +271,6 @@ bool OrdersBomb::validate(){
         
 }
 void OrdersBomb::execute(){
-    // IMPLEMENTATION
     cout << "OrdersBomb::execute" << endl;
 }
 
@@ -296,13 +286,11 @@ Orders* OrdersBlockade::allocateClone() const{
     return new OrdersBlockade(*this);
 }
 void OrdersBlockade::printOrder(std::ostream& strm) const{
-    // IMPLEMENTATION
     strm << "Player " << this->getIssuingPlayer()->id << " is performing a blockade on " << *this->getSourceTerritory();
 }
 bool OrdersBlockade::validate(){
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr)
         return false;
-    // IMPLEMENTATION
     //cout << "OrdersBlockade::validate" << endl;
 
     if (this->getSourceTerritory()->owner->equals(this->getIssuingPlayer())){
@@ -313,7 +301,6 @@ bool OrdersBlockade::validate(){
     return false;
 }
 void OrdersBlockade::execute(){
-    // IMPLEMENTATION
     cout << "OrdersBlockade::execute" << endl;
 }
 
@@ -359,13 +346,11 @@ Orders* OrdersAirlift::allocateClone() const{
     return new OrdersAirlift(*this);
 }
 void OrdersAirlift::printOrder(std::ostream& strm) const{
-    // IMPLEMENTATION
     strm << "Player " << this->getIssuingPlayer()->id << " is airlifting " << this->getNumArmies() << " from " << *this->getSourceTerritory() << "to " << *this->getTargetTerritory();
 }
 bool OrdersAirlift::validate(){
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr || this->getTargetTerritory() == nullptr)
         return false;
-    // IMPLEMENTATION
     //cout << "OrdersAirlift::validate" << endl;
 
     if (this->getSourceTerritory()->owner->equals(this->getIssuingPlayer()) && this->getTargetTerritory()->owner->equals(this->getIssuingPlayer())){
@@ -376,7 +361,6 @@ bool OrdersAirlift::validate(){
     return false;
 }
 void OrdersAirlift::execute(){
-    // IMPLEMENTATION
     cout << "OrdersAirlift::execute" << endl;
 }
 
@@ -411,13 +395,11 @@ Orders* OrdersNegotiate::allocateClone() const{
     return new OrdersNegotiate(*this);
 }
 void OrdersNegotiate::printOrder(std::ostream& strm) const{
-    // IMPLEMENTATION
     strm << "Player " << this->getIssuingPlayer()->id << " is negotiating with Player " << this->getEnemyToTruce()->id;
 }
 bool OrdersNegotiate::validate(){
     if (this->getEnemyToTruce() == nullptr || this->getIssuingPlayer() == nullptr)
         return false;
-    // IMPLEMENTATION
     //cout << "OrdersNegotiate::validate" << endl;
 
     if (this->getEnemyToTruce()->equals(this->getIssuingPlayer())){
@@ -429,7 +411,6 @@ bool OrdersNegotiate::validate(){
         
 }
 void OrdersNegotiate::execute(){
-    // IMPLEMENTATION
     cout << "OrdersNegotiate::execute" << endl;
 }
 

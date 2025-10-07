@@ -1,6 +1,10 @@
 #include "Orders.h"
+#include <filesystem>
 
 void testOrdersLists(){
+    cout << "-----------------------------------------------------------------------" << endl;
+    cout << "ORDERS LIST TEST" << endl;
+
     Player* p1 = new Player(1);
     p1->ownedTerritories.push_back(new Territory("Montreal", 5, p1));
     p1->ownedTerritories.push_back(new Territory("Toronto", 4, p1));
@@ -118,6 +122,20 @@ void testOrdersLists(){
     cout << olist1 << ", DATA: " << *olist1 << "\n\n";
     cout << olist2 << ", DATA: " << *olist2 << "\n\n";
 
+
+    Player* p3 = new Player(3);
+    cout << "\nTESTING IHERITED CONSTRUCTOR" << endl;
+    OrdersBomb* b1 = new OrdersBomb(p3, new Territory("Hogwarts", 1, p3));
+    OrdersBomb* b2 = new OrdersBomb(*b1);
+    OrdersBomb* b3 = new OrdersBomb();
+    *b3 = *b1;
+
+    cout << "BOMB ADDRESSES" << endl;
+    cout << b1 << ": " << *b1 << endl;
+    cout << b2 << ": " << *b2 << endl;
+    cout << b3 << ": " << *b3 << endl;
+
+    cout << "-----------------------------------------------------------------------" << endl;
 }
 
 
