@@ -1,6 +1,3 @@
-//
-// Created by Howard on 2025-09-21.
-//
 
 #ifndef CLIONPROJECTS_DECK_H
 #define CLIONPROJECTS_DECK_H
