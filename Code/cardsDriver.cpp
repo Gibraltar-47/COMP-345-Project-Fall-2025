@@ -11,7 +11,7 @@ void testCards() {
     cout << "=== BEGIN TEST ===" << endl;
         Deck deck;
 
-        // Add 30 copies of each card type
+        // Add 7 copies of each card type
         vector<string> cardNames = {"Bomb", "Airlift", "Blockade", "Diplomacy", "Blockade"};
         for (const auto& name : cardNames) {
             for (int i = 0; i < 7; ++i) {
@@ -19,7 +19,7 @@ void testCards() {
             }
         }
 
-        cout << "Deck created and 30 copies of each card added ("
+        cout << "Deck created and 7 copies of each card added ("
              << cardNames.size() * 30 << " total)." << endl << endl;
 
         OrderList olist;
