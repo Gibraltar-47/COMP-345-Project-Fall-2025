@@ -47,6 +47,10 @@ void Card::play(Deck& deck, Hand* hand, OrderList& olist) {  //Orderlist require
 
     //creates order and adds it to the orderlist of the PLAYER***************************************************
     olist.addOrder(new Order(*this->name)); //Name of the order<<=============================================
+    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    //This line creates the order based on the string* name of the card.
+
+
 
     hand->removeCard(this); //removes from hand
     deck.addCard(this); //add the card back to the deck
