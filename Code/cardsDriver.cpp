@@ -20,7 +20,7 @@ void testCards() {
         }
 
         cout << "Deck created and 7 copies of each card added ("
-             << cardNames.size() * 30 << " total)." << endl << endl;
+             << cardNames.size() * 7 << " total)." << endl << endl;
 
         OrderList olist;
 
@@ -41,12 +41,18 @@ void testCards() {
         player1.playCard(deck, "Bomb", olist);
         player2.playCard(deck, "Airlift", olist);
 
+        cout << "\n" << player1 << endl;
+        cout << player2 << endl;
+
         cout << "\nBoth players played one card each.\n" << endl;
         cout << "Deck now: " << deck << endl;
 
         // Player2 tries to play a nonexistent card
         cout << "\nTester2 tries to play a nonexistent card 'Fly':" << endl;
         player2.playCard(deck, "Fly", olist);
+
+        cout << "\n" << player1 << endl;
+        cout << player2 << endl;
 
         cout << "\nDeck state after invalid play attempt:" << endl;
         cout << deck << endl;
