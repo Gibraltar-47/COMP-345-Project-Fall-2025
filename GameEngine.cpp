@@ -46,6 +46,7 @@
             std::cout << "Valid commands: addplayer" << std::endl;
             std::cin >> input;
             }
+       //verify input if correct and call addPlayer()
     }
 
 
