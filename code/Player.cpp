@@ -3,17 +3,24 @@
 //
 
 #include "Player.h"
+#include "Territory.h"
+#include "Cards.h"
+#include "Orders.h"
+#include "OrdersList.h"
 #include <iostream>
 #include <algorithm>
 using namespace std;
+
+
+
 //default constructor, initializes name unknown, empty vectors for territories, cards and orders
 Player::Player(): name("Unknown"), territories(), handCards(){
-orderList=new OrdersList(); //dynamically allocates orderlist
+orderList=new OrdersList();
 
 }
 //cons with name
-Player::Player(const std:: string& playerName):name(playerName){
-   orderList=new OrdersList();
+Player::Player(const std:: string& playerName):name(playerName), territories(), handCards(), orders(){
+orderList=new OrdersList();
 
 }
 /*copy constructor, creates a new player object as a copy of another plyer, deep copy the orders but shallow copy the
@@ -25,31 +32,29 @@ name=other.name;
 //shallow copy terr and handcards
 territories=other.territories;
 handCards= other.handCards;
+ orders.clear();
+ for (Orders* o:other.orders) {
+  orders.push_back(new Orders(*o));
+ }
 orderList=new OrdersList(*other.orderList); //deep copy
 }
 
-//looping through the orders vector of other player
-  for(Order* o : other.orders){
-/*calling the copy constructor of Order class, creating a new Order obj in memory, it ensures we don't just copy
-the pointer, we create a seperate obj
-*/
-    orders.push_back(new Order(*o));
-  }
-}
-//aasignment operator
+
+//asignment operator
  Player& Player::operator=(const Player& other){
   if(this!=&other){
  name=other.name;
  territories=other.territories;
  handCards=other.handCards;
 //delete old orders
- for(*Order o:orders){
+ for(Orders* o:orders){
 delete o;
-orders.clear();
+
  }
+   orders.clear();
 //copy new ones
- for(Order* o:other.orders){
-orders.push_back(new Order(*o));
+ for(Orders* o:other.orders){
+orders.push_back(new Orders(*o));
 }
 delete orderList;
 //deep copy the new list
@@ -66,29 +71,27 @@ player has no ownership*/
 
  }
 //stream insertion operator
-std:: ostream& operator<<(std::ostream& out, const Player& p){
+ostream& operator<<(std::ostream& out, const Player& p){
   out<<"Player: "<<p.name<<"\n";
  out<<"Territories: ";
-  if(p.territories && !p.territories->empty()){
+  if(!p.territories.empty()){
  for(auto t:(p.territories))
   out<< t->getName()<<" ";
 } else out<<"none";
  out<<"\n";
+
  out<<"Hand: ";
- if(p.hand&& !p.hand->getCards().empty()){
-for(auto c: p.hand->getCards())
+ if(!p.handCards.empty()){
+for(auto c: p.handCards)
 out<<c->getName()<<" ";
-} else out<<"none";
+} else {
+ out<<"none";
+}
  out<<"\n";
- out<<"Orders:";
- if(p.orderList&& !p.orderList->getOrders().empty()){
- for(auto o: p.orderList->getOrders())
- out<<o->getName()<<" ";
 
-} else out<<"none";
-out<<"\n";
-return out;
-
+ out<<"Orders: ";
+ out<<"none\n";
+ return out;
 
 }
 //getters and setters
@@ -106,20 +109,23 @@ tr->setOwner(this); //sets this player as its owner
 }
 }
 //add a card to the player's hand and prints a string
-void Player::addCard(Card* ca){
+void Player::addCard(Cards* ca){
 if(ca!=nullptr){
  handCards.push_back(ca);
 cout<<name<<" has card: "<<ca->getName()<<endl;
    }
 }
 //add an order to the player's order list. Player owns the order list and it will delete it in the destructor
-    void Player::addOrder(Order* ord) {
+    void Player::addOrder(Orders* ord) {
     if(ord!=nullptr){
      orders.push_back(ord);
+     if (orderList) {
+      orderList->getList().push_back(ord);
+     }
       }
 }
 //return the current list of orders
-const vector<Order*> Player::getOrderList() const{
+const vector<Orders*> Player::getOrderList() const{
  return orders;
 }
 //execute all the orders in rderList, prints the result, deletes each order after execution and clear the vector
@@ -130,7 +136,7 @@ const vector<Order*> Player::getOrderList() const{
    return;
  }
     cout<<name<<" has these issues to order: "<<endl;
- for(Order* o: list){
+ for(Orders* o: list){
  if(o){
 o->execute();
 cout<<*o<<endl;
@@ -154,67 +160,69 @@ return defendList;
 
 }
 //returns list of territories adjacent to player's territories but owned by other player(to attack)
- vector<Territory*> Player::toAttack(const vector<Territory*>& allTerritories) const {
- vector<Territory*> attackList; //create an empty list
- for(Territory* myTerritory: territories){ //loop through the terrs the player owns
-if(myTerritory!=nullptr){
-for(const string& adjName: myTerritory->getAdjTerritoriesNames()){ //for each terr, loop through the names of adj terrs
-//search for Territory pointer by name
- auto it = find_if(allTerritories.begin(), allTerritories.end(), [&](Territory* t){
-/*check if the territory's name matches the adj terr name, and it checks that is not owned by the current player*/
-return t->getName()==adjName&& t->getOwner()!=this;
+vector<Territory*> Player::toAttack(const std::vector<Territory*>& allTerritories) const {
+ std::vector<Territory*> attackList;
 
-});
-//checks that we found a terr matching the criteria, adj and not owned by the current player
-if(it!=allTerritories.end()){
-//check if it's not already in the list
-   if(find(attackList.begin(), attackList.end(),*it)==attackList.end()){
+ // Loop through each territory the player owns
+ for (Territory* myTerritory : territories) {
+  if (!myTerritory) continue;
 
-              attackList.push_back(*it);
-         }
+  // Loop through adjacent territory names
+  for (const std::string& adjName : myTerritory->getAdjTerritoriesNames()) {
+
+   // Find the Territory object by name in allTerritories
+   auto it = std::find_if(allTerritories.begin(), allTerritories.end(),[&](Territory* t) {
+    return t && t->getName() == adjName && t->getOwner() != this;
+  });
+
+   // If found and not already in attackList, add it
+   if (it != allTerritories.end() &&
+       std::find(attackList.begin(), attackList.end(), *it) == attackList.end()) {
+    attackList.push_back(*it);
        }
-    }
+  }
+ }
 
  return attackList;
 }
-//print the status of the player
-  void Player::printStatus() const{
- cout<<"Player: "<<name<<endl;
+ //print the status of the player
+ void Player::printStatus(){
+  cout<<"Player: "<<name<<endl;
   cout<<"Territories: ";
-    if(territories.empty()) cout<<"none";
-   else for(Territory* t: territories) cout<<t->getName()<<" ";
- cout<<endl;
-cout<<"Hand cards: ";
-if(handCards.empty()) cout<<"none";
-else for(Card* c: handCards) cout<<c->getName()<<" ";
-cout<<endl;
-cout<<"Orders: ";
-if(orderList->getList().empty()) cout<<"none";
-else cout<<*orderList;
-cout<<endl;
-}
+  if(territories.empty()) cout<<"none";
+  else for(Territory* t: territories) cout<<t->getName()<<" ";
+  cout<<"\n Hand cards: ";
+  if(handCards.empty()) cout<<"none";
+  else for(Cards* c: handCards) cout<<c->getName()<<" ";
+  cout<<endl;
+  cout<<"Orders: ";
+  const auto list=orderList->getList();
+  if(list.empty()) cout<<"none";
+  else for (Orders* o:list) cout<<o->getName();
+  cout<<endl;
+ }
 
-cout<<endl;
-cout<<"Hand Cards: ";
-if(handCards.empty()){
-cout<<"(none)";
-} else{
-for(Card* c: handCards){
-if(c!=nullptr){
-cout<<c->getName()<<" ";
+ cout<<endl;
+ cout<<"Hand Cards: ";
+ if(handCards.empty()){
+  cout<<"(none)";
+ } else {
+  for(Cards* ca: handCards){
+   if(ca!=nullptr){
+    cout<<ca->getName()<<" ";
+   }
+  }
+  cout<<endl;
+  cout<<"Orders: ";
+  if(orders.empty()){
+   cout<<"(none)";
+  } else {
+   for(Orders* o:orders){
+    if(o!=nullptr){
+     cout<<o->getName()<<" ";
+    }
+
+   cout<<endl;
   }
  }
-cout<<endl;
-cout<<"Orders: ";
-if(orders.empty()){
-  cout<<"(none)";
-} else{
-for(Order* o:orders){
-if(o!=nullptr){
-cout<<o->getName()<<" ";
 }
-}
-cout<<endl;
-
-
-

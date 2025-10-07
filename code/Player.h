@@ -7,50 +7,26 @@
 #include <string>
 #include <vector>
 #include <iostream>
+using namespace std;
 
-//forward declaration
+//forward declarations
+class Player;
 class Territory;
 class Cards;
-class Order;
+class Orders;
+class OrdersList;
 //placeholder classes
-class Territory {
-public:
-    std::string getName() const { return "Territory"; }
-    std::vector<std::string> getAdjTerritoriesNames() const { return {}; }
-    Player* getOwner() const { return nullptr; }
-    void setOwner(Player*) {}
-};
-class Cards{
- public:
- std::string getName() const {return "Card";}
-};
-class Orders {
-public:
-    void execute() {}
-    std::string getName() const { return "Order"; }
-};
-
-class OrdersList {
-public:
-    std::vector<Order*> getList() const { return {}; }
-    void setList() {}
-    OrdersList() {}
-};
-class Deck{
-public:
-std::vector<Card*> getCards() const{return {};}
-void addCard(*Card){}
-Card* draw() const {return nullptr;}
-};
+class OrderList;
 
 class Player {
 private:
    std::string name;
    std::vector<Territory*> territories; //dynamic array of territory pointers
-   std::vector<Card*> handCards;
-   std::vector<Order*> orders;
-    //pointer to orderlist, owned by player
-  OrdersList* orderList;
+   std::vector<Cards*> handCards;
+   std::vector<Orders*> orders;
+    OrdersList* orderList;
+
+
 public:
    Player();
    Player(const std::string& playerName);
@@ -58,16 +34,18 @@ public:
    Player& operator =(const Player& other); //assignemnt operator
    ~Player(); //destructor, clears up resources when a player obj is destroyed
    std::string getName() const;
+    const std::vector<Orders*> getOrderList() const;
    void setName(const std::string& newName);
    void addTerritory(Territory* tr);
-   void addCard(Card* ca);
-   void addOrder(Order* ord);
+   void addCard(Cards* ca);
+   void addOrder(Orders* ord);
  //game actions
    std::vector<Territory*> toDefend() const;
-   std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const ;
+   std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const;
    void issueOrder(); //execute all orders and clean up memory
-   void printStatus() const; //print player's name, territories..
+   void printStatus() const; //print player's name, territories
   friend std::ostream& operator <<(std::ostream& out, const Player& p);
+
 
 };
 

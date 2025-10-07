@@ -12,8 +12,8 @@ void testPlayers(){
  Player p1("Jack");
  Player p2("Alyssa");
 //create territories
- Territory* tr1=new Territory();
-Territory* tr2=new Territory();
+ /*Territory* tr1 = new Territory();
+ Territory* tr2=new Territory();*/
 //assign terr to players
 p1.addTerritory(tr1);
 p1.addTerritory(tr2);
@@ -22,11 +22,12 @@ p2.addTerritory(tr1);
 p1.printStatus();
 p2.printStatus();
 //add cards
- Cards c1("Bomb");
-Cards c2("Reinforcement");
 
- p1.addCard(&c1);
-p1.addCard(&c2);
+ /*Cards* c1 = new Cards();
+ Cards* c2 = new Cards();*/
+
+ p1.addCard(c1);
+p1.addCard(c2);
 //issue orders
 p1.issueOrder();
 p2.issueOrder();
@@ -35,8 +36,7 @@ cout<<p2<<endl;
 //delete to avoid memory leaks
 delete tr1;
 delete tr2;
-delete c1;
-delete c2;
+
 
 
 }
