@@ -13,7 +13,6 @@
 using namespace std;
 
 //Card Class=====================
-
 //Default Constructor
 Card::Card() {
     this->name = new string("BLANK");
@@ -108,6 +107,7 @@ int Deck::getDeckSize() const {                                                 
 void Deck::addCard(Card* card) {                                                                                        //Adding cards to the deck
     cards.push_back(card);
 }
+
 Card* Deck::draw() {                                                                                                    //Removes a card from the deck and return it
     if (cards.empty()) {throw out_of_range("Deck is empty");}
 
