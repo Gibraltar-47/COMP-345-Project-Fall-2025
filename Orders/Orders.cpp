@@ -243,14 +243,6 @@ void OrdersAdvance::execute(){
     cout << "OrdersAdvance::execute" << endl;
 }
 
-// Might be able to use parents version since this class does not add new data members (research)
-// OrdersBomb::OrdersBomb(){}
-// OrdersBomb::OrdersBomb(Territory* sourceTerritory){}
-// OrdersBomb::OrdersBomb(const OrdersBomb& order){}
-// OrdersBomb::~OrdersBomb(){}
-// OrdersBomb& OrdersBomb::operator=(const OrdersBomb& order){}
-//-----------------------------------------------------------------------------------------------
-
 Orders* OrdersBomb::allocateClone() const{
     return new OrdersBomb(*this);
 }
@@ -274,13 +266,6 @@ void OrdersBomb::execute(){
     cout << "OrdersBomb::execute" << endl;
 }
 
-// Might be able to use parents version since this class does not add new data members (research)
-// OrdersBlockade::OrdersBlockade(){}
-// OrdersBlockade::OrdersBlockade(Territory* sourceTerritory){}
-// OrdersBlockade::OrdersBlockade(const OrdersBlockade& order){}
-// OrdersBlockade::~OrdersBlockade(){}
-// OrdersBlockade& OrdersBlockade::operator=(const OrdersBlockade& order){}
-//-----------------------------------------------------------------------------------------------
 
 Orders* OrdersBlockade::allocateClone() const{
     return new OrdersBlockade(*this);

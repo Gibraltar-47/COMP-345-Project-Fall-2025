@@ -106,16 +106,8 @@ class OrdersAdvance: public Orders
 class OrdersBomb: public Orders
 {
     public:
-        // Might be able to inherit constrcutors and assignment overload with this
-        // since this class does not introduce any new data members
         using Orders::Orders;
         using Orders::operator=;
-
-        // OrdersBomb();
-        // OrdersBomb(Territory* sourceTerritory);
-        // OrdersBomb(const OrdersBomb& order);
-        // ~OrdersBomb();
-        // OrdersBomb& operator=(const OrdersBomb& order);
 
         Orders* allocateClone() const override;
         void printOrder(std::ostream& strm) const override;
@@ -126,16 +118,8 @@ class OrdersBomb: public Orders
 class OrdersBlockade: public Orders
 {
     public:
-        // Might be able to inherit constrcutors and assignment overload with this
-        // since this class does not introduce any new data members
         using Orders::Orders;
         using Orders::operator=;
-
-        // OrdersBlockade();
-        // OrdersBlockade(Territory* sourceTerritory);
-        // OrdersBlockade(const OrdersBlockade& order);
-        // ~OrdersBlockade();
-        // OrdersBlockade& operator=(const OrdersBlockade& order);
 
         Orders* allocateClone() const override;
         void printOrder(std::ostream& strm) const override;

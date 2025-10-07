@@ -122,7 +122,6 @@ void testOrdersLists(){
     cout << olist1 << ", DATA: " << *olist1 << "\n\n";
     cout << olist2 << ", DATA: " << *olist2 << "\n\n";
 
-
     Player* p3 = new Player(3);
     cout << "\nTESTING IHERITED CONSTRUCTOR" << endl;
     OrdersBomb* b1 = new OrdersBomb(p3, new Territory("Hogwarts", 1, p3));
