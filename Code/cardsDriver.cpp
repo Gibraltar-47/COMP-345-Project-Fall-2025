@@ -27,8 +27,8 @@ void testCards() {
     Hand player2("Tester2");
     cout << "Two player hands created.\n" << endl;
 
-    // Each player draws 3 cards
-    for (int i = 0; i < 3; ++i) {
+    // Each player draws 6 cards
+    for (int i = 0; i < 6; ++i) {
         player1.draw(deck);
         player2.draw(deck);
     }
