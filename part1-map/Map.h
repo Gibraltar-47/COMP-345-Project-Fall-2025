@@ -22,6 +22,7 @@ using std::ifstream;
 class Territory;
 class Continent;
 
+//*************************************************************************
 //placeholder class
 class Player {
 private:
@@ -30,6 +31,7 @@ public:
     Player(std::string n);
     std::string getName() const;
 };
+//****************************************************************************
 
 class Map {
 private:
