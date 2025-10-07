@@ -5,14 +5,37 @@
 #ifndef CLIONPROJECTS_DECK_H
 #define CLIONPROJECTS_DECK_H
 
+#include <list>
 #include <string>
 #include <vector>
 
+class Deck;
+class Hand;
+
+class Order{
+private:
+    std::string* name;
+public:
+    Order(std::string& name);
+    ~Order();
+};
+
+class OrderList {
+private:
+    std::list<Order*> olist;
+public:
+    OrderList();
+    ~OrderList();
+    void addOrder(Order* order);
+    void resolveOrder();
+
+};
 
 class Card {
     //The Card class is being used by both the Hand class and the Deck class
     private:
         std::string* name;  //Name of card
+
 
     public:
         Card();
@@ -24,7 +47,7 @@ class Card {
         std::string getName() const;
         void setName(const std::string& n);
 
-        void order() const; //Placeholder as of now
+        void play(Deck& deck, Hand* hand, OrderList& olist);
 
         friend std::ostream& operator<<(std::ostream& os, const Card& c);
 };
@@ -46,9 +69,9 @@ class Deck {
         void addCard(Card* card);
         Card* draw();
 
-
         bool isEmpty() const;
         friend std::ostream& operator<<(std::ostream& os, const Deck& d);
+
 
 };
 
@@ -67,15 +90,13 @@ class Hand {
         Hand& operator=(const Hand& other);
 
         void addCard(Card* card);
-
         void draw(Deck& deck);
-
-        void play(Deck& deck, const std::string& cardName);
-
+        void playCard(Deck& deck, const std::string& cardName, OrderList& olist); //temporary for testing
+        void removeCard(Card* card);
         void returnAll(Deck& deck);
 
         bool isEmpty() const;
-
         friend std::ostream& operator<<(std::ostream& os, const Hand& hand);
 };
+
 #endif //CLIONPROJECTS_DECK_H

@@ -8,95 +8,79 @@ using namespace std;
 
 //Testing function
 void testCards() {
-    vector<string> cardNames = {"Bomb", "Airlift", "Diplomacy", "Reinforcement", "Blockade"};
+    cout << "=== BEGIN TEST ===" << endl;
+        Deck deck;
 
-    cout << "Deck has been created." << endl;
-    Deck deck;
-    for (const auto& name : cardNames) { // Add 6 copies of each card
-        for (int i = 0; i < 6; i++) {
-            deck.addCard(new Card(name));
+        // Add 30 copies of each card type
+        vector<string> cardNames = {"Bomb", "Airlift", "Blockade", "Diplomacy", "Blockade"};
+        for (const auto& name : cardNames) {
+            for (int i = 0; i < 7; ++i) {
+                deck.addCard(new Card(name));
+            }
         }
-    }
 
-    cout << deck << endl;
-    cout << endl;
-    Hand player1("John");                          //Player creation
-    Hand player2("Robert");
+        cout << "Deck created and 30 copies of each card added ("
+             << cardNames.size() * 30 << " total)." << endl << endl;
 
-    cout << "Playing an empty hand" << endl;
-    player1.play(deck, "Flashcard"); //plays empty card
+        OrderList olist;
 
-    cout << endl;
-    cout << "Drawing Cards :" << endl;
-    for (int i = 0; i < 5; i++) {                         //Fills hand
-        player1.draw(deck);
-        player2.draw(deck);
-    }
-    cout << endl;
-    cout << deck << endl;                                  //deck content
+        Hand player1("Tester1");
+        Hand player2("Tester2");
+        cout << "Two player hands created.\n" << endl;
 
-    cout << endl;                                           //player hand content
-    cout << player1 << endl;
-    cout << player2 << endl;
+        // Each player draws 3 cards
+        for (int i = 0; i < 3; ++i) {
+            player1.draw(deck);
+            player2.draw(deck);
+        }
 
-    cout << endl;
+        cout << "\n" << player1 << endl;
+        cout << player2 << endl;
 
-    cout << endl;                                   //attempts to play a card
-    player1.play(deck,"Bomb");
-    cout << deck << endl;
+        // Each plays one card
+        player1.playCard(deck, "Bomb", olist);
+        player2.playCard(deck, "Airlift", olist);
 
-    cout << endl;
-    player2.play(deck,"Airlift");
-    cout << deck << endl;
+        cout << "\nBoth players played one card each.\n" << endl;
+        cout << "Deck now: " << deck << endl;
 
-    cout << endl;
-    player1.play(deck,"Reinforcement");
-    cout << deck << endl;
+        // Player2 tries to play a nonexistent card
+        cout << "\nTester2 tries to play a nonexistent card 'Fly':" << endl;
+        player2.playCard(deck, "Fly", olist);
 
-    cout << endl;
-    player2.play(deck,"Blockade");
-    cout << deck << endl;
+        cout << "\nDeck state after invalid play attempt:" << endl;
+        cout << deck << endl;
 
-    cout << endl;                          //plays non existent card
-    player1.play(deck,"BlankCard");
-    cout << endl;
+        //  Test copy constructor here
+        cout << "\n=== Copy Constructor Test ===" << endl;
+        Hand cloneHand(player1);
+        cout << "Original Hand: " << player1 << endl;
+        cout << "Cloned Hand:   " << cloneHand << endl;
 
+        // Play a card from the original hand to see if it affects the copy
+        player1.playCard(deck, "Blockade", olist);
 
-    Hand player3(player1);
+        cout << "\nAfter playing from original:" << endl;
+        cout << "Original Hand: " << player1 << endl;
+        cout << "Cloned Hand:   " << cloneHand << endl;
 
+        // Return all cards
+        player1.returnAll(deck);
+        player2.returnAll(deck);
+        cloneHand.returnAll(deck);
 
-    cout << "testing copy constructor" << endl;
-    cout << player1 << endl;
-    cout << player3 << endl;
+        cout << "\nAll cards returned to deck.\n" << endl;
+        cout << "Deck now: " << deck << endl;
 
-
-    cout << endl;
-
-    player1.play(deck,"Reinforcement");
-    player1.play(deck,"Blockade");
-    player1.play(deck,"Airlift");
-
-    cout << deck << endl;
-    cout << player1 << endl;
-    cout << player3 << endl;
-
-    cout << endl;
-    player1.returnAll(deck);
-    cout<< player1 << endl;
-    cout << player2 << endl;
-    cout << player3 << endl;
-    cout << deck << endl;
-
-    cout << "Deleting John" << endl;
-    player1.returnAll(deck);
-    player1.~Hand();
-
-
+        cout << "\n=== END OF SCOPE ===" << endl;
 
 }
 
+
 int main() {
+
     testCards();
+
 
     return 0;
 }
