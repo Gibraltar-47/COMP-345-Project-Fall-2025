@@ -9,6 +9,8 @@
 class Deck;
 class Hand;
 
+//Placeholder******************************************
+//==============================
 class Order{
 private:
     std::string* name;
@@ -27,7 +29,7 @@ public:
     void resolveOrder();
 
 };
-
+//=================================
 class Card {
     //The Card class is being used by both the Hand class and the Deck class
     private:
@@ -77,7 +79,7 @@ class Deck {
 class Hand {
     //The hand class only borrows cards from the deck (shallow copy)
     private:
-        std::string* player;    //Player name (currently a placeholder) 4.2.5
+        std::string* playerName;    //Player name (currently a placeholder) 4.2.5
 
         std::vector<Card*> cards;  //Player hand  4.2.3, 4.2.5
 

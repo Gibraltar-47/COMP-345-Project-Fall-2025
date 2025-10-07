@@ -43,9 +43,10 @@ string Card::getName() const {
 void Card::setName(const string& n) {
     *name = n;
 }
-void Card::play(Deck& deck, Hand* hand, OrderList& olist) {
+void Card::play(Deck& deck, Hand* hand, OrderList& olist) {  //Orderlist requires changing it to the right name
 
-    olist.addOrder(new Order(*this->name)); //creates order and adds it to the orderlist
+    //creates order and adds it to the orderlist of the PLAYER***************************************************
+    olist.addOrder(new Order(*this->name)); //Name of the order<<=============================================
 
     hand->removeCard(this); //removes from hand
     deck.addCard(this); //add the card back to the deck
@@ -138,15 +139,15 @@ ostream& operator << (ostream& os, const Deck& deck) {
 //Hand Class=====================
 //Default Constructor
 Hand::Hand() {
-    this->player = new string("BLANK");
+    this->playerName = new string("BLANK");
 }
 //Parameterized Constructor
 Hand::Hand(const string& name) {
-    this->player = new string(name);
+    this->playerName = new string(name);
 }
 //Copy Constructor
 Hand::Hand(const Hand& other){
-    this->player = new string(*other.player);
+    this->playerName = new string(*other.playerName);
     for (Card* c : other.cards) {
         this->cards.push_back(new Card(*c));
     }
@@ -155,8 +156,8 @@ Hand::Hand(const Hand& other){
 //Assignment Operator
 Hand& Hand::operator=(const Hand& other) {
     if (this != &other) {
-        delete player;
-        player = new string(*other.player);
+        delete playerName;
+        playerName = new string(*other.playerName);
 
         cards = other.cards;
     }
@@ -164,17 +165,17 @@ Hand& Hand::operator=(const Hand& other) {
 }
 //Destructor
 Hand::~Hand() {                                                                                                         //Since the cards are owned by the Deck,
-    delete player;                                                                                                      //all cards inside a hand vector are borrowed objects
+    delete playerName;                                                                                                      //all cards inside a hand vector are borrowed objects
     cards.clear();                                                                                                      //cards wont be deleted from the hand. (see returnAll())
 }
 //Methods
 void Hand::addCard(Card* card) {                                                                                        //Adding cards to the list
     cards.push_back(card);
-    cout << *player << " has drawn " << card->getName() << endl;
+    cout << *playerName << " has drawn " << card->getName() << endl;
 }
 void Hand::draw(Deck& deck) {                                                                                           //Draw (RNG)
     cards.push_back(deck.draw());
-    cout << *player << " has drawn " << cards.back()->getName() << endl;
+    cout << *playerName << " has drawn " << cards.back()->getName() << endl;
 }
 void Hand::returnAll(Deck& deck) {                                                                                      //Whenever a player loses, all their cards are returned to the deck.
     for (Card* card : cards) {
@@ -193,7 +194,7 @@ bool Hand::isEmpty() const {
 }
 //Stream Insertion Operator
 ostream& operator << (ostream& os, const Hand& hand) {
-    os << *hand.player << "'s hand: ";
+    os << *hand.playerName << "'s hand: ";
     if (hand.cards.empty()) {
         os << "(EMPTY)";
     }
@@ -207,12 +208,10 @@ ostream& operator << (ostream& os, const Hand& hand) {
     }
     return os;
 }
-//=======================================================
-//Temporary
-void Hand::playCard(Deck& deck, const string& cardName, OrderList& olist) {
+void Hand::playCard(Deck& deck, const string& cardName, OrderList& olist) { //DO NOT REMOVE THIS PART FOR ASSIGNMENT 1 (but will need to change for second assignment)
     //Plays a card
     if (isEmpty()) {                                                                                                    //Checks if hand is empty
-        cout << *player << "'s hand is empty" << endl;
+        cout << *playerName << "'s hand is empty" << endl;
         return;
     }
 
@@ -220,18 +219,19 @@ void Hand::playCard(Deck& deck, const string& cardName, OrderList& olist) {
     [&] (Card* c) { return c->getName() == cardName; });
 
     if (it == cards.end()) {                                                                                            //If played card is not found in hand
-        cout << *player << " does not have " << cardName << endl;
+        cout << *playerName << " does not have " << cardName << endl;
         return;
     }
 
     Card* used = *it;
-    cout << *player << " has played " << used->getName() << "!" << endl;
+    cout << *playerName << " has played " << used->getName() << "!" << endl;
     used->play(deck, this,olist);
 
     //Returns the card back to the deck
     cout << used->getName() << " goes back into the deck." << endl;
 }
 
+//***********************************************************************************
 //TEMPORARY
 Order::Order(std::string &name) {
     this->name = new string(name);
