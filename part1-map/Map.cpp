@@ -44,6 +44,12 @@ bool isConnectedGraph(vector <vector<int>> &adjM, string n, string type){
     return true;
 }
 
+Player::Player(string n):name(n){}
+
+string Player::getName()const{
+    return name;
+}
+
 //constructor with a string name parameter
 Map::Map(const string& n):name(n){}
 
@@ -227,7 +233,6 @@ void Map::setVertice(Territory* t1, Territory* t2){
 
     adjMatrix[t1Index][t2Index]=1;
     adjMatrix[t2Index][t1Index]=1; //because the graph is undirected
-    cout<<"Map "<<name<<" - Vertice added!"<<std::endl;
 }
 
 bool Map::validate()
@@ -370,7 +375,6 @@ void Continent::setVertice(Territory* t1, Territory* t2){
 
     adjMatrix[t1Index][t2Index]=1;
     adjMatrix[t2Index][t1Index]=1; //because the graph is undirected
-    cout<<"Continent "<<name<<" - Vertice added!"<<std::endl;
 }
 //initialize the size of the matrix
 void Continent::initAdjMatrix(){
@@ -499,10 +503,10 @@ Map MapLoader::loadMap(const string& filename){
         string::size_type firstPos, secondPos;
         vector <string> adjTerrName,terrInfo;
 
-       while(getline(inputFileStream,line)){                                                                    //reading all the lines until the end of the file
+       while(getline(inputFileStream,line)){                                                                      //reading all the lines until the end of the file
             if (line=="[Map]"){                                                                                         //if true, the next line will have the name of the map in the image name(i.e. "image=Aldawin.png", Aldawin is the name of the map)
                 getline(inputFileStream, line);
-                firstPos=line.find('=');                                                                             //truncating the string to find the name by using '=' and '.' as delimiters
+                firstPos=line.find('=');                                                                              //truncating the string to find the name by using '=' and '.' as delimiters
                 secondPos=line.find('.');
                 mapName=line.substr(firstPos+1,secondPos-firstPos-1);
                 map=Map(mapName);                                                                                       //object map is reinitialized to the right name using a copy constructor
@@ -523,7 +527,7 @@ Map MapLoader::loadMap(const string& filename){
            if (step==2){
                if (line.empty()){continue;}
                std::stringstream terrInfoStream(line);
-               while (getline(terrInfoStream,terrName,',')){                                               //Once in the territories section, each line is considered as csv in the following order: name,x,y,continent,adjterr1,adjterr2,....ajterrN
+               while (getline(terrInfoStream,terrName,',')){                                                 //Once in the territories section, each line is considered as csv in the following order: name,x,y,continent,adjterr1,adjterr2,....ajterrN
                    terrInfo.push_back(terrName);                                                                        //each string is put in vector terrInfo, then each string in the vector is assigned to a local variable that will be used for object initialization
                }
                for (int i=0;i<terrInfo.size();i++){
@@ -544,7 +548,7 @@ Map MapLoader::loadMap(const string& filename){
                terrHolder=new Territory(terrName,conHolder,x,y,adjTerrName);
                adjTerrName.clear();
                map.addTerritory(terrHolder);                                                                            //add to map object
-               map.getContinent(conName)->addTerritory(map.getTerritory(terrHolder->getName()));                   //add to continent referencing to the map because it has a deep copy of continent
+               map.getContinent(conName)->addTerritory(map.getTerritory(terrHolder->getName()));                    //add to continent referencing to the map because it has a deep copy of continent
                delete terrHolder;                                                                                       //to avoid memory leaks
            }
        }

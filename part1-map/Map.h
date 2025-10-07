@@ -27,8 +27,8 @@ class Player {
 private:
     std::string name;
 public:
-    Player(std::string n) : name(n) {}
-    std::string getName() const { return name; }
+    Player(std::string n);
+    std::string getName() const;
 };
 
 class Map {
