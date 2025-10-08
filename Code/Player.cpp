@@ -127,21 +127,17 @@ cout<<name<<" has card: "<<ca->getName()<<endl;
 const vector<Orders*> Player::getOrderList() const{
  return orders;
 }
-//execute all the orders in rderList, prints the result, deletes each order after execution and clear the vector
+//issueOrder method
 void Player::issueOrder(){
- auto list=ordersList->getList();
-   if(list.empty()){
-   cout<<name<<" has no orders to issue."<<endl;
-   return;
- }
-    cout<<name<<" has these issues to order: "<<endl;
- for(Orders* o: list){
-   if(o){
-    o->execute();
-    cout<<*o<<endl;
-   }
+ //create a new orders obj
+Orders* newOrder=new Orders();
+ //add it to the player's orders vector
+orders.push_back(newOrder);
+ //add it to the list
+if(orderList){
+orderList->getList().push_back(newOrder);
 }
-//ordersList->setList();  //===================================================================================================
+cout<<name<<" created a new order: "<<newOrder->getName()<<endl;
 }
 
 //returns a list of territories the player owns(to defend)
@@ -164,13 +160,14 @@ vector<Territory*> Player::toAttack(const std::vector<Territory*>& allTerritorie
 
  // Loop through each territory the player owns
  for (Territory* myTerritory : territories) {
-  if (!myTerritory) continue;
+  if (!myTerritory) continue; //skip 
 
   // Loop through adjacent territory names
   for (const std::string& adjName : myTerritory->getAdjTerritoriesNames()) {
 
-   // Find the Territory object by name in allTerritories
+   // Find the Territory object by name in allTerritories, searching through the list of all terr on map
    auto it = std::find_if(allTerritories.begin(), allTerritories.end(),[&](Territory* t) {
+    //if it is not null and has the same name as adjTerr and is not owned by the current player
     return t && t->getName() == adjName && t->getOwner() != this;
   });
 
@@ -197,7 +194,7 @@ vector<Territory*> Player::toAttack(const std::vector<Territory*>& allTerritorie
     cout<<"Orders: ";
     const auto list=ordersList->getList();
     if(list.empty()) cout<<"none";
-    else for (Orders* o:list) //cout<<o->getName();
+    else for (Orders* o:list) 
     cout<<endl;
  }
 
@@ -216,29 +213,3 @@ bool Player::equals(Player* player2){
  return true;
 }
 
-/**
- cout<<endl;
- cout<<"Hand Cards: ";
- if(handCards.empty()){
-  cout<<"(none)";
- } else {
-  for(Cards* ca: handCards){
-   if(ca!=nullptr){
-    cout<<ca->getName()<<" ";
-   }
-  }
-  cout<<endl;
-  cout<<"Orders: ";
-  if(orders.empty()){
-   cout<<"(none)";
-  } else {
-   for(Orders* o:orders){
-    if(o!=nullptr){
-     cout<<o->getName()<<" ";
-    }
-
-   cout<<endl;
-  }
- }
-}
-*/
