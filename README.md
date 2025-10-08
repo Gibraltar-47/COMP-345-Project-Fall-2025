@@ -12,23 +12,24 @@ This project is a modular C++ game engine that simulates strategic gameplay usin
 - **Drivers & Tests**: Each module comes with driver files for testing.
 
 ## Project Structure
-Engine/
-GameEngine.cpp
-GameEngineDriver.cpp
-Orders/
-Orders.cpp
-OrdersDriver.cpp
-Part-4-Deck/
-Cards.cpp
-CardsDriver.cpp
-part1-map/
-Map.cpp
-MapDriver.cpp
-Player/
-Player.cpp
-PlayerTest.cpp
-PlayerDriver.cpp
-MainDriver.cpp
+Project/
+├─ Engine/
+│   ├─ GameEngine.cpp
+│   └─ GameEngineDriver.cpp
+├─ Orders/
+│   ├─ Orders.cpp
+│   └─ OrdersDriver.cpp
+├─ Part-4-Deck/
+│   ├─ Cards.cpp
+│   └─ CardsDriver.cpp
+├─ part1-map/
+│   ├─ Map.cpp
+│   └─ MapDriver.cpp
+├─ Player/
+│   ├─ Player.cpp
+│   ├─ PlayerTest.cpp
+│   └─ PlayerDriver.cpp
+└─ MainDriver.cpp
 
 ## Requirements
 - GCC/G++ compiler
