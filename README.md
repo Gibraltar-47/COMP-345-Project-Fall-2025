@@ -4,7 +4,7 @@
 COMP345
 
 ## Features
-- **Game Engine Core**: Main logic and control flow of the game.
+- **Game Engine**: Main logic and control flow of the game.
 - **Map System**: Manages maps and territories for gameplay.
 - **Player System**: Allows players to issue orders and interact in the game.
 - **Orders Module**: Supports various types of orders.
