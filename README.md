@@ -1,15 +1,14 @@
 # COMP-335---Project---Fall-2025
 
 ## Overview
-This project is a modular C++ game engine that simulates strategic gameplay using maps, players, orders, and cards. Each component can be tested individually and extended easily for future development.
+COMP345
 
 ## Features
 - **Game Engine Core**: Main logic and control flow of the game.
 - **Map System**: Manages maps and territories for gameplay.
 - **Player System**: Allows players to issue orders and interact in the game.
-- **Orders Module**: Supports various types of orders (`Advance`, `Deploy`, etc.).
-- **Deck & Cards**: Implements a card system for strategic gameplay.
-- **Drivers & Tests**: Each module comes with driver files for testing.
+- **Orders Module**: Supports various types of orders.
+- **Deck & Cards**: Implements a card system.
 
 ## Project Structure
 ```
