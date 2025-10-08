@@ -44,14 +44,15 @@ string Card::getName() const {
 void Card::setName(const string& n) {
     *name = n;
 }
-void Card::play(Deck& deck, Hand* hand, OrdersList& olist) {
+void Card::play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory) {
 
     // "Bomb", "Airlift", "Blockade", "Negotiate", "Blockade"
 
     //olist.addOrder(new Order(*this->name)); //creates order and adds it to the orderlist
 
     // Segmentation fault realted to this!!!
-    //olist.add(new Orders());
+    olist.add(new OrdersBomb(player, territory));
+
 
     // if (*this->name == "Bomb"){
 
@@ -183,7 +184,7 @@ Hand& Hand::operator=(const Hand& other) {
 }
 //Destructor
 Hand::~Hand() {                                                                                                         //Since the cards are owned by the Deck,
-    delete player;                                                                                                      //all cards inside a hand vector are borrowed objects
+    //delete player;                                                                                                      //all cards inside a hand vector are borrowed objects
     cards.clear();                                                                                                      //cards wont be deleted from the hand. (see returnAll())
 }
 //Methods
@@ -228,7 +229,7 @@ ostream& operator << (ostream& os, const Hand& hand) {
 }
 //=======================================================
 //Temporary
-void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist) {
+void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist,Player* p, Territory* territory) {
     //Plays a card
     if (isEmpty()) {                                                                                                    //Checks if hand is empty
         cout << *player << "'s hand is empty" << endl;
@@ -245,7 +246,7 @@ void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist) {
 
     Card* used = *it;
     cout << *player << " has played " << used->getName() << "!" << endl;
-    used->play(deck, this,olist);
+    used->play(deck, this,olist,p, territory);
 
     //Returns the card back to the deck
     cout << used->getName() << " goes back into the deck." << endl;

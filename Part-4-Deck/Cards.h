@@ -5,6 +5,7 @@
 #include <list>
 #include <string>
 #include <vector>
+#include "Map.h"
 // #include "../Orders/Orders.h"
 
 
@@ -13,6 +14,7 @@ class Deck;
 class Hand;
 class OrdersList;
 class Player;
+class Territory;
 
 // class Order{
 // private:
@@ -49,7 +51,7 @@ class Card {
         std::string getName() const;
         void setName(const std::string& n);
 
-        void play(Deck& deck, Hand* hand, OrdersList& olist); // 4.2.4 4.2.10 line 48
+        void play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory); // 4.2.4 4.2.10 line 48
 
         friend std::ostream& operator<<(std::ostream& os, const Card& c);
 };
@@ -95,7 +97,7 @@ class Hand {
 
         void addCard(Card* card);
         void draw(Deck& deck);
-        void playCard(Deck& deck, const std::string& cardName, OrdersList& olist); //temporary for testing
+        void playCard(Deck& deck, const std::string& cardName, OrdersList& olist,Player* p, Territory* territory); //temporary for testing
         void removeCard(Card* card);
         void returnAll(Deck& deck);
 

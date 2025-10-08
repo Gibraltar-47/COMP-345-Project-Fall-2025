@@ -3,6 +3,9 @@
 #include <iostream>
 #include <random>
 
+#include "Orders.h"
+#include "Player.h"
+
 
 using namespace std;
 
@@ -18,10 +21,20 @@ void testCards() {
             deck.addCard(new Card(name));
         }
     }
+    Player p1("Joseph");
+
+    std::vector<std::string> adj(5);
+    Continent* c1 = new Continent("NA", 5);
+    std::string name1 = "Montreal";
+    std::string name2 = "Toronto";
+    std::string name3 = "Miami";
+    std::string name4 = "Talahasee";
+
+    Territory* t1 = new Territory(name1, c1, 1, 3, adj);
 
     cout << "Deck created and 7 copies of each card added (" << cardNames.size() * 7 << " total)." << endl << endl;
 
-    OrdersList* olist;
+    OrdersList* olist = new OrdersList();
 
     Hand player1("Tester1");
     Hand player2("Tester2");
@@ -39,8 +52,8 @@ void testCards() {
     cout << player2 << endl;
 
     //Each plays one card Play() test
-    player1.playCard(deck, "Bomb", *olist);
-    player2.playCard(deck, "Airlift", *olist);
+    player1.playCard(deck, "Bomb", *olist, &p1, t1);
+    player2.playCard(deck, "Airlift", *olist,&p1, t1);
 
     cout << endl;
     cout << player1 << endl;
@@ -52,7 +65,7 @@ void testCards() {
     //Player2 tries to play a nonexistent card
     cout << endl;
     cout << "Tester2 tries to play a nonexistent card 'Fly':" << endl;
-    player2.playCard(deck, "Fly", *olist);
+    player2.playCard(deck, "Fly", *olist,&p1, t1);
 
     cout << endl;
     cout << player1 << endl;
@@ -70,7 +83,7 @@ void testCards() {
     cout << "Cloned Hand:   " << cloneHand << endl;
 
     //Play a card from the original hand to see if it affects the copy
-    player1.playCard(deck, "Blockade", *olist);
+    player1.playCard(deck, "Blockade", *olist,&p1, t1);
 
     cout << endl;
     cout << "After playing from original:" << endl;
