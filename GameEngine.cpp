@@ -11,19 +11,43 @@
 
 
 
-    GameEngine::GameEngine() = default;
+    GameEngine::GameEngine() {
+        gameState = "";
+        input = "";
+    }
+
+
+    GameEngine::~GameEngine() = default;
+    GameEngine::GameEngine(const GameEngine &other) {
+        this->gameState = other.gameState;
+        this->input = other.input;
+    }
+    GameEngine& GameEngine::operator=(const GameEngine& other) {
+        this->gameState = other.gameState;
+        this->input = other.input;
+        return *this;
+    }
+
+    ostream& operator<<(ostream& out, const GameEngine& other) {
+        out << "Game state: " << other.gameState << std::endl;
+        out << "Input: " << other.input << std::endl;
+        return out;
+    }
+
+
 
 
    void GameEngine::loadMap() {
         gameState = "map loaded";
         std::cout << "Map loaded... " << std::endl;
-
+        std::cout << "Game state: " << gameState << std::endl;
         std::cout << "Valid commands: loadmap/validatemap" << std::endl;
 
         std::cin >> input;
 
         while(input != "loadmap" && input!= "validatemap"){
         std::cout << "Invalid command entered" << std::endl;
+            std::cout << "Game state: " << gameState << std::endl;
         std::cout << "Valid commands: loadmap/validatemap" << std::endl;
         std::cin >> input;
 }
@@ -38,6 +62,7 @@
    void GameEngine::validateMap() {
         gameState = "map validated";
         std::cout << "Map validated" << std::endl;
+       std::cout << "Game state: " << gameState << std::endl;
         std::cout << "Valid commands: addplayer" << std::endl;
         std::cin >> input;
 
@@ -46,13 +71,14 @@
             std::cout << "Valid commands: addplayer" << std::endl;
             std::cin >> input;
             }
-       //verify input if correct and call addPlayer()
+       addPlayer();
     }
 
 
    void GameEngine::addPlayer() {
     gameState = "players added";
     std::cout << "Players added" << std::endl;
+       std::cout << "Game state: " << gameState << std::endl;
        std::cout << "Valid commands: addplayer/assigncountries" << std::endl;
 
         std::cin >> input;
@@ -66,11 +92,14 @@
            addPlayer();
         }
 
+       assignCountries();
+
 
 }
 
    void GameEngine::loopEntrance() {
         gameState = "assign reinforcement";
+       std::cout << "Game state: " << gameState << std::endl;
        std::cout << "Valid commands: issueorder" << std::endl;
         std::cin >> input;
 
@@ -87,6 +116,7 @@
    void GameEngine::assignCountries() {
     gameState = "assign reinforcement";
     std::cout << "Countries assigned" << std::endl;
+    std::cout << "Game state:" << gameState << std::endl;
 
     loopEntrance();
 
@@ -96,6 +126,7 @@
   void  GameEngine::issueOrder() {
     gameState = "issue orders";
     std::cout << "Order issued" << std::endl;
+       std::cout << "Game state: " << gameState << std::endl;
        std::cout << "Valid commands: issueorder/endissueorders" << std::endl;
     std::cin >> input;
 
@@ -118,6 +149,7 @@
    void GameEngine::endIssueOrders() {
     gameState = "execute orders";
     std::cout << "Order phase ended" << std::endl;
+       std::cout << "Game state: " << gameState << std::endl;
        std::cout << "Valid commands: execorder/endexecorders/win" << std::endl;
         std::cin >> input;
 
@@ -145,6 +177,7 @@
    void GameEngine::execOrder() {
     gameState = "execute orders";
     std::cout << "Order executed" << std::endl;
+       std::cout << "Game state:" << gameState << std::endl;
        std::cout << "Valid commands: execorder/endexecorders/win" << std::endl;
         std::cin >> input;
 
@@ -172,6 +205,7 @@
    void GameEngine::endExecOrders() {
     gameState = "assign reinforcement";
     std::cout << "Order phase ended" << std::endl;
+    std::cout << "Game state: " << gameState << std::endl;
     loopEntrance();
 
 }
@@ -179,7 +213,8 @@
    void GameEngine::win() {
     gameState = "win";
     std::cout << "Victory" << std::endl;
-       std::cout << "Valid commands: play/end" << std::endl;
+    std::cout << "Game state: " << gameState << std::endl;
+    std::cout << "Valid commands: play/end" << std::endl;
     std::cin >> input;
     while(input != "play" && input != "end"){
         std::cout << "Invalid command entered" << std::endl;
@@ -192,11 +227,16 @@
         end();
     }
 
+    if(input == "play"){
+        play();
+    }
+
 }
 
    void GameEngine::play() {
     gameState = "play";
     std::cout << "Game starting..." << std::endl;
+    std::cout << "Game state: " << gameState << std::endl;
     std::cout << "Valid commands: loadmap" << std::endl;
     std::cin >> input;
        while (input != "loadmap") {
@@ -204,19 +244,21 @@
            std::cout << "Valid commands: loadmap" << std::endl;
            std::cin >> input;
        }
-
+        if (input == "loadmap") {
+            loadMap();
+        }
+       validateMap();
     }
 
     void GameEngine::end(){
 
     gameState = "end";
     std::cout << "Game ended" << std::endl;
+    std::cout << "Game state: " << gameState << std::endl;
 
 }
 
-    std::string GameEngine::getGameState() {
-    return gameState;
-    }
+
 
 
 
