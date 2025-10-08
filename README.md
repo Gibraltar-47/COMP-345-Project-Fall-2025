@@ -13,20 +13,20 @@ This project is a modular C++ game engine that simulates strategic gameplay usin
 
 ## Project Structure
 ```
-Project/
-├─ Engine/
+Project
+├─ Engine
 │   ├─ GameEngine.cpp
 │   └─ GameEngineDriver.cpp
-├─ Orders/
+├─ Orders
 │   ├─ Orders.cpp
 │   └─ OrdersDriver.cpp
-├─ Part-4-Deck/
+├─ Part-4-Deck
 │   ├─ Cards.cpp
 │   └─ CardsDriver.cpp
-├─ part1-map/
+├─ part1-map
 │   ├─ Map.cpp
 │   └─ MapDriver.cpp
-├─ Player/
+├─ Player
 │   ├─ Player.cpp
 │   ├─ PlayerTest.cpp
 │   └─ PlayerDriver.cpp
