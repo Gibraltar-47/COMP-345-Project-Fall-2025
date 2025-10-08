@@ -40,7 +40,7 @@ Compile the project using:
 ```
 g++ Engine/GameEngine.cpp Engine/GameEngineDriver.cpp \Orders/Orders.cpp Orders/OrdersDriver.cpp \Part-4-Deck/Cards.cpp Part-4-Deck/CardsDriver.cpp \part1-map/Map.cpp part1-map/MapDriver.cpp \Player/PlayerTest.cpp Player/PlayerDriver.cpp \MainDriver.cpp -std=c++11
 ```
-##Running the Project
+Running the Project
 ```
 After compilation, run the game with:
 ```
