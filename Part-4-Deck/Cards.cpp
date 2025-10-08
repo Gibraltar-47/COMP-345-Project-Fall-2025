@@ -46,26 +46,9 @@ void Card::setName(const string& n) {
 }
 void Card::play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory) {
 
-    // "Bomb", "Airlift", "Blockade", "Negotiate", "Blockade"
 
-    //olist.addOrder(new Order(*this->name)); //creates order and adds it to the orderlist
+    olist.add(new OrdersBomb(player, territory)); //Only creates a bomb order for now
 
-    // Segmentation fault realted to this!!!
-    olist.add(new OrdersBomb(player, territory));
-
-
-    // if (*this->name == "Bomb"){
-
-    // }
-    // else if (*this->name == "Airlift"){
-
-    // }
-    // else if (*this->name == "Blockade"){
-
-    // }
-    // else if (*this->name == "Negotiate"){
-
-    // }
 
     hand->removeCard(this); //removes from hand
     deck.addCard(this); //add the card back to the deck
