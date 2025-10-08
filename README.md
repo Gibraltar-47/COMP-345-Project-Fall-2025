@@ -1,4 +1,4 @@
-# COMP-335---Project---Fall-2025
+# COMP-345---Project---Fall-2025
 
 ## Overview
 COMP345
