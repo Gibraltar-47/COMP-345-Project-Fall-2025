@@ -12,6 +12,7 @@ This project is a modular C++ game engine that simulates strategic gameplay usin
 - **Drivers & Tests**: Each module comes with driver files for testing.
 
 ## Project Structure
+```
 Project/
 ├─ Engine/
 │   ├─ GameEngine.cpp
@@ -30,7 +31,7 @@ Project/
 │   ├─ PlayerTest.cpp
 │   └─ PlayerDriver.cpp
 └─ MainDriver.cpp
-
+```
 ## Requirements
 - GCC/G++ compiler
 - C++11 or higher
