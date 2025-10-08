@@ -24,7 +24,11 @@ Project
 │   └─ CardsDriver.cpp
 ├─ part1-map
 │   ├─ Map.cpp
-│   └─ MapDriver.cpp
+│   ├─ MapDriver.cpp
+│   └─ mapFiles/ 
+│       ├─ map1.map
+│       ├─ map2.map
+│       └─ ...
 ├─ Player
 │   ├─ Player.cpp
 │   ├─ PlayerTest.cpp
