@@ -12,10 +12,10 @@ extern void testPlayers();
 
 
 int main(){
-    // testLoadMap();
-    // testPlayers();
+    testLoadMap();
+    testPlayers();
     testOrdersLists();
-    //testCards();
+    testCards();
     // testGameStates();
 
     return 0;

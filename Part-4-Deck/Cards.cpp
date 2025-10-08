@@ -48,7 +48,7 @@ void Card::play(Deck& deck, Hand* hand, OrdersList& olist) {
 
     // "Bomb", "Airlift", "Blockade", "Negotiate", "Blockade"
 
-    //olist.addOrder(new Order(*this->name)); //creates order and adds it to the orderlist
+    // olist.addOrder(new Order(*this->name)); //creates order and adds it to the orderlist
 
     // Segmentation fault realted to this!!!
     //olist.add(new Orders());
@@ -65,6 +65,8 @@ void Card::play(Deck& deck, Hand* hand, OrdersList& olist) {
     // else if (*this->name == "Negotiate"){
 
     // }
+
+    
 
     hand->removeCard(this); //removes from hand
     deck.addCard(this); //add the card back to the deck

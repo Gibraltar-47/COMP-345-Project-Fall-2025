@@ -29,33 +29,79 @@ Player::Player(const std:: string& playerName): name(playerName), territories(),
     orderList=new OrdersList();
 }
 
+// Player::Player(const Player& other){
+//     name=other.name;
+
+//     //shallow copy terr and handcards
+//     territories=other.territories;
+//     handCards= other.handCards;
+
+//     //orders.clear();
+
+//     orderList=new OrdersList(*other.orderList); //deep copy
+// }
+
+//asignment operator
+// Player& Player::operator=(const Player& other){
+//     if(this!=&other){
+//         name=other.name;
+//         territories=other.territories;
+//         handCards=other.handCards;
+
+//         //deep copy the new list
+//         orderList =new OrdersList(*other.orderList);
+//     }
+//     return *this;
+// }
+
+// Player::~Player(){
+//     delete orderList; //delete the Orderlist
+// }
+
 Player::Player(const Player& other){
-    name=other.name;
+    name = other.name;
 
-    //shallow copy terr and handcards
-    territories=other.territories;
-    handCards= other.handCards;
+    // Deep copy territories
+    //territories.clear();
+    for (auto t : other.territories) {
+        territories.push_back(new Territory(*t));
+    }
 
-    //orders.clear();
+    // Deep copy hand cards
+    //handCards.clear();
+    for (auto c : other.handCards) {
+        handCards.push_back(new Card(*c));
+    }
 
-    orderList=new OrdersList(*other.orderList); //deep copy
+    // Deep copy order list
+    orderList = new OrdersList(*other.orderList);
 }
 
 //asignment operator
-Player& Player::operator=(const Player& other){
-    if(this!=&other){
-        name=other.name;
-        territories=other.territories;
-        handCards=other.handCards;
-
-        //deep copy the new list
-        orderList =new OrdersList(*other.orderList);
-    }
-    return *this;
+Player::~Player() {
+    //for (auto t : territories) delete t;
+    for (auto c : handCards) delete c;
+    delete orderList;
 }
 
-Player::~Player(){
-    delete orderList; //delete the Orderlist
+Player& Player::operator=(const Player& other) {
+    if (this == &other) return *this;
+
+    // Clean up current
+    for (auto t : territories) delete t;
+    territories.clear();
+    for (auto c : handCards) delete c;
+    handCards.clear();
+    delete orderList;
+
+    name = other.name;
+
+    // Deep copy again
+    for (auto t : other.territories) territories.push_back(new Territory(*t));
+    for (auto c : other.handCards) handCards.push_back(new Card(*c));
+    orderList = new OrdersList(*other.orderList);
+
+    return *this;
 }
 
 //stream insertion operator

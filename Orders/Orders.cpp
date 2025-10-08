@@ -59,10 +59,11 @@ Orders::Orders(Player* issuingPlayer, Territory* sourceTerritory) : issuingPlaye
     // cout << "Orders::Orders(Territory* sourceTerritory)\n";
 }
 Orders::Orders(const Orders& order){
-    // cout << "Orders::Orders(const Orders& order)\n";
+    //cout << "Orders::Orders(const Orders& order)\n";
 
     if (order.getIssuingPlayer())
-        this->issuingPlayer = new Player(*(order.issuingPlayer)); // might be fine if player class has copy constructor and assignment operator
+        //this->issuingPlayer = new Player(*(order.issuingPlayer)); // might be fine if player class has copy constructor and assignment operator
+        this->issuingPlayer = order.getIssuingPlayer();
     else   
         this->issuingPlayer = nullptr;
 
@@ -407,7 +408,7 @@ void OrdersNegotiate::execute(){
 OrdersList::OrdersList() {}
 OrdersList::OrdersList(OrdersList& orderList){
     for (auto iterator : orderList.list){
-       this->list.push_back(iterator->allocateClone());
+        this->list.push_back(iterator->allocateClone());
     }
 }
 OrdersList& OrdersList::operator=(const OrdersList& orderList){

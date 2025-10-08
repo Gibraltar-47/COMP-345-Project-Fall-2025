@@ -124,37 +124,38 @@ void testOrdersLists(){
     cout << o3 << ", DATA: " << *o3 << "\n\n";
 
     OrdersAdvance* oa1 = new OrdersAdvance(p1, p1->getTerritories()[0], p1->getTerritories()[1], 1);
+    cout << "BEFORE COPY" << endl;
     OrdersAdvance* oa2 = new OrdersAdvance(*oa1);
-    // OrdersAdvance* oa3 = new OrdersAdvance();
-    // *oa3 = *oa1;
+    OrdersAdvance* oa3 = new OrdersAdvance();
+    *oa3 = *oa1;
 
-    // cout << "ORDERS ADVANCE MEMORY ADDRESSES AND DATA:" << endl;
-    // cout << oa1 << ", DATA: " << *oa1 << "\n\n";
-    // cout << oa2 << ", DATA: " << *oa2 << "\n\n";
-    // cout << oa3 << ", DATA: " << *oa3 << "\n\n";
+    cout << "ORDERS ADVANCE MEMORY ADDRESSES AND DATA:" << endl;
+    cout << oa1 << ", DATA: " << *oa1 << "\n\n";
+    cout << oa2 << ", DATA: " << *oa2 << "\n\n";
+    cout << oa3 << ", DATA: " << *oa3 << "\n\n";
 
 
 
-    // OrdersList* olist1 = new OrdersList(*(p1->getOrderList()));
-    // OrdersList* olist2 = new OrdersList();
-    // *olist2 = *olist1;
+    OrdersList* olist1 = new OrdersList(*(p1->getOrderList()));
+    OrdersList* olist2 = new OrdersList();
+    *olist2 = *olist1;
 
-    // cout << "\nORDER LIST MEMORY ADDESES AND DATA:" << endl;
-    // cout << p1->getOrderList() << ", DATA: " << *(p1->getOrderList()) << "\n\n";
-    // cout << olist1 << ", DATA: " << *olist1 << "\n\n";
-    // cout << olist2 << ", DATA: " << *olist2 << "\n\n";
+    cout << "\nORDER LIST MEMORY ADDESES AND DATA:" << endl;
+    cout << p1->getOrderList() << ", DATA: " << *(p1->getOrderList()) << "\n\n";
+    cout << olist1 << ", DATA: " << *olist1 << "\n\n";
+    cout << olist2 << ", DATA: " << *olist2 << "\n\n";
 
-    // Player* p3 = new Player("Negin");
-    // cout << "\nTESTING IHERITED CONSTRUCTOR" << endl;
-    // OrdersBomb* b1 = new OrdersBomb(p3, new Territory("Hogwarts", c1, 5, 8, adj));
-    // OrdersBomb* b2 = new OrdersBomb(*b1);
-    // OrdersBomb* b3 = new OrdersBomb();
-    // *b3 = *b1;
+    Player* p3 = new Player("Negin");
+    cout << "\nTESTING IHERITED CONSTRUCTOR" << endl;
+    OrdersBomb* b1 = new OrdersBomb(p3, new Territory("Hogwarts", c1, 5, 8, adj));
+    OrdersBomb* b2 = new OrdersBomb(*b1);
+    OrdersBomb* b3 = new OrdersBomb();
+    *b3 = *b1;
 
-    // cout << "BOMB ADDRESSES" << endl;
-    // cout << b1 << ": " << *b1 << endl;
-    // cout << b2 << ": " << *b2 << endl;
-    // cout << b3 << ": " << *b3 << endl;
+    cout << "BOMB ADDRESSES" << endl;
+    cout << b1 << ": " << *b1 << endl;
+    cout << b2 << ": " << *b2 << endl;
+    cout << b3 << ": " << *b3 << endl;
 
     cout << "-----------------------------------------------------------------------" << endl;
 }
