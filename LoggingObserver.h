@@ -7,8 +7,8 @@
 #include <string>
 using std::cout;
 
-#ifndef GITCLONE345_LOGGINGOBSERVER_H
-#define GITCLONE345_LOGGINGOBSERVER_H
+#ifndef LOGGINGOBSERVER_H
+#define LOGGINGOBSERVER_H
 
 class ILoggable{
     public:
