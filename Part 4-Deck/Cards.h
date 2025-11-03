@@ -5,33 +5,35 @@
 #include <list>
 #include <string>
 #include <vector>
+#include "Map.h"
+// #include "../Orders/Orders.h"
+
+
 //4.2.6
 class Deck;
 class Hand;
+class OrdersList;
+class Player;
+class Territory;
 
-//Placeholder******************************************
-//==============================
-class Order{
-private:
-    std::string* name;
-public:
-    Order(std::string& name);
-    ~Order();
-};
+// class Order{
+// private:
+//     std::string* name;
+// public:
+//     Order(std::string& name);
+//     ~Order();
+// };
 
-class OrderList {
-private:
-    std::list<Order*> olist;
-public:
-    OrderList();
-    ~OrderList();
-    void addOrder(Order* order);
-    void resolveOrder();
+// class OrderList {
+// private:
+//     std::list<Order*> olist;
+// public:
+//     OrderList();
+//     ~OrderList();
+//     void addOrder(Order* order);
+//     void resolveOrder();
 
-};
-//=================================
-//^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^Placeholder
-
+// };
 
 class Card {
     //The Card class is being used by both the Hand class and the Deck class
@@ -49,7 +51,8 @@ class Card {
         std::string getName() const;
         void setName(const std::string& n);
 
-        void play(Deck& deck, Hand* hand, OrderList& olist); // 4.2.4 4.2.10 line 48
+        void play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory,                //Mandatory parameters
+                    int mode = 3, int numArmies = 0, Territory* target = nullptr, Player* otherPlayer = nullptr); //Optional Parameter
 
         friend std::ostream& operator<<(std::ostream& os, const Card& c);
 };
@@ -82,7 +85,7 @@ class Deck {
 class Hand {
     //The hand class only borrows cards from the deck (shallow copy)
     private:
-        std::string* playerName;    //Player name (currently a placeholder) 4.2.5
+        std::string* player;    //Player name (currently a placeholder) 4.2.5
 
         std::vector<Card*> cards;  //Player hand  4.2.3, 4.2.5
 
@@ -95,7 +98,7 @@ class Hand {
 
         void addCard(Card* card);
         void draw(Deck& deck);
-        void playCard(Deck& deck, const std::string& cardName, OrderList& olist); //temporary for testing
+        void playCard(Deck& deck, const std::string& cardName, OrdersList& olist,Player* p, Territory* territory, Player* p2 = nullptr, Territory* territory2 = nullptr, int numArmies =1 ); //temporary for testing
         void removeCard(Card* card);
         void returnAll(Deck& deck);
 

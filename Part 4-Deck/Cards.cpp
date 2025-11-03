@@ -7,6 +7,7 @@
 #include <random>
 
 #include "Cards.h"
+#include "../Orders/Orders.h"
 
 using namespace std;
 
@@ -43,13 +44,43 @@ string Card::getName() const {
 void Card::setName(const string& n) {
     *name = n;
 }
-void Card::play(Deck& deck, Hand* hand, OrderList& olist) {  //Orderlist requires changing it to the right name
+void Card::play(Deck& deck,
+                Hand* hand,
+                OrdersList& olist,
+                Player* player,
+                Territory* territory,
+                int mode,             //Defaults to 3 (bomb)
+                int numArmies,        //Defaults to 0
+                Territory* target,    //Defaults to nullptr
+                Player* otherPlayer   //Defaults to nullptr if not used
+    ) {
+    switch (mode) {
+        case 1: //Deploy
+            olist.add(new OrdersDeploy(player, territory, numArmies));
+            break;
+        case 2: //Advance
+            olist.add(new OrdersAdvance(player, territory, target, numArmies));
+            break;
+        case 3: //Bombs
+            olist.add(new OrdersBomb(player, territory));
+            break;
+        case 4: //Airlift
+            olist.add(new OrdersAirlift(player, territory, target, numArmies));
+            break;
+        case 5: //Negotiate
+            olist.add(new OrdersNegotiate(player, otherPlayer));
+            break;
+        case 6: //Blockade
+            olist.add(new OrdersBlockade(player, territory));
+            break;
+        default: //Invalid mode
+            cout << "Invalid mode of play, will default to Bomb" << endl;
+            olist.add(new OrdersBomb(player, territory)); //Need another placeholder
+            break;
 
-    //creates order and adds it to the orderlist of the PLAYER***************************************************
-    olist.addOrder(new Order(*this->name)); //Name of the order<<=============================================
-    //^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-    //This line creates the order based on the string* name of the card.
+    }
 
+    //olist.add(new OrdersBomb(player, territory)); //Only creates a bomb order for now
 
 
     hand->removeCard(this); //removes from hand
@@ -143,15 +174,15 @@ ostream& operator << (ostream& os, const Deck& deck) {
 //Hand Class=====================
 //Default Constructor
 Hand::Hand() {
-    this->playerName = new string("BLANK");
+    this->player = new string("BLANK");
 }
 //Parameterized Constructor
 Hand::Hand(const string& name) {
-    this->playerName = new string(name);
+    this->player = new string(name);
 }
 //Copy Constructor
 Hand::Hand(const Hand& other){
-    this->playerName = new string(*other.playerName);
+    this->player = new string(*other.player);
     for (Card* c : other.cards) {
         this->cards.push_back(new Card(*c));
     }
@@ -160,8 +191,8 @@ Hand::Hand(const Hand& other){
 //Assignment Operator
 Hand& Hand::operator=(const Hand& other) {
     if (this != &other) {
-        delete playerName;
-        playerName = new string(*other.playerName);
+        delete player;
+        player = new string(*other.player);
 
         cards = other.cards;
     }
@@ -169,17 +200,17 @@ Hand& Hand::operator=(const Hand& other) {
 }
 //Destructor
 Hand::~Hand() {                                                                                                         //Since the cards are owned by the Deck,
-    delete playerName;                                                                                                      //all cards inside a hand vector are borrowed objects
+    //delete player;                                                                                                      //all cards inside a hand vector are borrowed objects
     cards.clear();                                                                                                      //cards wont be deleted from the hand. (see returnAll())
 }
 //Methods
 void Hand::addCard(Card* card) {                                                                                        //Adding cards to the list
     cards.push_back(card);
-    cout << *playerName << " has drawn " << card->getName() << endl;
+    cout << *player << " has drawn " << card->getName() << endl;
 }
 void Hand::draw(Deck& deck) {                                                                                           //Draw (RNG)
     cards.push_back(deck.draw());
-    cout << *playerName << " has drawn " << cards.back()->getName() << endl;
+    cout << *player << " has drawn " << cards.back()->getName() << endl;
 }
 void Hand::returnAll(Deck& deck) {                                                                                      //Whenever a player loses, all their cards are returned to the deck.
     for (Card* card : cards) {
@@ -198,7 +229,7 @@ bool Hand::isEmpty() const {
 }
 //Stream Insertion Operator
 ostream& operator << (ostream& os, const Hand& hand) {
-    os << *hand.playerName << "'s hand: ";
+    os << *hand.player << "'s hand: ";
     if (hand.cards.empty()) {
         os << "(EMPTY)";
     }
@@ -212,10 +243,12 @@ ostream& operator << (ostream& os, const Hand& hand) {
     }
     return os;
 }
-void Hand::playCard(Deck& deck, const string& cardName, OrderList& olist) { //DO NOT REMOVE THIS PART FOR ASSIGNMENT 1 (but will need to change for second assignment)
+//=======================================================
+//Temporary
+void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist,Player* p, Territory* territory, Player* p2, Territory* territory2, int numArmies) {
     //Plays a card
     if (isEmpty()) {                                                                                                    //Checks if hand is empty
-        cout << *playerName << "'s hand is empty" << endl;
+        cout << *player << "'s hand is empty" << endl;
         return;
     }
 
@@ -223,46 +256,69 @@ void Hand::playCard(Deck& deck, const string& cardName, OrderList& olist) { //DO
     [&] (Card* c) { return c->getName() == cardName; });
 
     if (it == cards.end()) {                                                                                            //If played card is not found in hand
-        cout << *playerName << " does not have " << cardName << endl;
+        cout << *player << " does not have " << cardName << endl;
         return;
     }
 
     Card* used = *it;
-    cout << *playerName << " has played " << used->getName() << "!" << endl;
-    used->play(deck, this,olist);
+    cout << *player << " has played " << used->getName() << "!" << endl;
+
+    if (cardName == "Bomb") {
+        used->play(deck, this, olist, p, territory, 3);
+    }
+    else if (cardName == "Negotiate") {
+        used->play(deck, this, olist, p, territory, 5, numArmies,nullptr,p2);
+    }
+    else if (cardName == "Airlift") {
+        used->play(deck, this, olist, p, territory, 4, numArmies,territory2);
+    }
+    else if (cardName == "Deploy") {
+        used->play(deck, this, olist, p, territory, 1,numArmies);
+    }
+    else if (cardName == "Advance") {
+        used->play(deck, this, olist, p, territory, 2, numArmies,territory2);
+    }
+    else if (cardName == "Blockade") {
+        used->play(deck, this, olist, p, territory, 6);
+    }
+    else {
+        std::cerr << "Unknown card name: " << cardName << std::endl;
+    }
+
+
+    //used->play(deck, this,olist,p, territory);
 
     //Returns the card back to the deck
     cout << used->getName() << " goes back into the deck." << endl;
 }
 
-//***********************************************************************************
 //TEMPORARY
-Order::Order(std::string &name) {
-    this->name = new string(name);
-}
+// Order::Order(std::string &name) {
+//     this->name = new string(name);
+// }
 
-Order::~Order() {
-    cout << *this->name << " deleted" << endl;
-    delete name;
-}
+// Order::~Order() {
+//     cout << *this->name << " deleted" << endl;
+//     delete name;
+// }
 
-OrderList::OrderList() = default;
+// OrderList::OrderList() = default;
 
-OrderList::~OrderList() {
-    cout << "Resolving Orders: " << endl;
-    for (Order* o: olist) {
-        delete o;
-    }
-    olist.clear();
-    cout << endl;
-    cout << "List has been deleted" << endl;
-}
-void OrderList::addOrder(Order *order) {
-    this->olist.push_back(order);
-}
-void OrderList::resolveOrder() {
-    delete this;
-}
+// OrderList::~OrderList() {
+//     cout << "Resolving Orders: " << endl;
+//     for (Order* o: olist) {
+//         delete o;
+//     }
+//     olist.clear();
+//     cout << endl;
+//     cout << "List has been deleted" << endl;
+// }
+// void OrderList::addOrder(Order *order) {
+//     this->olist.push_back(order);
+// }
+// void OrderList::resolveOrder() {
+//     delete this;
+// }
 
 
 
