@@ -5,7 +5,7 @@
 #include <list>
 #include <string>
 #include <vector>
-// #include "../Orders/Orders.h"
+#include "../part1-map/Map.h"
 
 
 //4.2.6
@@ -13,25 +13,7 @@ class Deck;
 class Hand;
 class OrdersList;
 class Player;
-
-// class Order{
-// private:
-//     std::string* name;
-// public:
-//     Order(std::string& name);
-//     ~Order();
-// };
-
-// class OrderList {
-// private:
-//     std::list<Order*> olist;
-// public:
-//     OrderList();
-//     ~OrderList();
-//     void addOrder(Order* order);
-//     void resolveOrder();
-
-// };
+class Territory;
 
 class Card {
     //The Card class is being used by both the Hand class and the Deck class
@@ -49,7 +31,7 @@ class Card {
         std::string getName() const;
         void setName(const std::string& n);
 
-        void play(Deck& deck, Hand* hand, OrdersList& olist); // 4.2.4 4.2.10 line 48
+        void play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory); // 4.2.4 4.2.10 line 48
 
         friend std::ostream& operator<<(std::ostream& os, const Card& c);
 };
@@ -95,7 +77,7 @@ class Hand {
 
         void addCard(Card* card);
         void draw(Deck& deck);
-        void playCard(Deck& deck, const std::string& cardName, OrdersList& olist); //temporary for testing
+        void playCard(Deck& deck, const std::string& cardName, OrdersList& olist,Player* p, Territory* territory); //temporary for testing
         void removeCard(Card* card);
         void returnAll(Deck& deck);
 

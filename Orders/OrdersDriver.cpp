@@ -21,21 +21,15 @@ void testOrdersLists(){
     Territory* t4 = new Territory(name4, c1, 7 ,8, adj);
 
     Player* p1 = new Player("Shawn");
-    //p1->getTerritories().push_back(t1);
-    //p1->getTerritories().push_back(t2);
     p1->addTerritory(t1);
     p1->addTerritory(t2);
 
     Player* p2 = new Player("Howard");
-    //p2->getTerritories().push_back(t3);
-    //p2->getTerritories().push_back(t4);
     p2->addTerritory(t3);
     p2->addTerritory(t4);
 
 
     cout << "VALID ORDERS" << endl;
-
-    cout << p1->getTerritories().size() << endl;
 
     Orders* vorder1 = new OrdersDeploy(p1, p1->getTerritories()[0], 3);
     Orders* vorder2 = new OrdersAdvance(p1, p1->getTerritories()[0], p1->getTerritories()[1], 1);
@@ -45,7 +39,7 @@ void testOrdersLists(){
     Orders* vorder6 = new OrdersNegotiate(p1, p2);
     Orders* vlist[6] = {vorder1, vorder2, vorder3, vorder4, vorder5, vorder6};
 
-    // cout << "INVALID ORDERS" << endl;
+    cout << "INVALID ORDERS" << endl;
     Orders* iorder1 = new OrdersDeploy(p2, p1->getTerritories()[0], 3);
     Orders* iorder2 = new OrdersAdvance(p2, p1->getTerritories()[1], p2->getTerritories()[0], 10);
     Orders* iorder3 = new OrdersBomb(p2, p2->getTerritories()[0]);
@@ -67,7 +61,7 @@ void testOrdersLists(){
     cout << "\nBELOW IS THE LIST OF ORDERS FOR PLAYER 1 (INVALID)\n" << endl;
     cout << *(p2->getOrderList()) << endl;
 
-    // cout << "NOW PRINTING THE VALIDITY OF THE ORDERS\n" << endl;
+    cout << "NOW PRINTING THE VALIDITY OF THE ORDERS\n" << endl;
     cout << "PLAYER 1 ORDERS" << endl;
     for (auto order : p1->getOrderList()->getList()){
         cout << "IS VALID?: ";
@@ -159,26 +153,3 @@ void testOrdersLists(){
 
     cout << "-----------------------------------------------------------------------" << endl;
 }
-
-
-// int main(){
-
-//     testOrdersLists();
-    
-//     // Player* p1 = new Player(1);
-//     // Player* p2 = new Player(2);
-//     // Territory* t1 = new Territory("Canada", 3, p1);
-//     // Orders* o1 = new Orders(p1, t1);
-
-//     // cout << "\nPlayer: " << p1 << " DATA: " << *p1 << endl;
-//     // cout << "\nTerritory: " << t1 << " DATA: " << *t1 << endl;
-//     // cout << "\nOrders: " << o1 << " DATA: " << *o1 << "\n" << endl;
-
-//     // delete o1;
-
-//     // cout << "\nPlayer: " << p1 << " DATA: " << *p1 << endl;
-//     // cout << "\nTerritory: " << t1 << " DATA: " << *t1 << endl;
-//     //cout << "\nOrders: " << o1 << " DATA: " << *o1 << endl;
-
-//     return 0;
-// }

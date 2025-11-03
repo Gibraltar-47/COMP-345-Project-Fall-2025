@@ -7,31 +7,6 @@
 #include "../part1-map/Map.h"
 using namespace std;
 
-// Territory::Territory(){}
-// Territory::Territory(std::string _name, int _points, Player* _owner) : name(_name), points(_points), owner(_owner) {}
-// Player::Player(int id) : id(id) {
-//     this->listOfOrders = new OrdersList();
-// }
-
-// bool Territory::equals(Territory* territory2){
-//     if (this->name != territory2->name || this->points != territory2->points || !(this->owner->id == territory2->owner->id))
-//         return false;
-//     return true;
-// }
-// bool Player::equals(Player* player2){
-//     if (this->id != player2->id)
-//         return false;
-    
-//     if (this->ownedTerritories.size() != player2->ownedTerritories.size())
-//         return false;
-
-//     for (int n = 0; n < this->ownedTerritories.size(); n++){
-//         if (!(this->ownedTerritories[n]->equals(player2->ownedTerritories[n])))
-//             return false;
-//     }
-//     return true;
-// }
-
 std::ostream& operator<<(std::ostream &strm, const Orders& order){
     order.printOrder(strm);
     return strm;
@@ -48,18 +23,9 @@ std::ostream& operator<<(std::ostream &strm, Territory& territory){
     strm << "Territory: " << territory.getName();
     return strm;
 }
-std::ostream& operator<<(std::ostream &strm, const Player& player){
-    strm << "Player: " << player.getName() << endl;
-    return strm;
-}
-Orders::Orders() : issuingPlayer(nullptr) , sourceTerritory(nullptr), isActive(false), isValid(false) {
-    // cout << "Orders::Orders()" << endl;
-}
-Orders::Orders(Player* issuingPlayer, Territory* sourceTerritory) : issuingPlayer(issuingPlayer), sourceTerritory(sourceTerritory), isActive(false), isValid(false){
-    // cout << "Orders::Orders(Territory* sourceTerritory)\n";
-}
+Orders::Orders() : issuingPlayer(nullptr) , sourceTerritory(nullptr), isActive(false), isValid(false) {}
+Orders::Orders(Player* issuingPlayer, Territory* sourceTerritory) : issuingPlayer(issuingPlayer), sourceTerritory(sourceTerritory), isActive(false), isValid(false){}
 Orders::Orders(const Orders& order){
-    //cout << "Orders::Orders(const Orders& order)\n";
 
     if (order.getIssuingPlayer())
         //this->issuingPlayer = new Player(*(order.issuingPlayer)); // might be fine if player class has copy constructor and assignment operator
@@ -76,13 +42,9 @@ Orders::Orders(const Orders& order){
     this->setIsActive(order.getIsActive());
     this->setIsValid(order.getIsValid());
 }
-Orders::~Orders(){
-    // delete sourceTerritory;
-    // delete issuingPlayer;
-}
+Orders::~Orders(){}
 
 Orders& Orders::operator=(const Orders& order){
-    // cout << "Orders::operator=(const Orders& order)\n";
     if (this != &order){
         delete this->getSourceTerritory(); // Free old memory before assignment
         delete this->getIssuingPlayer();
@@ -148,7 +110,6 @@ OrdersDeploy::OrdersDeploy(Player* issuingPlayer, Territory* sourceTerritory, in
 OrdersDeploy::OrdersDeploy(const OrdersDeploy& order) : Orders(order) {
     this->setNumArmies(order.getNumArmies());
 }
-//OrdersDeploy::~OrdersDeploy(){}
 OrdersDeploy& OrdersDeploy::operator=(const OrdersDeploy& order){
         if (this != &order){
             Orders::operator=(order);
@@ -174,7 +135,6 @@ void OrdersDeploy::printOrder(std::ostream& strm) const{
 bool OrdersDeploy::validate(){
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr || this->getSourceTerritory()->getOwner() == nullptr)
         return false;
-    //cout << "OrdersDeploy::validate" << endl;
     // May have to add in equals functions
     if (this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer())){
         cout << "VALID DEPLOY" << endl;
@@ -191,16 +151,13 @@ OrdersAdvance::OrdersAdvance() : Orders(), targetTerritory(nullptr), numArmies(0
 OrdersAdvance::OrdersAdvance(Player* issuingPlayer, Territory* sourceTerritory, Territory* targetTerritory, int numArmies) : Orders(issuingPlayer, sourceTerritory), targetTerritory(targetTerritory), numArmies(numArmies){}
 OrdersAdvance::OrdersAdvance(const OrdersAdvance& order) : Orders(order) {
     if (order.getTargetTerritory()){
-        cout << "LLLL" << endl;
         this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
     }
     else   
         this->setTargetTerritory(nullptr);
     this->setNumArmies(order.getNumArmies());
 }
-OrdersAdvance::~OrdersAdvance(){
-    // delete targetTerritory;
-}
+OrdersAdvance::~OrdersAdvance(){}
 OrdersAdvance& OrdersAdvance::operator=(const OrdersAdvance& order){
     if (this != &order){
         Orders::operator=(order);
@@ -257,7 +214,6 @@ void OrdersBomb::printOrder(std::ostream& strm) const{
 bool OrdersBomb::validate(){
     if (this->getSourceTerritory() == nullptr || this->getSourceTerritory()->getOwner() == nullptr || this->getIssuingPlayer() == nullptr)
         return false;
-    //cout << "OrdersBomb::validate" << endl;
 
     if (this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer())){
         cout << "Bombing own territory is invalid" << endl;
@@ -281,7 +237,6 @@ void OrdersBlockade::printOrder(std::ostream& strm) const{
 bool OrdersBlockade::validate(){
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr)
         return false;
-    //cout << "OrdersBlockade::validate" << endl;
 
     if (this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer())){
         cout << "VALID BLOCKADE" << endl;
@@ -304,9 +259,7 @@ OrdersAirlift:: OrdersAirlift(const OrdersAirlift& order) : Orders(order) {
     this->setNumArmies(order.getNumArmies());
 
 }
-OrdersAirlift::~OrdersAirlift(){
-    // delete targetTerritory;
-}
+OrdersAirlift::~OrdersAirlift(){}
 OrdersAirlift& OrdersAirlift::operator=(const OrdersAirlift& order){
     if (this != &order){
         Orders::operator=(order);
@@ -341,7 +294,6 @@ void OrdersAirlift::printOrder(std::ostream& strm) const{
 bool OrdersAirlift::validate(){
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr || this->getTargetTerritory() == nullptr)
         return false;
-    //cout << "OrdersAirlift::validate" << endl;
 
     if (this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer()) && this->getTargetTerritory()->getOwner()->equals(this->getIssuingPlayer())){
         cout << "VALID AIRLIFT" << endl;
@@ -360,9 +312,7 @@ OrdersNegotiate::OrdersNegotiate(const OrdersNegotiate& order) : Orders(order){
     if (order.getEnemyToTruce())
         this->enemyToTruce = new Player(*order.enemyToTruce); // might be fine if player class has copy constructor and assignment operator
 }
-OrdersNegotiate::~OrdersNegotiate(){
-    // delete enemyToTruce;
-}
+OrdersNegotiate::~OrdersNegotiate(){}
 OrdersNegotiate& OrdersNegotiate::operator=(const OrdersNegotiate& order){
     if (this != &order){
         Orders::operator=(order);
@@ -390,7 +340,6 @@ void OrdersNegotiate::printOrder(std::ostream& strm) const{
 bool OrdersNegotiate::validate(){
     if (this->getEnemyToTruce() == nullptr || this->getIssuingPlayer() == nullptr)
         return false;
-    //cout << "OrdersNegotiate::validate" << endl;
 
     if (this->getEnemyToTruce()->equals(this->getIssuingPlayer())){
         cout << "INVALID NEGOTIATION" << endl;
@@ -471,9 +420,6 @@ Orders* OrdersList::remove(const int index){
     return nullptr;
 
 }
-// Orders* OrdersList::move(const Orders& order, int position){
-//     return nullptr;
-// }
 Orders* OrdersList::move(const int sourceIndex, const int targetIndex){
     auto firstIterator = this->list.begin();
     std::advance(firstIterator, sourceIndex);

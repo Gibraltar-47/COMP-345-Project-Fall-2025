@@ -4,30 +4,10 @@
 
 #include "GameEngine.h"
 
-#include <iostream>
 
-
-void testGameStates(){
+void testGameStates() {
     GameEngine game;
+    std::cout << "PRINTING GAME ENGINE WITH STREAM INSERTION: "<< std::endl << game << std::endl;
+    game.play();
 
-
-    while(game.getGameState() != "end"){
-        game.play();
-        game.loadMap();
-        game.validateMap();
-        game.addPlayer();
-        game.assignCountries();
-    }
 }
-
-
-
-
-
-
-// int main(){
-
-// testGameStates();
-
-// return 0;
-// }

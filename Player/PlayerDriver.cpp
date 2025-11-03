@@ -26,9 +26,7 @@ void testPlayers(){
 //create players
  Player p1("Jack");
  Player p2("Alyssa");
-//create territories
-//  Territory* tr1 = new Territory();
-//  Territory* tr2 = new Territory();
+
 //assign terr to players
 p1.addTerritory(tr1);
 p1.addTerritory(tr2);
@@ -37,7 +35,6 @@ p2.addTerritory(tr1);
 p1.printStatus();
 p2.printStatus();
 //add cards
-
  Card* c1 = new Card();
  Card* c2 = new Card();
 
@@ -55,8 +52,4 @@ delete tr2;
 
 cout << "END OF PLAYER DRIVER" << endl;
 }
-//  int main(){
-//   testPlayers();
-//  return 0;
-//  }
 

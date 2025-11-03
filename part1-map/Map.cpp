@@ -45,12 +45,6 @@ bool isConnectedGraph(vector <vector<int>> &adjM, string n, string type){
     return true;
 }
 
-// Player::Player(string n):name(n){}
-
-// string Player::getName()const{
-//     return name;
-// }
-
 //constructor with a string name parameter
 Map::Map(const string& n):name(n){}
 
@@ -272,41 +266,6 @@ bool Map::validate()
     if (check1&&check2&&check3){return true;}
     return false;
 }
-// bool Map::validate()
-// {
-//     bool check3=true,check2=false,check1=false;
-//     //1. verify that the map is a connected graph through DFS function isConnectedGraph
-//     if (!adjMatrix.empty())
-//     {
-//         check1 = isConnectedGraph(adjMatrix, name, "Map");
-//     }
-
-//     //2. verify that the country is a connected graph through DFS function isConnectedGraph
-//     if (!adjMatrix.empty())
-//     {
-//         check2 = isConnectedGraph(adjMatrix, continents[0]->getName(), "Continent");
-//     }
-
-//     //3.1 check if any territory is being repeated in any continent's territories list
-//     set <Territory> setTerr;
-//     for (Continent* c: continents){
-//         for (Territory* t: c->getTerritories()){
-//             if (setTerr.count(t)){
-//                 cout<<t->getName()<<" appears in more than one continent"<<std::endl;
-//                 check3=false;
-//             }else{setTerr.insert(t);}
-//         }
-//     }
-//     //3.2 check if every territory has an association to a continent or nullptr
-//     for (Territory* t: territories){
-//         if (t->getContinent()==nullptr){
-//             cout<<t->getName()<<" is not associated to any continent"<<std::endl;
-//             check3=false;
-//         }
-//     }
-//     if (check1&&check2&&check3){return true;}
-//     return false;
-// }
 
 ostream& operator <<(ostream& out, const Map& map){
     out<<"Map name: "<<map.name<<"\n";
@@ -532,103 +491,6 @@ MapLoader::MapLoader()= default;                                                
 MapLoader::MapLoader(const MapLoader& otherMapLoader){};
 MapLoader::~MapLoader()= default;
 MapLoader& MapLoader::operator = (const MapLoader& otherMapLoader){return *this;}                                       //there is no difference between a MapLoader to another
-
-// Map MapLoader::loadMap(const string& filename){
-//     Map map("holder");
-
-//     inputFileStream.open(filename);
-//     if (inputFileStream.is_open()){                                                                                     //if true, the file was opened successfully and will be read
-//         Territory* terrHolder=nullptr;
-//         Continent* conHolder=nullptr;
-
-//         string line,mapName,conName,terrName;
-//         int step=0,x,y,p;
-//         string::size_type firstPos, secondPos;
-//         vector <string> adjTerrName,terrInfo;
-
-//        while(getline(inputFileStream,line)){                                                                      //reading all the lines until the end of the file
-//             if (line=="[Map]"){                                                                                         //if true, the next line will have the name of the map in the image name(i.e. "image=Aldawin.png", Aldawin is the name of the map)
-//                 getline(inputFileStream, line);
-//                 firstPos=line.find('=');                                                                              //truncating the string to find the name by using '=' and '.' as delimiters
-//                 secondPos=line.find('.');
-//                 mapName=line.substr(firstPos+1,secondPos-firstPos-1);
-//                 map=Map(mapName);                                                                                       //object map is reinitialized to the right name using a copy constructor
-//                 continue;
-//             }
-//             if (line=="[Continents]"){                                                                                  //unless the ifstream reaches the continent section marked by the string in if cond
-//                 step++;continue;                                                                                        //the code will never initialize any territory or continent, because step (int 0) needs to be incremented to proceed to the next step
-//             }
-//            if (step==1){                                                                                                //step is only going to get incremented if it reaches the territories' section
-//                if (line.empty()){continue;}
-//                if (line=="[Territories]"){step++;continue;}
-//                 firstPos=line.find('=');                                                                             //each line in the continent section shows 2 things separated by '=': 1. name 2. points to conquer
-//                 conName=line.substr(0,firstPos);
-//                 p=stoi(line.substr(firstPos+1,line.size()-firstPos-1));
-//                 conHolder= new Continent(conName,p);                                                                    //a continent is initialized using the conHolder continent obj placeholder
-//                 map.addContinent(conHolder);                                                                            //the newly initialized continent is then added to the map's vector of the continents
-//            }
-//            if (step==2){
-//                if (line.empty()){continue;}
-//                std::stringstream terrInfoStream(line);
-//                while (getline(terrInfoStream,terrName,',')){                                                 //Once in the territories section, each line is considered as csv in the following order: name,x,y,continent,adjterr1,adjterr2,....ajterrN
-//                    terrInfo.push_back(terrName);                                                                        //each string is put in vector terrInfo, then each string in the vector is assigned to a local variable that will be used for object initialization
-//                }
-//                for (int i=0;i<terrInfo.size();i++){
-//                    if (i==0){
-//                        terrName=terrInfo[0];
-//                    }else if (i==1){
-//                        x=stoi(terrInfo[1]);
-//                    }else if (i==2){
-//                        y=stoi(terrInfo[2]);
-//                    }else if (i==3){
-//                        conName=terrInfo[3];
-//                        conHolder= map.getContinent(conName);                                                            //because Continent is a pointer data member of territories we go through the map's collection of continents to find the pointer
-//                    }else if (i>3){
-//                        adjTerrName.push_back(terrInfo[i]);
-//                    }
-//                }
-//                terrInfo.clear();                                                                                        //after terrInfo was used, it is cleared to make sure there is no value from a previous territory added to the following one
-//                terrHolder=new Territory(terrName,conHolder,x,y,adjTerrName);
-//                adjTerrName.clear();
-//                map.addTerritory(terrHolder);                                                                            //add to map object
-//                map.getContinent(conName)->addTerritory(map.getTerritory(terrHolder->getName()));                    //add to continent referencing to the map because it has a deep copy of continent
-//                delete terrHolder;                                                                                       //to avoid memory leaks
-//            }
-//        }
-//     }else{                                                                                                              //if the file was not opened successfully
-//         cout<<"Error: file not found"<<std::endl;
-//     }
-//     inputFileStream.close();
-
-//     //populating the map graph data structure
-//     //to populate the graph, we must start with each continent's subgraph
-//     map.initAdjMatrix();
-//     vector<string>adjTerrName;
-//     for (Continent* c:map.getContinents()){
-//         c->initAdjMatrix();
-//         for (Territory* t:c->getTerritories()){
-//             adjTerrName.push_back(t->getName());
-//             for (const string& name:t->getAdjTerritoriesNames()){
-//                 Territory* terr=map.getTerritory(name);
-//                 if (terr!=nullptr&&terr->getContinent()==c&&!c->isConnected(t,map.getTerritory(name))){                 //3 checks: 1. is the destination territory pointer null 2. is the destination territory in the same continent as its source
-//                     c->setVertice(t,map.getTerritory(name));                                                            //3. was the vertice between the 2 territories already created
-//                 }
-//             }
-//         }
-//     }
-//     adjTerrName.clear();
-//     //populate the adjacency matrix for the map
-//     for (Territory* t:map.getTerritories()){
-//         adjTerrName.push_back(t->getName());
-//         for (const string& name:t->getAdjTerritoriesNames()){
-//             Territory* terr=map.getTerritory(name);
-//             if (terr!=nullptr&&!map.isConnected(t,map.getTerritory(name))){
-//                 map.setVertice(t,map.getTerritory(name));
-//             }
-//         }
-//     }
-//     return map;
-// };
 
 Map MapLoader::loadMap(const string& filename){
     Map map("holder");

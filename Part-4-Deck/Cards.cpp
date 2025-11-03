@@ -44,29 +44,11 @@ string Card::getName() const {
 void Card::setName(const string& n) {
     *name = n;
 }
-void Card::play(Deck& deck, Hand* hand, OrdersList& olist) {
+void Card::play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory) {
 
-    // "Bomb", "Airlift", "Blockade", "Negotiate", "Blockade"
 
-    // olist.addOrder(new Order(*this->name)); //creates order and adds it to the orderlist
+    olist.add(new OrdersBomb(player, territory)); //Only creates a bomb order for now
 
-    // Segmentation fault realted to this!!!
-    //olist.add(new Orders());
-
-    // if (*this->name == "Bomb"){
-
-    // }
-    // else if (*this->name == "Airlift"){
-
-    // }
-    // else if (*this->name == "Blockade"){
-
-    // }
-    // else if (*this->name == "Negotiate"){
-
-    // }
-
-    
 
     hand->removeCard(this); //removes from hand
     deck.addCard(this); //add the card back to the deck
@@ -184,8 +166,7 @@ Hand& Hand::operator=(const Hand& other) {
     return *this;
 }
 //Destructor
-Hand::~Hand() {                                                                                                         //Since the cards are owned by the Deck,
-    delete player;                                                                                                      //all cards inside a hand vector are borrowed objects
+Hand::~Hand() {                                                                                                         //Since the cards are owned by the Deck,                                                                                                 //all cards inside a hand vector are borrowed objects
     cards.clear();                                                                                                      //cards wont be deleted from the hand. (see returnAll())
 }
 //Methods
@@ -230,7 +211,7 @@ ostream& operator << (ostream& os, const Hand& hand) {
 }
 //=======================================================
 //Temporary
-void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist) {
+void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist,Player* p, Territory* territory) {
     //Plays a card
     if (isEmpty()) {                                                                                                    //Checks if hand is empty
         cout << *player << "'s hand is empty" << endl;
@@ -247,39 +228,8 @@ void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist) {
 
     Card* used = *it;
     cout << *player << " has played " << used->getName() << "!" << endl;
-    used->play(deck, this,olist);
+    used->play(deck, this,olist,p, territory);
 
     //Returns the card back to the deck
     cout << used->getName() << " goes back into the deck." << endl;
 }
-
-//TEMPORARY
-// Order::Order(std::string &name) {
-//     this->name = new string(name);
-// }
-
-// Order::~Order() {
-//     cout << *this->name << " deleted" << endl;
-//     delete name;
-// }
-
-// OrderList::OrderList() = default;
-
-// OrderList::~OrderList() {
-//     cout << "Resolving Orders: " << endl;
-//     for (Order* o: olist) {
-//         delete o;
-//     }
-//     olist.clear();
-//     cout << endl;
-//     cout << "List has been deleted" << endl;
-// }
-// void OrderList::addOrder(Order *order) {
-//     this->olist.push_back(order);
-// }
-// void OrderList::resolveOrder() {
-//     delete this;
-// }
-
-
-

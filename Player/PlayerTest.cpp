@@ -1,6 +1,4 @@
 #include "Player.h"
-// #include "Territory.h"
-// #include "Cards.h"
 #include "../Orders/Orders.h"
 #include "../part1-map/Map.h"
 #include "../Part-4-Deck/Cards.h"
@@ -9,14 +7,6 @@
 #include <algorithm>
 using namespace std;
 
-// Territory::Territory() : name("Unknown Territory"), owner(nullptr) {}
-// Territory::Territory(std::string name, Player* owner) : name(name), owner(owner) {}
-// std::string Territory::getName() {return this->name;}
-// Player* Territory::getOwner() {return this->owner;}
-// void Territory::setOwner(Player* owner) {this->owner = owner;}
-
-// Cards::Cards() : name("Unknwon Card") {}
-// std::string Cards::getName() {return this->name;}
 
 
 
@@ -29,46 +19,15 @@ Player::Player(const std:: string& playerName): name(playerName), territories(),
     orderList=new OrdersList();
 }
 
-// Player::Player(const Player& other){
-//     name=other.name;
-
-//     //shallow copy terr and handcards
-//     territories=other.territories;
-//     handCards= other.handCards;
-
-//     //orders.clear();
-
-//     orderList=new OrdersList(*other.orderList); //deep copy
-// }
-
-//asignment operator
-// Player& Player::operator=(const Player& other){
-//     if(this!=&other){
-//         name=other.name;
-//         territories=other.territories;
-//         handCards=other.handCards;
-
-//         //deep copy the new list
-//         orderList =new OrdersList(*other.orderList);
-//     }
-//     return *this;
-// }
-
-// Player::~Player(){
-//     delete orderList; //delete the Orderlist
-// }
-
 Player::Player(const Player& other){
     name = other.name;
 
     // Deep copy territories
-    //territories.clear();
     for (auto t : other.territories) {
         territories.push_back(new Territory(*t));
     }
 
     // Deep copy hand cards
-    //handCards.clear();
     for (auto c : other.handCards) {
         handCards.push_back(new Card(*c));
     }
@@ -79,7 +38,6 @@ Player::Player(const Player& other){
 
 //asignment operator
 Player::~Player() {
-    //for (auto t : territories) delete t;
     for (auto c : handCards) delete c;
     delete orderList;
 }
@@ -103,32 +61,6 @@ Player& Player::operator=(const Player& other) {
 
     return *this;
 }
-
-//stream insertion operator
-// ostream& operator<<(std::ostream& out, const Player& p){
-//     out<<"Player: "<<p.name<<"\n";
-//     out<<"Territories: ";
-//     if(!p.territories.empty()){
-//         for(auto t:(p.territories))
-//             out<< t->getName()<<" ";
-//     } 
-//     else out<<"none";
-//     out<<"\n";
-
-//     out<<"Hand: ";
-//     if(!p.handCards.empty()){
-//         for(auto c: p.handCards)
-//             out<<c->getName()<<" ";
-//     } 
-//     else{
-//             out<<"none";
-//     }
-//     out<<"\n";
-
-//     out<<"Orders: ";
-//     out<<"none\n";
-//     return out;
-// }
 
 //getters and setters
  string Player::getName() const{
@@ -166,25 +98,19 @@ void Player::addOrder(Orders* ord) {
     orderList->add(ord);
 }
 
-//execute all the orders in rderList, prints the result, deletes each order after execution and clear the vector
 void Player::issueOrder(){
-    // auto list=orderList->getList();
-    // if(list.empty()){
-    //     cout<<name<<" has no orders to issue."<<endl;
-    //     return;
-    // }
-
-    // cout<<name<<" has these issues to order: "<<endl;
-
-    // for(Orders* o: list){
-    //     if(o){
-    //         o->execute();
-    //         cout<<*o<<endl;
-    //     }
-    // }
-    // orderList->setList();
+ //create a new order
+ Orders* newOrder=new Orders();
 
 
+ //adds it to the player's orders vector
+ orderList->add(newOrder);
+ //add to the OrdersList
+ if (orderList) {
+  orderList->getList().push_back(newOrder);
+
+ }
+ cout<< name<<" created a new order: "<< *newOrder <<endl;
 }
 
 //returns a list of territories the player owns(to defend)
@@ -232,19 +158,19 @@ vector<Territory*> Player::toAttack(const std::vector<Territory*>& allTerritorie
     cout << "PLAYER PRINT STATUS" << endl;
 
 
-//   cout<<"Player: "<<name<<endl;
-//   cout<<"Territories: ";
-//   if(territories.empty()) cout<<"none";
-//   else for(Territory* t: territories) cout<<t->getName()<<" ";
-//   cout<<"\n Hand cards: ";
-//   if(handCards.empty()) cout<<"none";
-//   else for(Card* c: handCards) cout<<c->getName()<<" ";
-//   cout<<endl;
-//   cout<<"Orders: ";
-//   const auto list=orderList->getList();
-//   if(list.empty()) cout<<"none";
-//   else for (Orders* o:list) cout<< o->getName();
-//   cout<<endl;
+  cout<<"Player: "<<name<<endl;
+  cout<<"Territories: ";
+  if(territories.empty()) cout<<"none";
+  else for(Territory* t: territories) cout<<t->getName()<<" ";
+  cout<<"\n Hand cards: ";
+  if(handCards.empty()) cout<<"none";
+  else for(Card* c: handCards) cout<<c->getName()<<" ";
+  cout<<endl;
+  cout<<"Orders: ";
+  const auto list=orderList->getList();
+  if(list.empty()) cout<<"none";
+  else for (Orders* o:list) cout<< *o;
+  cout<<endl;
  }
 
 bool Player::equals(Player* player2){
@@ -259,4 +185,30 @@ bool Player::equals(Player* player2){
             return false;
     }
     return true;
+}
+
+//stream insertion operator
+ostream& operator<<(std::ostream& out, const Player& p){
+    out<<"Player: "<<p.name<<"\n";
+    out<<"Territories: ";
+    if(!p.territories.empty()){
+        for(auto t:(p.territories))
+            out<< t->getName()<<" ";
+    } 
+    else out<<"none";
+    out<<"\n";
+
+    out<<"Hand: ";
+    if(!p.handCards.empty()){
+        for(auto c: p.handCards)
+            out<<c->getName()<<" ";
+    } 
+    else{
+            out<<"none";
+    }
+    out<<"\n";
+
+    out<<"Orders: ";
+    out<<"none\n";
+    return out;
 }

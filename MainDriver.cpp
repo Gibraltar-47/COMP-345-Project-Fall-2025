@@ -16,7 +16,7 @@ int main(){
     testPlayers();
     testOrdersLists();
     testCards();
-    // testGameStates();
+    testGameStates();
 
     return 0;
 }
