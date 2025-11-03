@@ -44,10 +44,43 @@ string Card::getName() const {
 void Card::setName(const string& n) {
     *name = n;
 }
-void Card::play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory) {
+void Card::play(Deck& deck,
+                Hand* hand,
+                OrdersList& olist,
+                Player* player,
+                Territory* territory,
+                int mode,             //Defaults to 3 (bomb)
+                int numArmies,        //Defaults to 0
+                Territory* target,    //Defaults to nullptr
+                Player* otherPlayer   //Defaults to nullptr if not used
+    ) {
+    switch (mode) {
+        case 1: //Deploy
+            olist.add(new OrdersDeploy(player, territory, numArmies));
+            break;
+        case 2: //Advance
+            olist.add(new OrdersAdvance(player, territory, target, numArmies));
+            break;
+        case 3: //Bombs
+            olist.add(new OrdersBomb(player, territory));
+            break;
+        case 4: //Airlift
+            olist.add(new OrdersAirlift(player, territory, target, numArmies));
+            break;
+        case 5: //Negotiate
+            olist.add(new OrdersNegotiate(player, otherPlayer));
+            break;
+        case 6: //Blockade
+            olist.add(new OrdersBlockade(player, territory));
+            break;
+        default: //Invalid mode
+            cout << "Invalid mode of play, will default to Bomb" << endl;
+            olist.add(new OrdersBomb(player, territory)); //Need another placeholder
+            break;
 
+    }
 
-    olist.add(new OrdersBomb(player, territory)); //Only creates a bomb order for now
+    //olist.add(new OrdersBomb(player, territory)); //Only creates a bomb order for now
 
 
     hand->removeCard(this); //removes from hand
@@ -212,7 +245,7 @@ ostream& operator << (ostream& os, const Hand& hand) {
 }
 //=======================================================
 //Temporary
-void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist,Player* p, Territory* territory) {
+void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist,Player* p, Territory* territory, Player* p2, Territory* territory2, int numArmies) {
     //Plays a card
     if (isEmpty()) {                                                                                                    //Checks if hand is empty
         cout << *player << "'s hand is empty" << endl;
@@ -229,7 +262,31 @@ void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist,Player
 
     Card* used = *it;
     cout << *player << " has played " << used->getName() << "!" << endl;
-    used->play(deck, this,olist,p, territory);
+
+    if (cardName == "Bomb") {
+        used->play(deck, this, olist, p, territory, 3);
+    }
+    else if (cardName == "Negotiate") {
+        used->play(deck, this, olist, p, territory, 5, numArmies,nullptr,p2);
+    }
+    else if (cardName == "Airlift") {
+        used->play(deck, this, olist, p, territory, 4, numArmies,territory2);
+    }
+    else if (cardName == "Deploy") {
+        used->play(deck, this, olist, p, territory, 1,numArmies);
+    }
+    else if (cardName == "Advance") {
+        used->play(deck, this, olist, p, territory, 2, numArmies,territory2);
+    }
+    else if (cardName == "Blockade") {
+        used->play(deck, this, olist, p, territory, 6);
+    }
+    else {
+        std::cerr << "Unknown card name: " << cardName << std::endl;
+    }
+
+
+    //used->play(deck, this,olist,p, territory);
 
     //Returns the card back to the deck
     cout << used->getName() << " goes back into the deck." << endl;

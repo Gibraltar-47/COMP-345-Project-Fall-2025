@@ -51,7 +51,8 @@ class Card {
         std::string getName() const;
         void setName(const std::string& n);
 
-        void play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory); // 4.2.4 4.2.10 line 48
+        void play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory,                //Mandatory parameters
+                    int mode = 3, int numArmies = 0, Territory* target = nullptr, Player* otherPlayer = nullptr); //Optional Parameter
 
         friend std::ostream& operator<<(std::ostream& os, const Card& c);
 };
@@ -97,7 +98,7 @@ class Hand {
 
         void addCard(Card* card);
         void draw(Deck& deck);
-        void playCard(Deck& deck, const std::string& cardName, OrdersList& olist,Player* p, Territory* territory); //temporary for testing
+        void playCard(Deck& deck, const std::string& cardName, OrdersList& olist,Player* p, Territory* territory, Player* p2 = nullptr, Territory* territory2 = nullptr, int numArmies =1 ); //temporary for testing
         void removeCard(Card* card);
         void returnAll(Deck& deck);
 
