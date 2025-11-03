@@ -28,14 +28,15 @@ Orders::Orders(Player* issuingPlayer, Territory* sourceTerritory) : issuingPlaye
 Orders::Orders(const Orders& order){
 
     if (order.getIssuingPlayer())
-        //this->issuingPlayer = new Player(*(order.issuingPlayer)); // might be fine if player class has copy constructor and assignment operator
+        // this->issuingPlayer = new Player(*(order.issuingPlayer)); // might be fine if player class has copy constructor and assignment operator
         this->issuingPlayer = order.getIssuingPlayer();
     else   
         this->issuingPlayer = nullptr;
 
 
     if (order.getSourceTerritory())
-        this->sourceTerritory = new Territory(*(order.sourceTerritory)); // might be fine if Territory class has copy constructor and assignment operator
+        // this->sourceTerritory = new Territory(*(order.sourceTerritory)); // might be fine if Territory class has copy constructor and assignment operator
+        this->sourceTerritory = order.sourceTerritory;
     else
         this->setSourceTerritory(nullptr);
 
@@ -46,16 +47,18 @@ Orders::~Orders(){}
 
 Orders& Orders::operator=(const Orders& order){
     if (this != &order){
-        delete this->getSourceTerritory(); // Free old memory before assignment
-        delete this->getIssuingPlayer();
+        // delete this->getSourceTerritory(); // Free old memory before assignment
+        // delete this->getIssuingPlayer();
 
         if (order.getIssuingPlayer())
-            this->issuingPlayer = new Player(*order.issuingPlayer); // might be fine if player class has copy constructor and assignment operator
+            // this->issuingPlayer = new Player(*order.issuingPlayer); // might be fine if player class has copy constructor and assignment operator
+            this->issuingPlayer = order.getIssuingPlayer();
         else   
             this->issuingPlayer = nullptr;
 
         if (order.getSourceTerritory())
-            this->sourceTerritory = new Territory(*(order.sourceTerritory)); // might be fine if Territory class has copy constructor and assignment operator
+            // this->sourceTerritory = new Territory(*(order.sourceTerritory)); // might be fine if Territory class has copy constructor and assignment operator
+            this->sourceTerritory = order.sourceTerritory;
         else   
             this->sourceTerritory = nullptr;
         
@@ -151,7 +154,8 @@ OrdersAdvance::OrdersAdvance() : Orders(), targetTerritory(nullptr), numArmies(0
 OrdersAdvance::OrdersAdvance(Player* issuingPlayer, Territory* sourceTerritory, Territory* targetTerritory, int numArmies) : Orders(issuingPlayer, sourceTerritory), targetTerritory(targetTerritory), numArmies(numArmies){}
 OrdersAdvance::OrdersAdvance(const OrdersAdvance& order) : Orders(order) {
     if (order.getTargetTerritory()){
-        this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
+        // this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
+        this->targetTerritory = order.targetTerritory;
     }
     else   
         this->setTargetTerritory(nullptr);
@@ -161,10 +165,11 @@ OrdersAdvance::~OrdersAdvance(){}
 OrdersAdvance& OrdersAdvance::operator=(const OrdersAdvance& order){
     if (this != &order){
         Orders::operator=(order);
-        delete this->getTargetTerritory();
+        // delete this->getTargetTerritory();
 
         if (order.getTargetTerritory())
-            this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
+            // this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
+            this->targetTerritory = order.targetTerritory;
         else
             this->setTargetTerritory(nullptr);
         this->setNumArmies(order.getNumArmies());
@@ -253,7 +258,8 @@ OrdersAirlift::OrdersAirlift() : Orders(), targetTerritory(nullptr), numArmies(0
 OrdersAirlift::OrdersAirlift(Player* issuingPlayer, Territory* sourceTerritory, Territory* targetTerritory, int numArmies) : Orders(issuingPlayer, sourceTerritory), targetTerritory(targetTerritory), numArmies(numArmies) {}
 OrdersAirlift:: OrdersAirlift(const OrdersAirlift& order) : Orders(order) {
     if (order.getTargetTerritory())
-        this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
+        // this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
+        this->targetTerritory = order.targetTerritory;
     else   
         this->setTargetTerritory(nullptr);
     this->setNumArmies(order.getNumArmies());
@@ -263,10 +269,11 @@ OrdersAirlift::~OrdersAirlift(){}
 OrdersAirlift& OrdersAirlift::operator=(const OrdersAirlift& order){
     if (this != &order){
         Orders::operator=(order);
-        delete this->getTargetTerritory();
+        // delete this->getTargetTerritory();
 
         if (order.getTargetTerritory())
-            this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
+            // this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
+            this->targetTerritory = order.targetTerritory;
         else
             this->setTargetTerritory(nullptr);
         this->setNumArmies(order.getNumArmies());
@@ -310,16 +317,18 @@ OrdersNegotiate::OrdersNegotiate() : Orders(), enemyToTruce(nullptr) {}
 OrdersNegotiate::OrdersNegotiate(Player* issuingPlayer, Player* enemyToTruce) : Orders(issuingPlayer, nullptr), enemyToTruce(enemyToTruce) {}
 OrdersNegotiate::OrdersNegotiate(const OrdersNegotiate& order) : Orders(order){
     if (order.getEnemyToTruce())
-        this->enemyToTruce = new Player(*order.enemyToTruce); // might be fine if player class has copy constructor and assignment operator
+        // this->enemyToTruce = new Player(*order.enemyToTruce); // might be fine if player class has copy constructor and assignment operator
+        this->enemyToTruce = order.enemyToTruce;
 }
 OrdersNegotiate::~OrdersNegotiate(){}
 OrdersNegotiate& OrdersNegotiate::operator=(const OrdersNegotiate& order){
     if (this != &order){
         Orders::operator=(order);
-        delete this->getEnemyToTruce();
+        // delete this->getEnemyToTruce();
 
         if (order.getEnemyToTruce())
-            this->enemyToTruce = new Player(*order.enemyToTruce); // might be fine if player class has copy constructor and assignment operator
+            // this->enemyToTruce = new Player(*order.enemyToTruce); // might be fine if player class has copy constructor and assignment operator
+            this->enemyToTruce = order.enemyToTruce;
         else
             this->setEnemyToTruce(nullptr);
     }
