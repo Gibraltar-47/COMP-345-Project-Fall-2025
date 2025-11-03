@@ -10,8 +10,7 @@
 #include <set>
 #include <string>
 #include <vector>
-// #include "Map.h"
-// #include "../Player/Player.h"
+
 using std::vector;
 using std::string;
 using std::ostream;
@@ -23,16 +22,6 @@ using std::ifstream;
 class Territory;
 class Continent;
 class Player;
-
-
-//placeholder class
-// class Player {
-// private:
-//     std::string name;
-// public:
-//     Player(std::string n);
-//     std::string getName() const;
-// };
 
 class Map {
 private:

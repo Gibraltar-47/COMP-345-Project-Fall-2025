@@ -21,21 +21,15 @@ void testOrdersLists(){
     Territory* t4 = new Territory(name4, c1, 7 ,8, adj);
 
     Player* p1 = new Player("Shawn");
-    //p1->getTerritories().push_back(t1);
-    //p1->getTerritories().push_back(t2);
     p1->addTerritory(t1);
     p1->addTerritory(t2);
 
     Player* p2 = new Player("Howard");
-    //p2->getTerritories().push_back(t3);
-    //p2->getTerritories().push_back(t4);
     p2->addTerritory(t3);
     p2->addTerritory(t4);
 
 
     cout << "VALID ORDERS" << endl;
-
-    cout << p1->getTerritories().size() << endl;
 
     Orders* vorder1 = new OrdersDeploy(p1, p1->getTerritories()[0], 3);
     Orders* vorder2 = new OrdersAdvance(p1, p1->getTerritories()[0], p1->getTerritories()[1], 1);
@@ -45,7 +39,7 @@ void testOrdersLists(){
     Orders* vorder6 = new OrdersNegotiate(p1, p2);
     Orders* vlist[6] = {vorder1, vorder2, vorder3, vorder4, vorder5, vorder6};
 
-    // cout << "INVALID ORDERS" << endl;
+    cout << "INVALID ORDERS" << endl;
     Orders* iorder1 = new OrdersDeploy(p2, p1->getTerritories()[0], 3);
     Orders* iorder2 = new OrdersAdvance(p2, p1->getTerritories()[1], p2->getTerritories()[0], 10);
     Orders* iorder3 = new OrdersBomb(p2, p2->getTerritories()[0]);
@@ -67,7 +61,7 @@ void testOrdersLists(){
     cout << "\nBELOW IS THE LIST OF ORDERS FOR PLAYER 1 (INVALID)\n" << endl;
     cout << *(p2->getOrderList()) << endl;
 
-    // cout << "NOW PRINTING THE VALIDITY OF THE ORDERS\n" << endl;
+    cout << "NOW PRINTING THE VALIDITY OF THE ORDERS\n" << endl;
     cout << "PLAYER 1 ORDERS" << endl;
     for (auto order : p1->getOrderList()->getList()){
         cout << "IS VALID?: ";
@@ -124,60 +118,38 @@ void testOrdersLists(){
     cout << o3 << ", DATA: " << *o3 << "\n\n";
 
     OrdersAdvance* oa1 = new OrdersAdvance(p1, p1->getTerritories()[0], p1->getTerritories()[1], 1);
+    cout << "BEFORE COPY" << endl;
     OrdersAdvance* oa2 = new OrdersAdvance(*oa1);
-    // OrdersAdvance* oa3 = new OrdersAdvance();
-    // *oa3 = *oa1;
+    OrdersAdvance* oa3 = new OrdersAdvance();
+    *oa3 = *oa1;
 
-    // cout << "ORDERS ADVANCE MEMORY ADDRESSES AND DATA:" << endl;
-    // cout << oa1 << ", DATA: " << *oa1 << "\n\n";
-    // cout << oa2 << ", DATA: " << *oa2 << "\n\n";
-    // cout << oa3 << ", DATA: " << *oa3 << "\n\n";
+    cout << "ORDERS ADVANCE MEMORY ADDRESSES AND DATA:" << endl;
+    cout << oa1 << ", DATA: " << *oa1 << "\n\n";
+    cout << oa2 << ", DATA: " << *oa2 << "\n\n";
+    cout << oa3 << ", DATA: " << *oa3 << "\n\n";
 
 
 
-    // OrdersList* olist1 = new OrdersList(*(p1->getOrderList()));
-    // OrdersList* olist2 = new OrdersList();
-    // *olist2 = *olist1;
+    OrdersList* olist1 = new OrdersList(*(p1->getOrderList()));
+    OrdersList* olist2 = new OrdersList();
+    *olist2 = *olist1;
 
-    // cout << "\nORDER LIST MEMORY ADDESES AND DATA:" << endl;
-    // cout << p1->getOrderList() << ", DATA: " << *(p1->getOrderList()) << "\n\n";
-    // cout << olist1 << ", DATA: " << *olist1 << "\n\n";
-    // cout << olist2 << ", DATA: " << *olist2 << "\n\n";
+    cout << "\nORDER LIST MEMORY ADDESES AND DATA:" << endl;
+    cout << p1->getOrderList() << ", DATA: " << *(p1->getOrderList()) << "\n\n";
+    cout << olist1 << ", DATA: " << *olist1 << "\n\n";
+    cout << olist2 << ", DATA: " << *olist2 << "\n\n";
 
-    // Player* p3 = new Player("Negin");
-    // cout << "\nTESTING IHERITED CONSTRUCTOR" << endl;
-    // OrdersBomb* b1 = new OrdersBomb(p3, new Territory("Hogwarts", c1, 5, 8, adj));
-    // OrdersBomb* b2 = new OrdersBomb(*b1);
-    // OrdersBomb* b3 = new OrdersBomb();
-    // *b3 = *b1;
+    Player* p3 = new Player("Negin");
+    cout << "\nTESTING IHERITED CONSTRUCTOR" << endl;
+    OrdersBomb* b1 = new OrdersBomb(p3, new Territory("Hogwarts", c1, 5, 8, adj));
+    OrdersBomb* b2 = new OrdersBomb(*b1);
+    OrdersBomb* b3 = new OrdersBomb();
+    *b3 = *b1;
 
-    // cout << "BOMB ADDRESSES" << endl;
-    // cout << b1 << ": " << *b1 << endl;
-    // cout << b2 << ": " << *b2 << endl;
-    // cout << b3 << ": " << *b3 << endl;
+    cout << "BOMB ADDRESSES" << endl;
+    cout << b1 << ": " << *b1 << endl;
+    cout << b2 << ": " << *b2 << endl;
+    cout << b3 << ": " << *b3 << endl;
 
     cout << "-----------------------------------------------------------------------" << endl;
 }
-
-
-// int main(){
-
-//     testOrdersLists();
-    
-//     // Player* p1 = new Player(1);
-//     // Player* p2 = new Player(2);
-//     // Territory* t1 = new Territory("Canada", 3, p1);
-//     // Orders* o1 = new Orders(p1, t1);
-
-//     // cout << "\nPlayer: " << p1 << " DATA: " << *p1 << endl;
-//     // cout << "\nTerritory: " << t1 << " DATA: " << *t1 << endl;
-//     // cout << "\nOrders: " << o1 << " DATA: " << *o1 << "\n" << endl;
-
-//     // delete o1;
-
-//     // cout << "\nPlayer: " << p1 << " DATA: " << *p1 << endl;
-//     // cout << "\nTerritory: " << t1 << " DATA: " << *t1 << endl;
-//     //cout << "\nOrders: " << o1 << " DATA: " << *o1 << endl;
-
-//     return 0;
-// }

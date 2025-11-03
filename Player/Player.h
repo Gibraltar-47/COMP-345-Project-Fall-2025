@@ -4,9 +4,6 @@
 #include <string>
 #include <vector>
 #include <iostream>
-// #include "../Orders/Orders.h"
-// #include "../part1-map/Map.h"
-// #include "../Part-4-Deck/Cards.h"
 
 // Forward declarations
 class Territory;
@@ -17,36 +14,6 @@ class Deck;
 class Hand;
 
 using namespace std;
-
-//forward declarations
-// class Player;
-// class Territory;
-// class Cards;
-// class Orders;
-// //placeholder classes
-// class OrdersList;
-
-// class Territory {
-//   private:
-//     std::string name;
-//     Player* owner;
-  
-//   public:
-//     Territory();
-//     Territory(std::string name, Player* owner);
-//     std::string getName();
-//     Player* getOwner();
-//     void setOwner(Player* owner);
-
-// };
-
-// class Cards {
-//   private:
-//     std::string name;
-
-//   public:
-//     std::string getName();
-// };
 
 class Player {
   private:

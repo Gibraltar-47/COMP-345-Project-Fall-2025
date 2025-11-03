@@ -45,12 +45,6 @@ bool isConnectedGraph(vector <vector<int>> &adjM, string n, string type){
     return true;
 }
 
-// Player::Player(string n):name(n){}
-
-// string Player::getName()const{
-//     return name;
-// }
-
 //constructor with a string name parameter
 Map::Map(const string& n):name(n){}
 
@@ -112,11 +106,13 @@ Map::~Map(){
     for(Territory* t : territories){
         delete t;
     }
+    territories.clear();
 
     for(Continent* c : continents){
         delete c;
     }
-//clear vectors
+    continents.clear();
+    //clear vectors
 }
 
 //getter for the name attribute
@@ -239,11 +235,16 @@ void Map::setVertice(Territory* t1, Territory* t2){
 bool Map::validate()
 {
     bool check3=true;
-    //1. verify that the map is a connected graph through DFS function isConnectedGraph
-    const bool check1 = isConnectedGraph(adjMatrix, name, "Map");
+    bool check2 = false;
+    bool check1 = false;
 
-    //2. verify that the country is a connected graph through DFS function isConnectedGraph
-    const bool check2 = isConnectedGraph(adjMatrix, continents[0]->getName(), "Continent");
+    if (!adjMatrix.empty())
+        //1. verify that the map is a connected graph through DFS function isConnectedGraph
+        check1 = isConnectedGraph(adjMatrix, name, "Map");
+
+    if (!adjMatrix.empty())
+        //2. verify that the country is a connected graph through DFS function isConnectedGraph
+        check2 = isConnectedGraph(adjMatrix, continents[0]->getName(), "Continent");
 
     //3.1 check if any territory is being repeated in any continent's territories list
     set <Territory*> setTerr;
@@ -505,18 +506,23 @@ Map MapLoader::loadMap(const string& filename){
         vector <string> adjTerrName,terrInfo;
 
        while(getline(inputFileStream,line)){                                                                      //reading all the lines until the end of the file
-            if (line=="[Map]"){                                                                                         //if true, the next line will have the name of the map in the image name(i.e. "image=Aldawin.png", Aldawin is the name of the map)
+           if (step==0&&line!="[Map]"){
+               cout<<endl<<"The given file to load does not have the correct configuration to create a valid map object. "<<endl<<
+                           "The returned map object from function loadMap is a placeholder map with no information."<<endl;
+               break;
+           }
+           if (line=="[Map]"){                                                                                         //if true, the next line will have the name of the map in the image name(i.e. "image=Aldawin.png", Aldawin is the name of the map)
                 getline(inputFileStream, line);
                 firstPos=line.find('=');                                                                              //truncating the string to find the name by using '=' and '.' as delimiters
                 secondPos=line.find('.');
                 mapName=line.substr(firstPos+1,secondPos-firstPos-1);
-                map=Map(mapName);                                                                                       //object map is reinitialized to the right name using a copy constructor
+                map=Map(mapName);step++;                                                                                       //object map is reinitialized to the right name using a copy constructor
                 continue;
             }
             if (line=="[Continents]"){                                                                                  //unless the ifstream reaches the continent section marked by the string in if cond
                 step++;continue;                                                                                        //the code will never initialize any territory or continent, because step (int 0) needs to be incremented to proceed to the next step
             }
-           if (step==1){                                                                                                //step is only going to get incremented if it reaches the territories' section
+           if (step==2){                                                                                                //step is only going to get incremented if it reaches the territories' section
                if (line.empty()){continue;}
                if (line=="[Territories]"){step++;continue;}
                 firstPos=line.find('=');                                                                             //each line in the continent section shows 2 things separated by '=': 1. name 2. points to conquer
@@ -525,7 +531,7 @@ Map MapLoader::loadMap(const string& filename){
                 conHolder= new Continent(conName,p);                                                                    //a continent is initialized using the conHolder continent obj placeholder
                 map.addContinent(conHolder);                                                                            //the newly initialized continent is then added to the map's vector of the continents
            }
-           if (step==2){
+           if (step==3){
                if (line.empty()){continue;}
                std::stringstream terrInfoStream(line);
                while (getline(terrInfoStream,terrName,',')){                                                 //Once in the territories section, each line is considered as csv in the following order: name,x,y,continent,adjterr1,adjterr2,....ajterrN

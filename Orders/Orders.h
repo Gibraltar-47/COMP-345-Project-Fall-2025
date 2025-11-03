@@ -5,34 +5,11 @@
 #include <list>
 #include <algorithm>
 #include <string>
-// #include "../part1-map/Map.h"
-// #include "../Player/Player.h"
 using namespace std;
 
 class Player;
 class OrdersList;
 class Territory;
-
-// class Territory{ 
-//     public:
-//         std::string name; int points;
-//         Player* owner;
-//         Territory();
-//         Territory(std::string name, int points, Player* owner);
-//         bool equals(Territory* territory2);
-//         friend std::ostream& operator<<(std::ostream &strm, const Territory& territory);
-// }; // Temporary (is replacing nodes from map)
-
-// class Player{
-//     public:
-//         int id;
-//         std::vector<Territory*> ownedTerritories;
-//         OrdersList* listOfOrders;
-//         Player();
-//         Player(int id);
-//         bool equals(Player* player2);
-//         friend std::ostream& operator<<(std::ostream &strm, const Player& player);
-// }; // Temporary (is replacing player class)
 
 class Orders
 {

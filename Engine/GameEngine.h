@@ -6,30 +6,29 @@
 #define COMP_345_PROJECT_FALL_2025_GAMEENGINE_H
 
 #include <string>
+#include <iostream>
+using std::ostream;
 
 
 
 class GameEngine {
 
-private:
-
-
-    std::string gameState = "start";
-
+    std::string gameState;
     std::string input;
 
 public:
 
 	GameEngine();
-
-    std::string getGameState();
+	~GameEngine();
+	GameEngine(const GameEngine& other);
+	GameEngine& operator=(const GameEngine& other);
+	friend ostream& operator<<(ostream& out, const GameEngine& other);
 
     void loopEntrance();
 	void loadMap();
 	void validateMap();
 	void addPlayer();
 	void assignCountries();
-
 	void issueOrder();
 	void endIssueOrders();
 	void execOrder();
