@@ -3,8 +3,8 @@
 #include <iostream>
 #include <random>
 
-#include "../Orders/Orders.h"
-#include "../Player/Player.h"
+#include "Orders.h"
+#include "Player.h"
 
 
 using namespace std;
@@ -22,6 +22,7 @@ void testCards() {
         }
     }
     Player p1("Joseph");
+    Player p2("Ana");
 
     std::vector<std::string> adj(5);
     Continent* c1 = new Continent("NA", 5);
@@ -31,6 +32,7 @@ void testCards() {
     std::string name4 = "Talahasee";
 
     Territory* t1 = new Territory(name1, c1, 1, 3, adj);
+    Territory* t2 = new Territory(name2, c1, 2, 7, adj);
 
     cout << "Deck created and 7 copies of each card added (" << cardNames.size() * 7 << " total)." << endl << endl;
 
@@ -50,14 +52,20 @@ void testCards() {
     cout << endl;
     cout << player1 << endl;
     cout << player2 << endl;
+    int mode = 1;
 
     //Each plays one card Play() test
     player1.playCard(deck, "Bomb", *olist, &p1, t1);
-    player2.playCard(deck, "Airlift", *olist,&p1, t1);
+    player2.playCard(deck, "Airlift", *olist,&p1, t1, nullptr,t2, 1);
 
     cout << endl;
     cout << player1 << endl;
     cout << player2 << endl;
+
+
+    player1.playCard(deck, "Negotiate", *olist, &p1, t1, &p2);
+
+
 
     cout << "\nBoth players played one card each.\n" << endl;
     cout << "Deck now: " << deck << endl;
@@ -90,11 +98,22 @@ void testCards() {
     cout << "Original Hand: " << player1 << endl;
     cout << "Cloned Hand:   " << cloneHand << endl;
 
+    //OrderList showcase
+    cout << *olist << endl;
+
     //Return all cards
     player1.returnAll(deck);
     player2.returnAll(deck);
     cloneHand.returnAll(deck);
 
     cout << "\nAll cards returned to deck.\n" << endl;
-    cout << "Deck now: " << deck << endl << endl;
+    cout << "Deck now: " << deck << endl;
 }
+
+
+// int main() {
+
+//     testCards();
+
+//     return 0;
+// }

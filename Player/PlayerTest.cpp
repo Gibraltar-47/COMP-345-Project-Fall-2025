@@ -15,7 +15,7 @@ Player::Player() : name("hi") {
 }
 
 //cons with name
-Player::Player(const std:: string& playerName): name(playerName), territories(), handCards() {
+Player::Player(const std:: string& playerName): name(playerName), territories(), handCards(),numArmies(0) {
     orderList=new OrdersList();
 }
 
@@ -211,4 +211,8 @@ ostream& operator<<(std::ostream& out, const Player& p){
     out<<"Orders: ";
     out<<"none\n";
     return out;
+}
+
+void Player::setNumArmies(int newNumArmies) {
+    numArmies = newNumArmies;
 }

@@ -22,6 +22,9 @@ class Player {
     std::vector<Card*> handCards;
     OrdersList* orderList;
 
+  //=====
+    int numArmies;
+
 
 public:
    Player();
@@ -44,7 +47,8 @@ public:
    bool equals(Player* player2);
   friend std::ostream& operator <<(std::ostream& out, const Player& p);
 
-
+  //Part 2
+  void setNumArmies(int newNumArmies);
 };
 
 #endif
