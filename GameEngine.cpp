@@ -1,269 +1,169 @@
 //
-// Created by abede on 2025-09-28.
+// Created by Howard on 2025-11-03.
 //
-
-#include <iostream>
-#include <string>
 #include "GameEngine.h"
+#include <iostream>
+#include <limits>
 
+using std::string;
+using std::cout;
+using std::endl;
+using std::cin;
 
+GameEngine::GameEngine() : state("start"), gameOver(false) {}
+GameEngine::~GameEngine() = default;
 
-
-
-
-    GameEngine::GameEngine() {
-        gameState = "";
-        input = "";
-    }
-
-
-    GameEngine::~GameEngine() = default;
-    GameEngine::GameEngine(const GameEngine &other) {
-        this->gameState = other.gameState;
-        this->input = other.input;
-    }
-    GameEngine& GameEngine::operator=(const GameEngine& other) {
-        this->gameState = other.gameState;
-        this->input = other.input;
-        return *this;
-    }
-
-    ostream& operator<<(ostream& out, const GameEngine& other) {
-        out << "Game state: " << other.gameState << std::endl;
-        out << "Input: " << other.input << std::endl;
-        return out;
-    }
-
-
-
-
-   void GameEngine::loadMap() {
-        gameState = "map loaded";
-        std::cout << "Map loaded... " << std::endl;
-        std::cout << "Game state: " << gameState << std::endl;
-        std::cout << "Valid commands: loadmap/validatemap" << std::endl;
-
-        std::cin >> input;
-
-        while(input != "loadmap" && input!= "validatemap"){
-        std::cout << "Invalid command entered" << std::endl;
-            std::cout << "Game state: " << gameState << std::endl;
-        std::cout << "Valid commands: loadmap/validatemap" << std::endl;
-        std::cin >> input;
+string GameEngine::getState() const {
+    return state;
 }
-        if(input == "loadmap"){
-        loadMap();
-    }
-
+void GameEngine::changeState(const string& newState, const string& message) {
+    state = newState;
+    cout << message << endl;
+    cout << "Now in state: " << state << endl;
 }
 
+void GameEngine::runGame() {
+    cout << "Welcome to the Game Engine!" << endl << endl;
+    cout << "---------------------" << endl;
+    string command;
+    state = "start";
+    gameOver = false;
 
+    while (!gameOver) {
+        cout << "Current State: " << getState() << endl;
+        cout << "Enter a command: (type 'loadmap' to proceed)";
+        cin >> command;
 
-   void GameEngine::validateMap() {
-        gameState = "map validated";
-        std::cout << "Map validated" << std::endl;
-       std::cout << "Game state: " << gameState << std::endl;
-        std::cout << "Valid commands: addplayer" << std::endl;
-        std::cin >> input;
-
-        while(input != "addplayer"){
-            std::cout << "Invalid command entered" << std::endl;
-            std::cout << "Valid commands: addplayer" << std::endl;
-            std::cin >> input;
+        if (command == "exit") { //quick exit
+            gameOver = true;
+        }
+        else if (command == "loadmap" && (state == "start" || state == "maploaded")) {
+            changeState("maploaded", "Map loaded.(type 'validatemap' to proceed)");
+        }
+        else if (command == "validatemap" && state == "maploaded") {
+            changeState("mapvalidated", "Map validated.(type 'addplayer' to proceed)");
+        }
+        else if (command == "addplayer" && (state == "mapvalidated" || state == "playersadded")) {
+            changeState("playersadded", "Players added.(type 'assigncountries' to proceed)");
+        }
+        else if (command == "assigncountries" && state == "playersadded") {
+            changeState("maingameloop", "Game loop has begun(type 'win' to proceed)");
+            //mainGameLoop();
+        }
+        else if (command == "win" && (state == "maingameloop" || state == "executeorders")) {
+            changeState("win", "Game loop has ended(type 'end' to proceed or 'play' to start a new game)");
+        }
+        else if ((command == "play" || command == "end") && state == "win") {
+            if (command == "play") {
+                state = "start";
             }
-       addPlayer();
+            else {
+                gameOver = true;
+                cout << "Exiting game." << endl;
+            }
+        }
+        else {
+            cout << "Invalid command for current state: " << state << endl;
+        }
+    }
+}
+/**
+void GameEngine::mainGameLoop() {
+    bool roundOver = false;
+
+    while (!roundOver) {
+        reinforcementPhase();
+        issueOrdersPhase();
+        executeOrdersPhase();
+
+        roundOver = checkWinCondition();
+    }
+}
+
+
+// =======================
+// Reinforcement Phase
+// =======================
+void GameEngine::reinforcementPhase() {
+    //string buffer;
+    changeState("reinforcement", "Reinforcement Phase.");
+    //
+    for (auto player: players) {
+        //reinforcement
+
+        int territoriesOwned = player->getTerritories().size();
+        int reinforcements = territoriesOwned/3; //truncated
+
+        for (Continent* continent: map->getContinents()) {
+            //if player owns all the territories
+            //reinforcements += continent bonus
+
+        }
+        if (reinforcements < 3) {
+            reinforcements = 3;
+        }
+
+
+
     }
 
 
-   void GameEngine::addPlayer() {
-    gameState = "players added";
-    std::cout << "Players added" << std::endl;
-       std::cout << "Game state: " << gameState << std::endl;
-       std::cout << "Valid commands: addplayer/assigncountries" << std::endl;
-
-        std::cin >> input;
-
-        while(input != "addplayer" && input != "assigncountries"){
-            std::cout << "Invalid command entered" << std::endl;
-            std::cout << "Valid commands: addplayer/assigncountries" << std::endl;
-            std::cin >> input;
-        }
-        if(input == "addplayer"){
-           addPlayer();
-        }
-
-       assignCountries();
-
+    //cout << "\nEnter random to continue...";
+    //cin >> buffer;
+    waitForUser();
 
 }
 
-   void GameEngine::loopEntrance() {
-        gameState = "assign reinforcement";
-       std::cout << "Game state: " << gameState << std::endl;
-       std::cout << "Valid commands: issueorder" << std::endl;
-        std::cin >> input;
+// =======================
+// Issue Orders Phase
+// =======================
+void GameEngine::issueOrdersPhase() {
+    //string buffer;
+    changeState("issueorders", "Issue Orders Phase.");
+    //
 
-        while(input != "issueorder"){
-            std::cout << "Invalid command entered" << std::endl;
-            std::cout << "Valid commands: issueorder" << std::endl;
-            std::cin >> input;
-        }
-        if(input == "issueorder"){
-            issueOrder();
-        }
-}
-
-   void GameEngine::assignCountries() {
-    gameState = "assign reinforcement";
-    std::cout << "Countries assigned" << std::endl;
-    std::cout << "Game state:" << gameState << std::endl;
-
-    loopEntrance();
-
-
-}
-
-  void  GameEngine::issueOrder() {
-    gameState = "issue orders";
-    std::cout << "Order issued" << std::endl;
-       std::cout << "Game state: " << gameState << std::endl;
-       std::cout << "Valid commands: issueorder/endissueorders" << std::endl;
-    std::cin >> input;
-
-        while(input != "issueorder" && input != "endissueorders"){
-            std::cout << "Invalid command entered" << std::endl;
-            std::cout << "Valid commands: issueorder/endissueorders" << std::endl;
-            std::cin >> input;
-        }
-
-    if(input == "issueorder"){
-    issueOrder();
+    for (auto o: players) {
+        //issue orders
     }
-
-    if(input == "endissueorders"){
-    endIssueOrders();
-    }
-
+    //cout << "\nEnter random to continue...";
+    //cin >> buffer;
+    waitForUser();
 }
 
-   void GameEngine::endIssueOrders() {
-    gameState = "execute orders";
-    std::cout << "Order phase ended" << std::endl;
-       std::cout << "Game state: " << gameState << std::endl;
-       std::cout << "Valid commands: execorder/endexecorders/win" << std::endl;
-        std::cin >> input;
+// =======================
+// Execute Orders Phase
+// =======================
+void GameEngine::executeOrdersPhase() {
+    //string buffer;
+    changeState("executeorders", "Execute Orders Phase.");
 
-        while(input != "execorder" && input != "endexecorders" && input != "win"){
-            std::cout << "Invalid command entered" << std::endl;
-            std::cout << "Valid commands: execorder/endexecorders/win" << std::endl;
-            std::cin >> input;
-        }
 
-        if(input == "execorder"){
-            execOrder();
+    for (auto o: players) {
 
-        }
-
-        if(input == "endexecorders"){
-            endExecOrders();
-        }
-
-        if(input == "win"){
-            win();
-        }
-
-}
-
-   void GameEngine::execOrder() {
-    gameState = "execute orders";
-    std::cout << "Order executed" << std::endl;
-       std::cout << "Game state:" << gameState << std::endl;
-       std::cout << "Valid commands: execorder/endexecorders/win" << std::endl;
-        std::cin >> input;
-
-        while(input != "execorder" && input != "endexecorders" && input != "win"){
-            std::cout << "Invalid command entered" << std::endl;
-            std::cout << "Valid commands: execorder/endexecorders/win" << std::endl;
-            std::cin >> input;
-        }
-
-        if(input == "execorder"){
-            execOrder();
-
-        }
-
-        if(input == "endexecorders"){
-            endExecOrders();
-        }
-
-        if(input == "win"){
-            win();
-        }
-
-}
-
-   void GameEngine::endExecOrders() {
-    gameState = "assign reinforcement";
-    std::cout << "Order phase ended" << std::endl;
-    std::cout << "Game state: " << gameState << std::endl;
-    loopEntrance();
-
-}
-
-   void GameEngine::win() {
-    gameState = "win";
-    std::cout << "Victory" << std::endl;
-    std::cout << "Game state: " << gameState << std::endl;
-    std::cout << "Valid commands: play/end" << std::endl;
-    std::cin >> input;
-    while(input != "play" && input != "end"){
-        std::cout << "Invalid command entered" << std::endl;
-        std::cout << "Valid commands: play/end" << std::endl;
-        std::cin >> input;
     }
 
 
-    if(input == "end"){
-        end();
-    }
-
-    if(input == "play"){
-        play();
-    }
-
+    //cout << "\nEnter random to continue...";
+    //cin >> buffer;
+    waitForUser();
 }
 
-   void GameEngine::play() {
-    gameState = "play";
-    std::cout << "Game starting..." << std::endl;
-    std::cout << "Game state: " << gameState << std::endl;
-    std::cout << "Valid commands: loadmap" << std::endl;
-    std::cin >> input;
-       while (input != "loadmap") {
-           std::cout << "Invalid command entered" << std::endl;
-           std::cout << "Valid commands: loadmap" << std::endl;
-           std::cin >> input;
-       }
-        if (input == "loadmap") {
-            loadMap();
-        }
-       validateMap();
+bool GameEngine::checkWinCondition() {
+    string command;
+    cout << "\nChecking Winning condition..." << endl;
+    cout << "Enter a command (type 'exit' to end this game loop): ";
+    cin >> command;
+
+    if (command == "exit") {
+        state = "win";
+        return true; // signal game loop to end
     }
-
-    void GameEngine::end(){
-
-    gameState = "end";
-    std::cout << "Game ended" << std::endl;
-    std::cout << "Game state: " << gameState << std::endl;
+    return false;
 
 }
-
-
-
-
-
-
-
-
-
-
+*/
+void GameEngine::waitForUser() { //line skips
+    cout << "\nPress Enter to continue...";
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    cin.get();
+}

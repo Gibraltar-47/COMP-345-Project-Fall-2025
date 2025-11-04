@@ -1,46 +1,52 @@
 //
-// Created by abede on 2025-09-28.
+// Created by Howard on 2025-11-03.
 //
 
-#ifndef COMP_345_PROJECT_FALL_2025_GAMEENGINE_H
-#define COMP_345_PROJECT_FALL_2025_GAMEENGINE_H
+#ifndef COMP_345_PROJECT_FALL_2025_PART2_GAMEENGINE_H
+#define COMP_345_PROJECT_FALL_2025_PART2_GAMEENGINE_H
 
-#include <string>
 #include <iostream>
-using std::ostream;
+#include <string>
+#include <vector>
+//#include "Player.h"
+// "Map.h"
+
+using std::string;
+using std::cout;
+using std::endl;
+using std::cin;
 
 
 
 class GameEngine {
+    private:
+        string state;   //state of the engine
+        //vector<Player*> players;
+        bool gameOver;
+        //Map* map;
 
-    std::string gameState;
-    std::string input;
+    public:
+        GameEngine(); //Default constructor
+        ~GameEngine();
 
-public:
+        //void setState(string& state);
+        string getState() const;
+        void changeState(const string& newState, const string& message);
 
-	GameEngine();
-	~GameEngine();
-	GameEngine(const GameEngine& other);
-	GameEngine& operator=(const GameEngine& other);
-	friend ostream& operator<<(ostream& out, const GameEngine& other);
+        void runGame();
 
-    void loopEntrance();
-	void loadMap();
-	void validateMap();
-	void addPlayer();
-	void assignCountries();
-	void issueOrder();
-	void endIssueOrders();
-	void execOrder();
-	void endExecOrders();
-	void win();
-	void play();
-    void end();
+        //void mainGameLoop();
+        //void reinforcementPhase();
+        //void issueOrdersPhase();
+        //void executeOrdersPhase();
 
+        //bool checkWinCondition();
+        void waitForUser();
 
-
-
+        //void addPlayer(Player* player);
+        //void removePlayer(Player* player);
+        //void addMap(Map* map);
 };
 
 
-#endif //COMP_345_PROJECT_FALL_2025_GAMEENGINE_H
+#endif //COMP_345_PROJECT_FALL_2025_PART2_GAMEENGINE_H
