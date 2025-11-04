@@ -85,20 +85,16 @@ void GameEngine::mainGameLoop() {
 // Reinforcement Phase
 // =======================
 void GameEngine::reinforcementPhase() {
-    //string buffer;
     changeState("reinforcement", "Reinforcement Phase.");
     //
+
     for (auto player: players) {
         //reinforcement
 
         int territoriesOwned = player->getTerritories().size();
         int reinforcements = territoriesOwned/3; //truncated
 
-        for (Continent* continent: map->getContinents()) {
-            //if player owns all the territories
-            //reinforcements += continent bonus
 
-        }
         if (reinforcements < 3) {
             reinforcements = 3;
         }
@@ -107,9 +103,6 @@ void GameEngine::reinforcementPhase() {
 
     }
 
-
-    //cout << "\nEnter random to continue...";
-    //cin >> buffer;
     waitForUser();
 
 }
@@ -118,15 +111,12 @@ void GameEngine::reinforcementPhase() {
 // Issue Orders Phase
 // =======================
 void GameEngine::issueOrdersPhase() {
-    //string buffer;
     changeState("issueorders", "Issue Orders Phase.");
     //
 
     for (auto o: players) {
         //issue orders
     }
-    //cout << "\nEnter random to continue...";
-    //cin >> buffer;
     waitForUser();
 }
 
@@ -134,7 +124,6 @@ void GameEngine::issueOrdersPhase() {
 // Execute Orders Phase
 // =======================
 void GameEngine::executeOrdersPhase() {
-    //string buffer;
     changeState("executeorders", "Execute Orders Phase.");
 
 
@@ -143,8 +132,6 @@ void GameEngine::executeOrdersPhase() {
     }
 
 
-    //cout << "\nEnter random to continue...";
-    //cin >> buffer;
     waitForUser();
 }
 
