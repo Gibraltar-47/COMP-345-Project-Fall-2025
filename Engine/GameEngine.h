@@ -8,8 +8,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "Player.h"
-#include "Map.h"
+#include "./Player/Player.h"
+#include "./part1-map/Map.h"
 
 using std::string;
 using std::cout;
@@ -21,9 +21,9 @@ using std::cin;
 class GameEngine {
     private:
         string state;   //state of the engine
-        vector<Player*> players;
+        //vector<Player*> players;
         bool gameOver;
-        Map* map;
+        //Map* map;
 
     public:
         GameEngine(); //Default constructor
@@ -35,17 +35,17 @@ class GameEngine {
 
         void runGame();
 
-        void mainGameLoop();
-        void reinforcementPhase();
-        void issueOrdersPhase();
-        void executeOrdersPhase();
+        //void mainGameLoop();
+        //void reinforcementPhase();
+        //void issueOrdersPhase();
+        //void executeOrdersPhase();
 
-        bool checkWinCondition();
+        //bool checkWinCondition();
         void waitForUser();
 
-        void addPlayer(Player* player);
-        void removePlayer(Player* player);
-        void addMap(Map* map);
+        //void addPlayer(Player* player);
+        //void removePlayer(Player* player);
+        //void addMap(Map* map);
 };
 
 
