@@ -3,8 +3,8 @@
 #include <iostream>
 #include <random>
 
-#include "Orders.h"
-#include "Player.h"
+#include "../Orders/Orders.h"
+#include "../Player/Player.h"
 
 
 using namespace std;

@@ -8,8 +8,8 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include "./Player/Player.h"
-#include "./part1-map/Map.h"
+//#include "Player.h"
+// "Map.h"
 
 using std::string;
 using std::cout;
