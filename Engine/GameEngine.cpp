@@ -31,7 +31,7 @@ void GameEngine::runGame() {
 
     while (!gameOver) {
         cout << "Current State: " << getState() << endl;
-        cout << "Enter a command: (type 'loadmap' to proceed)";
+        cout << "Enter a command:";
         cin >> command;
 
         if (command == "exit") { //quick exit
@@ -154,3 +154,4 @@ void GameEngine::waitForUser() { //line skips
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
     cin.get();
 }
+
