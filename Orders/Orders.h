@@ -160,6 +160,7 @@ class OrdersList
         ~OrdersList();
         friend std::ostream& operator<<(std::ostream &strm, const OrdersList& orderList);
         std::list<Orders*> getList() const;
+        std::list<Orders*>& getList();
         void setList(std::list<Orders*> list);
         Orders* add(Orders* order);
         Orders* remove(const Orders& order);
