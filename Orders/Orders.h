@@ -101,6 +101,7 @@ class OrdersBlockade: public Orders
         using Orders::Orders;
         using Orders::operator=;
 
+        static Player* neutralPlayer;
         Orders* allocateClone() const override;
         void printOrder(std::ostream& strm) const override;
         bool validate() override;

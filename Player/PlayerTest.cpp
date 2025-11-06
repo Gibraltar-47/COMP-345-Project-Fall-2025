@@ -15,7 +15,7 @@ Player::Player() : name("hi") {
 }
 
 //cons with name
-Player::Player(const std:: string& playerName): name(playerName), territories(), handCards() {
+Player::Player(const std:: string& playerName): name(playerName), territories(), handCards(), truceList() {
     orderList=new OrdersList();
 }
 
@@ -30,6 +30,13 @@ Player::Player(const Player& other){
     // Deep copy hand cards
     for (auto c : other.handCards) {
         handCards.push_back(new Card(*c));
+    }
+
+    // PERFORM DEEP OR SHALLOW COPY OF TRUCE PLAYERS? 
+    // (PLAYERS DONT NECESSARILY OWN PLAYER THRY TRUCE WITH AND MAY SHARE POINTERS TO SAME PLAYER AND EVEN TERRITORIES)
+    for (auto p : other.truceList){
+        // truceList.push_back(new Player(*p));
+        truceList.push_back(p);
     }
 
     // Deep copy order list
@@ -52,11 +59,16 @@ Player& Player::operator=(const Player& other) {
     handCards.clear();
     delete orderList;
 
+    // WITH SHARED POINTER IDEA WE WOULD NOT BE DELETING THE PLAYERS
+    truceList.clear();
+
     name = other.name;
 
     // Deep copy again
     for (auto t : other.territories) territories.push_back(new Territory(*t));
     for (auto c : other.handCards) handCards.push_back(new Card(*c));
+    // HERE TOO
+    for (auto p: other.truceList) truceList.push_back(p);
     orderList = new OrdersList(*other.orderList);
 
     return *this;
@@ -66,13 +78,21 @@ Player& Player::operator=(const Player& other) {
  string Player::getName() const{
   return name;
 }
+bool Player::getEarnedCard(){
+    return earnedCard;
+}
 void Player::setName(const string& newName){
    name=newName;
+}
+void Player::setEarnedCard(bool hasEarned){
+    earnedCard = hasEarned;
 }
 std::vector<Territory*> Player::getTerritories() {
     return this->territories;
 }
-
+std::vector<Player*> Player::getTruceList(){
+    return this->truceList;
+}
 OrdersList* Player::getOrderList(){
     return this->orderList;
 }
@@ -82,6 +102,45 @@ void Player:: addTerritory(Territory* tr){
     if(tr!=nullptr){
         territories.push_back(tr);
         tr->setOwner(this); //sets this player as its owner
+    }
+}
+// removes a territory from a player's list
+void Player::removeTerritory(Territory* tr){
+    if (tr == nullptr) return;
+    int indexOfRemovedTerr = -1;
+    for (int index = 0; index < territories.size(); index++){
+        if (territories[index] == tr){
+            indexOfRemovedTerr = index;
+            break;
+        }
+    }
+    if (indexOfRemovedTerr != -1){
+        Territory* temp = territories[territories.size()-1];
+        territories[territories.size()-1] = tr;
+        territories[indexOfRemovedTerr] = temp;
+        territories.pop_back();
+    }
+}
+
+void Player::addTruce(Player* enemyToTruce){
+    if (enemyToTruce != nullptr){
+        truceList.push_back(enemyToTruce);
+    }
+}
+void Player::removeTruce(Player* enemy){
+    if (enemy == nullptr) return;
+    int indexOfRemovedTruce = -1;
+    for (int index = 0; index < truceList.size(); index++){
+        if (truceList[index] == enemy){
+            indexOfRemovedTruce = index;
+            break;
+        }
+    }
+    if (indexOfRemovedTruce != -1){
+        Player* temp = truceList[truceList.size()-1];
+        truceList[truceList.size()-1] = enemy;
+        truceList[indexOfRemovedTruce] = temp;
+        truceList.pop_back();
     }
 }
 
