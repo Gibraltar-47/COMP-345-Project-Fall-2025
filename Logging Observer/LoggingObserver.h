@@ -3,7 +3,7 @@
 //
 
 #include <iostream>
-#include <vector>
+#include <set>
 #include <string>
 using std::cout;
 
@@ -25,6 +25,7 @@ class Observer{
 class LogObserver : Observer{
     private:
         string filename;
+        ofstream& outputFileStream;
     public:
         //overridden virtual method from parent class
         void update(const ILoggable& s) override;
@@ -39,14 +40,18 @@ class LogObserver : Observer{
 };
 
 class Subject{
-public:
-    vector <LogObserver*> list;
-    virtual void addObserver(LogObserver* observer);
-    virtual void removeObserver(LogObserver* observer);
-    virtual void notify(ILoggable subject);
 
-    Subject();
-    ~Subject();
+//protected members and methods for the Subject class
+//so that only derived classes can directly access them
+//without having to implement them again (except for the notify method that NEEDS to be implemented in derived classes)
+protected:
+    set <LogObserver*> list;
+    virtual void addObserver(LogObserver* observer) ;
+    virtual void removeObserver(LogObserver* observer);
+    virtual void notify(ILoggable subject) =0;
+
+    Subject() = default;
+    ~Subject() = default;
 };
 
 #endif //GITCLONE345_LOGGINGOBSERVER_H

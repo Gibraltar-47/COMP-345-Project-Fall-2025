@@ -4,10 +4,11 @@
 
 #include "LoggingObserver.h"
 #include <iostream>
-#include <vector>
+#include <set>
 #include <string>
 using std::cout;
 
 void Subject::addObserver(LogObserver *observer) {
-    list.push_back(observer);
+    list.insert(observer);
 }
+
