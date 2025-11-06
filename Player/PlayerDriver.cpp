@@ -41,8 +41,8 @@ p2.printStatus();
  p1.addCard(c1);
 p1.addCard(c2);
 //issue orders
-p1.issueOrder();
-p2.issueOrder();
+//p1.issueOrder();
+//p2.issueOrder();
 cout<<p1<<endl;
 cout<<p2<<endl;
 
