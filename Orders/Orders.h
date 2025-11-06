@@ -5,6 +5,8 @@
 #include <list>
 #include <algorithm>
 #include <string>
+#include <stdlib.h>
+#include <time.h>
 using namespace std;
 
 class Player;

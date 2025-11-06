@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <string>
 #include <stdlib.h>
+#include <time.h>
 #include "Orders.h"
 #include "../Player/Player.h"
 #include "../part1-map/Map.h"
@@ -155,10 +156,15 @@ void OrdersDeploy::execute(){
     bool isValid = validate();
     if (!isValid){
         cout << "Deploying to unowned territory " << this->getSourceTerritory()->getName() << " is invalid" << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
         return;
     }
     int currentNumArmies = this->getSourceTerritory()->getNumOfArmies();
     this->getSourceTerritory()->setNumOfArmies(currentNumArmies + this->getNumArmies());
+
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 OrdersAdvance::OrdersAdvance() : Orders(), targetTerritory(nullptr), numArmies(0) {}
@@ -247,12 +253,16 @@ bool OrdersAdvance::validate(){
     return (SourceTerritoryBelongsToPlayer && TargetTerritoryAdjacentToSource);
 }
 void OrdersAdvance::execute(){
+    srand((unsigned) time(NULL));
     bool isValid = this->validate();
     int probAttackArmyKills = 60;
     int probDefendArmyKills = 70;
     if (!isValid){
         cout << "Invalid advance from territory " << this->getSourceTerritory()->getName() << " to territory " <<
             this->getTargetTerritory()->getName() << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
+        return;
     }
     // We are advancing armies from one of our territories to another one of our territories
     int currentNumArmiesSource = this->getSourceTerritory()->getNumOfArmies();
@@ -296,6 +306,8 @@ void OrdersAdvance::execute(){
         this->getTargetTerritory()->setNumOfArmies(attackingArmies);
         this->getIssuingPlayer()->setEarnedCard(true);
     }
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 Orders* OrdersBomb::allocateClone() const{
@@ -336,10 +348,15 @@ void OrdersBomb::execute(){
     bool isValid = this->validate();
     if (!isValid){
         cout << "Cannot perform bombing of territory " << this->getSourceTerritory()->getName() << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
         return;
     }
     int numArmiesBeforeBomb = this->getSourceTerritory()->getNumOfArmies();
     this->getSourceTerritory()->setNumOfArmies(numArmiesBeforeBomb / 2);
+
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 Orders* OrdersBlockade::allocateClone() const{
@@ -362,12 +379,18 @@ void OrdersBlockade::execute(){
     bool isValid = this->validate();
     if (!isValid){
         cout << "Blockade on territory that is not yours is invalid" << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
         return;
     }
     int currentNumArmies = this->getSourceTerritory()->getNumOfArmies();
     this->getSourceTerritory()->setNumOfArmies(currentNumArmies * 2);
     this->getIssuingPlayer()->removeTerritory(this->getSourceTerritory());
     this->getSourceTerritory()->setOwner(neutralPlayer);
+    neutralPlayer->addTerritory(this->getSourceTerritory());
+
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 OrdersAirlift::OrdersAirlift() : Orders(), targetTerritory(nullptr), numArmies(0) {}
@@ -430,6 +453,8 @@ void OrdersAirlift::execute(){
     if (!isValid){
         cout << "Invalid airlift, cannot airlift from " << this->getSourceTerritory()->getName() << 
             " to " << this->getTargetTerritory()->getName() << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
         return;
     }
     int sourceNumArmies = this->getSourceTerritory()->getNumOfArmies();
@@ -437,6 +462,9 @@ void OrdersAirlift::execute(){
 
     this->getSourceTerritory()->setNumOfArmies(sourceNumArmies - this->getNumArmies());
     this->getTargetTerritory()->setNumOfArmies(targetNumArmies + this->getNumArmies());
+
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 OrdersNegotiate::OrdersNegotiate() : Orders(), enemyToTruce(nullptr) {}
@@ -477,10 +505,10 @@ bool OrdersNegotiate::validate(){
         return false;
 
     if (this->getEnemyToTruce()->equals(this->getIssuingPlayer())){
-        cout << "INVALID NEGOTIATION" << endl;
+        // cout << "INVALID NEGOTIATION" << endl;
         return false;
     }
-    cout << "VALID NEGOTIATE" << endl;
+    // cout << "VALID NEGOTIATE" << endl;
     return true;
         
 }
@@ -488,10 +516,15 @@ void OrdersNegotiate::execute(){
     bool isValid = this->validate();
     if (!isValid){
         cout << "Cannot perform a negotiation with self or null player" << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
         return;
     }
-    this->getIssuingPlayer()->addTruce(this->getSourceTerritory()->getOwner());
-    this->getSourceTerritory()->getOwner()->addTruce(this->getIssuingPlayer());
+    this->getIssuingPlayer()->addTruce(this->getEnemyToTruce());
+    this->getEnemyToTruce()->addTruce(this->getIssuingPlayer());
+
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 
@@ -543,8 +576,9 @@ Orders* OrdersList::remove(const Orders& order){
     auto it = std::find(this->list.begin(), this->list.end(), &order);
 
     if (it != this->list.end()){
-        this->list.erase(it);
-        return *it;
+        Orders* temp = *it;   // save pointer first
+        this->list.erase(it); // erase iterator
+        return temp; 
     }
     cout << "Element not found" << endl;
     return nullptr;
@@ -554,8 +588,9 @@ Orders* OrdersList::remove(const int index){
     std::advance(it, index);
 
     if (it != this->list.end()){
-        this->list.erase(it);
-        return *it;
+        Orders* temp = *it;   // save pointer first
+        this->list.erase(it); // erase iterator
+        return temp; 
     }
     cout << "Element not found" << endl;
     return nullptr;
