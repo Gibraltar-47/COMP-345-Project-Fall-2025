@@ -24,6 +24,7 @@ class GameEngine {
         vector<Player*> players;
         bool gameOver;
         Map* map;
+        Deck* deck;
 
     public:
         GameEngine(); //Default constructor
@@ -49,6 +50,7 @@ class GameEngine {
         void addPlayer(Player* player);
         void removePlayer(Player* player);
         void addMap(Map* map);
+        void giveDeck(Deck* deck);
         void printAllPlayerOrders(const std::vector<Player*>& players);
 };
 
