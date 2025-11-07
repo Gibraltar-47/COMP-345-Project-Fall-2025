@@ -15,7 +15,7 @@ Player::Player() : name("hi") {
 }
 
 //cons with name
-Player::Player(const std:: string& playerName): name(playerName), territories(), handCards(),numArmies(0) {
+Player::Player(const std:: string& playerName): name(playerName), territories(), handCards(),numArmies(0), hand(name) {
     orderList=new OrdersList();
 }
 
@@ -88,8 +88,8 @@ void Player:: addTerritory(Territory* tr){
 //add a card to the player's hand and prints a string
 void Player::addCard(Card* ca){
     if (ca!=nullptr){
-        handCards.push_back(ca);
-        cout<<name<<" has card: "<<ca->getName()<<endl;
+        hand.addCard(ca);
+        //cout<<name<<" has card: "<<ca->getName()<<endl;
    }
 }
 
@@ -98,23 +98,101 @@ void Player::addOrder(Orders* ord) {
     orderList->add(ord);
 }
 
-void Player::issueOrder(){
- //create a new order
- Orders* newOrder=new Orders();
+void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory, Player& player2) {
 
+    switch (mode) {
+        case 1: //Deploy
+            orderList->add(new OrdersDeploy(this,sourceTerritory,numArmies));
+            break;
+        case 2: //Advance
+            orderList->add(new OrdersAdvance(this,sourceTerritory,targetTerritory, numArmies));
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6: {
+            Card* matchingCard = nullptr;
+            for (Card* card: hand.getCards()) {
+                if ((mode == 3 && card->getName() == "Bomb") ||
+                    (mode == 4 && card->getName() == "Blockade") ||
+                    (mode == 5 && card->getName() == "Airlift") ||
+                    (mode == 6 && card->getName() == "Diplomacy")) {
+                    matchingCard = card;
+                    break;
+                    }
+            }
+            if (!matchingCard) {
+                cout << name << " doesn't have the card required for this order." << endl;
+                return;
+            }
+            OrdersList* olist = this->getOrderList();
 
- //adds it to the player's orders vector
- orderList->add(newOrder);
- //add to the OrdersList
- if (orderList) {
-  orderList->getList().push_back(newOrder);
+            matchingCard->play(deck, &this->hand, *olist, this, sourceTerritory,mode,numArmies,targetTerritory,&player2); //dereference problem
+            cout << name << " played a " << matchingCard->getName() << " card." << endl;
+            break;
 
- }
- cout<< name<<" created a new order: "<< *newOrder <<endl;
+        }
+        default:
+            cout << "Invalid order mode." << endl;
+
+    }
+
+    /**
+    //It first checks the required card name and if the order requires a card
+    string cardNeeded;
+    bool requiresCard = false;
+    switch (mode) {
+        case 3: cardNeeded = "Bomb"; requiresCard = true; break;
+        case 4: cardNeeded = "Blockade"; requiresCard = true; break;
+        case 5: cardNeeded = "Airlift"; requiresCard = true; break;
+        case 6: cardNeeded = "Negotiate"; requiresCard = true; break;
+        default: break; // Deploy/Advance don't require cards
+    }
+    //if a card is required then check if the player has it
+    if (requiresCard) {
+        auto it = std::find_if(handCards.begin(), handCards.end(), [&](Card* c) {
+            return c && c->getName() == cardNeeded;
+        });
+
+        if (it == handCards.end()) {
+            cout << name << " tried to issue a " << cardNeeded << " order but does not have the card." << endl;
+            return; // No card, skip issuing
+        }
+
+        cout << name << " used the " << cardNeeded << " card to issue the order." << endl;
+        delete *it; // Free card memory
+        handCards.erase(it); // Remove from hand
+    }
+
+    //Creates the order using the appropriate parameters given the switch case
+    switch (mode) {
+        case 1: //Deploy
+            orderList->add(new OrdersDeploy(this,sourceTerritory,numArmies));
+            break;
+        case 2: //Advance
+            orderList->add(new OrdersAdvance(this,sourceTerritory,targetTerritory, numArmies));
+            break;
+        case 3: //Bomb
+            orderList->add(new OrdersBomb(this,sourceTerritory));
+            break;
+        case 4: //Blockade
+            orderList->add(new OrdersBlockade(this,sourceTerritory));
+            break;
+        case 5: //Airlift
+            orderList->add(new OrdersAirlift(this,sourceTerritory,targetTerritory, numArmies));
+            break;
+        case 6: //Negotiate
+            orderList->add(new OrdersNegotiate(this,&player2));
+            break;
+        default:
+            cout<<"Wrong order mode!"<<endl;
+    }
+    cout<< name<<" created a new order." <<endl;
+    */
 }
 
 //returns a list of territories the player owns(to defend)
-vector<Territory*> Player::toDefend() const{
+vector<Territory*> Player::toDefend() const{                                                                            //Require changes to work as intended
     //create a new empty vector defendList to store terr
     vector<Territory*> defendList;
     //loop through all the terr the player owns
@@ -128,28 +206,28 @@ vector<Territory*> Player::toDefend() const{
 }
 
 //returns list of territories adjacent to player's territories but owned by other player(to attack)
-vector<Territory*> Player::toAttack(const std::vector<Territory*>& allTerritories) const {
+vector<Territory*> Player::toAttack(const std::vector<Territory*>& allTerritories) const {                              //Require changes to work as intended
     std::vector<Territory*> attackList;
 
     cout << "TO ATTACK FUNCTION" << endl;
 
-    // // Loop through each territory the player owns
-    // for (Territory* myTerritory : territories) {
-    //     if (!myTerritory) continue;
+     // Loop through each territory the player owns
+     for (Territory* myTerritory : territories) {
+         if (!myTerritory) continue;
 
-    //     // Loop through adjacent territory names
-    //     for (const std::string& adjName : myTerritory->getAdjTerritoriesNames()) {
-    //         // Find the Territory object by name in allTerritories
-    //         auto it = std::find_if(allTerritories.begin(), allTerritories.end(),[&](Territory* t) {
-    //             return t && t->getName() == adjName && t->getOwner() != this;
-    //         });
+         // Loop through adjacent territory names
+         for (const std::string& adjName : myTerritory->getAdjTerritoriesNames()) {
+             // Find the Territory object by name in allTerritories
+             auto it = std::find_if(allTerritories.begin(), allTerritories.end(),[&](Territory* t) {
+                 return t && t->getName() == adjName && t->getOwner() != this;
+             });
 
-    //         // If found and not already in attackList, add it
-    //         if (it != allTerritories.end() && std::find(attackList.begin(), attackList.end(), *it) == attackList.end()) {
-    //             attackList.push_back(*it);
-    //         }
-    //     }
-    // }
+             // If found and not already in attackList, add it
+             if (it != allTerritories.end() && std::find(attackList.begin(), attackList.end(), *it) == attackList.end()) {
+                 attackList.push_back(*it);
+             }
+         }
+     }
  return attackList;
 }
 
@@ -213,6 +291,21 @@ ostream& operator<<(std::ostream& out, const Player& p){
     return out;
 }
 
+
+//=====================================
 void Player::setNumArmies(int newNumArmies) {
     numArmies = newNumArmies;
+}
+int Player::getNumArmies() {
+    return numArmies;
+}
+
+Territory* Player::findTerritoryByName(const string& name) {
+    for (auto t : territories)
+        if (t->getName() == name)
+            return t;
+    return nullptr;
+}
+Hand* Player::getHand() {
+    return &this->hand;
 }

@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "../Part-4-Deck/Cards.h"
 
 // Forward declarations
 class Territory;
@@ -21,6 +22,7 @@ class Player {
     std::vector<Territory*> territories; //dynamic array of territory pointers
     std::vector<Card*> handCards;
     OrdersList* orderList;
+    Hand hand;
 
   //=====
     int numArmies;
@@ -30,7 +32,7 @@ public:
    Player();
    Player(const std::string& playerName);
    Player(const Player& other); //copy constructor
-   Player& operator =(const Player& other); //assignemnt operator
+   Player& operator =(const Player& other); //assignment operator
    ~Player(); //destructor, clears up resources when a player obj is destroyed
    std::string getName() const;
    OrdersList* getOrderList();
@@ -42,13 +44,18 @@ public:
  //game actions
    std::vector<Territory*> toDefend() const;
    std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const;
-   void issueOrder(); //execute all orders and clean up memory
-   void printStatus() const; //print player's name, territories
+  //added item
+   void issueOrder(Deck& deck, int type, Territory* source, int numArmies, Territory* target, Player& issuer);//execute all orders and clean up memory
+
+  void printStatus() const; //print player's name, territories
    bool equals(Player* player2);
   friend std::ostream& operator <<(std::ostream& out, const Player& p);
 
   //Part 2
   void setNumArmies(int newNumArmies);
+  int getNumArmies();
+  Territory* findTerritoryByName(const string& name);
+    Hand* getHand();
 };
 
 #endif
