@@ -24,12 +24,14 @@ Player::Player(const Player& other){
 
     // Deep copy territories
     for (auto t : other.territories) {
-        territories.push_back(new Territory(*t));
+        //territories.push_back(new Territory(*t));
+        territories.push_back(t);
     }
 
     // Deep copy hand cards
     for (auto c : other.handCards) {
-        handCards.push_back(new Card(*c));
+        //handCards.push_back(new Card(*c));
+        handCards.push_back(c);
     }
 
     // PERFORM DEEP OR SHALLOW COPY OF TRUCE PLAYERS? 
