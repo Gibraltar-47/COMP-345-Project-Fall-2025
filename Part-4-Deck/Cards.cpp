@@ -239,6 +239,7 @@ ostream& operator << (ostream& os, const Hand& hand) {
 }
 //=======================================================
 //Temporary
+/**
 void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist,Player* p, Territory* territory, Player* p2, Territory* territory2, int numArmies) {
     //Plays a card
     if (isEmpty()) {                                                                                                    //Checks if hand is empty
@@ -285,6 +286,12 @@ void Hand::playCard(Deck& deck, const string& cardName, OrdersList& olist,Player
     //Returns the card back to the deck
     cout << used->getName() << " goes back into the deck." << endl;
 }
+*/
+std::vector<Card *> Hand::getCards() {
+    return this->cards;
+}
+
+
 
 //TEMPORARY
 // Order::Order(std::string &name) {

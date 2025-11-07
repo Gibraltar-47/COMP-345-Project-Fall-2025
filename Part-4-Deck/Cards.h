@@ -51,8 +51,8 @@ class Card {
         std::string getName() const;
         void setName(const std::string& n);
 
-        void play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory,                //Mandatory parameters
-                    int mode = 3, int numArmies = 0, Territory* target = nullptr, Player* otherPlayer = nullptr); //Optional Parameter
+        void play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory,
+                    int mode, int numArmies, Territory* target, Player* otherPlayer);
 
         friend std::ostream& operator<<(std::ostream& os, const Card& c);
 };
@@ -104,6 +104,8 @@ class Hand {
 
         bool isEmpty() const;
         friend std::ostream& operator<<(std::ostream& os, const Hand& hand);
+
+    std::vector<Card *> getCards();
 };
 
 #endif //CLIONPROJECTS_DECK_H

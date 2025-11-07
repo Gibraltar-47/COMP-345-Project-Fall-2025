@@ -9,6 +9,7 @@
 
 using namespace std;
 
+/**
 //Testing function
 void testCards() {
 
@@ -117,3 +118,4 @@ void testCards() {
 
 //     return 0;
 // }
+*/
