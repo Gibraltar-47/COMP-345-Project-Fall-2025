@@ -69,8 +69,17 @@ Player& Player::operator=(const Player& other) {
 void Player::setName(const string& newName){
    name=newName;
 }
+
+void Player::setEarnedCard(bool hasEarned){
+    earnedCard = hasEarned;
+}
+
 std::vector<Territory*> Player::getTerritories() {
     return this->territories;
+}
+
+std::vector<Player*> Player::getTruceList(){
+    return this->truceList;
 }
 
 OrdersList* Player::getOrderList(){
@@ -82,6 +91,45 @@ void Player:: addTerritory(Territory* tr){
     if(tr!=nullptr){
         territories.push_back(tr);
         tr->setOwner(this); //sets this player as its owner
+    }
+}
+
+void Player::removeTerritory(Territory* tr){
+    if (tr == nullptr) return;
+    int indexOfRemovedTerr = -1;
+    for (int index = 0; index < territories.size(); index++){
+        if (territories[index] == tr){
+            indexOfRemovedTerr = index;
+            break;
+        }
+    }
+    if (indexOfRemovedTerr != -1){
+        Territory* temp = territories[territories.size()-1];
+        territories[territories.size()-1] = tr;
+        territories[indexOfRemovedTerr] = temp;
+        territories.pop_back();
+    }
+}
+
+void Player::addTruce(Player* enemyToTruce){
+    if (enemyToTruce != nullptr){
+        truceList.push_back(enemyToTruce);
+    }
+}
+void Player::removeTruce(Player* enemy){
+    if (enemy == nullptr) return;
+    int indexOfRemovedTruce = -1;
+    for (int index = 0; index < truceList.size(); index++){
+        if (truceList[index] == enemy){
+            indexOfRemovedTruce = index;
+            break;
+        }
+    }
+    if (indexOfRemovedTruce != -1){
+        Player* temp = truceList[truceList.size()-1];
+        truceList[truceList.size()-1] = enemy;
+        truceList[indexOfRemovedTruce] = temp;
+        truceList.pop_back();
     }
 }
 

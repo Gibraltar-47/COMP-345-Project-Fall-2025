@@ -24,6 +24,9 @@ class Player {
     OrdersList* orderList;
     Hand hand;
 
+    std::vector<Player*> truceList;
+    bool earnedCard;
+
   //=====
     int numArmies;
 
@@ -56,6 +59,12 @@ public:
   int getNumArmies();
   Territory* findTerritoryByName(const string& name);
     Hand* getHand();
+    std::vector<Player*> getTruceList();
+    bool getEarnedCard();
+    void setEarnedCard(bool hasEarned);
+    void removeTerritory(Territory* tr);
+    void addTruce(Player* enemyToTruce);
+    void removeTruce(Player* enemy);
 };
 
 #endif
