@@ -28,8 +28,8 @@ class Player {
     bool earnedCard;
 
   //=====
-    int numArmies;
-
+    int numArmies; //Total of army units
+    int numFreeArmies; //Number of free army units to deploy
 
 public:
    Player();
@@ -45,7 +45,7 @@ public:
    void addCard(Card* ca);
    void addOrder(Orders* ord);
  //game actions
-   std::vector<Territory*> toDefend() const;
+   std::vector<Territory*> toDefend(const std::vector<Territory*>& allTerritories) const;
    std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const;
   //added item
    void issueOrder(Deck& deck, int type, Territory* source, int numArmies, Territory* target, Player& issuer);//execute all orders and clean up memory
@@ -55,8 +55,10 @@ public:
   friend std::ostream& operator <<(std::ostream& out, const Player& p);
 
   //Part 2
-  void setNumArmies(int newNumArmies);
+  void addNumArmies(int newArmies);
   int getNumArmies();
+  int getNumFreeArmies();
+
   Territory* findTerritoryByName(const string& name);
     Hand* getHand();
     std::vector<Player*> getTruceList();
