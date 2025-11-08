@@ -91,23 +91,5 @@ public:
 
 };
 
-class CommandProcessor : Subject, ILoggable{
-protected:
-    vector<Command*> commands;
-public:
-    CommandProcessor(Observer* observer);
-    ~CommandProcessor() override;
-    //methods
-    virtual void readCommand(); //reading the command from either console or a file
-    void saveCommand(const string& cm);
-    virtual Command* getCommand();
-    virtual bool validate(Command* cm, string state);
-    const vector<Command*>& getCommandList() const; //getter for commands vector
-    //stream insertion operator
-    friend ostream& operator<<(ostream& os, const CommandProcessor& cp);
-
-
-
-};
 
 #endif
