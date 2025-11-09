@@ -318,8 +318,6 @@ void testGameStates() {
 
 }
 
-
-
 // Standard main that just calls testGameStates
 //int main() {
 //    testGameStates();
