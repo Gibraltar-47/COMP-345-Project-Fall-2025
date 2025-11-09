@@ -83,35 +83,36 @@ void testGameStates() {
 
     // === Add territories to continents ===
 
-    // Continent 1: Northern Reach
+    // Continent A
     continent1->addTerritory(terr1);
     continent1->addTerritory(terr2);
     continent1->addTerritory(terr3);
     continent1->addTerritory(terr4);
 
-    // Continent 2: Central Empire
+    // Continent B
     continent2->addTerritory(terr5);
     continent2->addTerritory(terr6);
     continent2->addTerritory(terr7);
     continent2->addTerritory(terr8);
 
-    // Continent 3: Southern Isles
+    // Continent C
     continent3->addTerritory(terr9);
     continent3->addTerritory(terr10);
     continent3->addTerritory(terr11);
     continent3->addTerritory(terr12);
 
-    // Continent 4: Eastern Dominion
+    // Continent D
     continent4->addTerritory(terr13);
     continent4->addTerritory(terr14);
     continent4->addTerritory(terr15);
     continent4->addTerritory(terr16);
 
-    // Continent 5: Western Frontier
+    // Continent E
     continent5->addTerritory(terr17);
     continent5->addTerritory(terr18);
     continent5->addTerritory(terr19);
 
+    // Continent F
     continent6->addTerritory(terr20);
 
 
@@ -228,25 +229,28 @@ void testGameStates() {
 
     }
 
-
-
     GameEngine engine;   // create a new engine instance
-    engine.addPlayer(&p1);
-    engine.addPlayer(&p2);
-    engine.addPlayer(&p3);
-    engine.addPlayer(&p4);
-    engine.addPlayer(&p5);
+    engine.addPlayer(&p1, true);
+    engine.addPlayer(&p2, true);
+    engine.addPlayer(&p3, true);
+    engine.addPlayer(&p4, true);
+    engine.addPlayer(&p5, true);
 
-    engine.addMap(&testMap);
-    engine.giveDeck(&deck);
+    engine.addMap(&testMap, true);
+    engine.giveDeck(&deck, true);
 
     engine.runGame();        // start the game loop
 
     cout << "===== GAME ENDED =====" << endl;
-}
 
+
+
+}
+*/
+/**
 // Standard main that just calls testGameStates
 int main() {
     testGameStates();
     return 0;
+}
 */

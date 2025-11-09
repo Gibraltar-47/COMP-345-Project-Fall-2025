@@ -1,4 +1,8 @@
-
+#include "../Engine/GameEngine.h"
+#include "../Orders/Orders.h"
+#include "../Part-4-Deck/Cards.h"
+#include "../part1-map/Map.h"
+#include "../Player/Player.h"
 #include "GameEngine.h"
 
 #include <iostream>
@@ -8,6 +12,13 @@
 // Free function required by the assignment
 void testGameStates() {
     cout << "===== GAME ENGINE STATE MACHINE TEST =====" << endl;
+    cout << "Testing a player getting the right amount of reinforcements based on territories and continents owned." << endl;
+    cout << "Testing a player issuing deploy orders" << endl;
+    cout << "Testing a player issuing advance orders" << endl;
+    cout << "Testing a player issuing bomb, blockade, airlift, and diplomacy orders using cards." << endl;
+    cout << "Testing a player removed from the game" << endl;
+    cout << "Testing execution of orders and their effects on the game state." << endl;
+
     Map testMap("TestMap");
 
     // Create Continents
@@ -192,8 +203,7 @@ void testGameStates() {
     setOwner(&p4, {terr14, terr15, terr16, terr17, terr18, terr19});
 
     Deck deck;
-
-    //Add 7 copies of each card type
+    //Add 20 copies of each card type
     vector<string> cardNames = {"Bomb", "Airlift", "Negotiate", "Blockade"};
     for (const auto& name : cardNames) {
         for (int i = 0; i < 20; ++i) {
@@ -209,22 +219,97 @@ void testGameStates() {
 
     }
 
-
-
     GameEngine engine;   // create a new engine instance
     engine.addPlayer(&p1);
     engine.addPlayer(&p2);
     engine.addPlayer(&p3);
     engine.addPlayer(&p4);
     engine.addPlayer(&p5);
-
     engine.addMap(&testMap);
     engine.giveDeck(&deck);
 
     engine.runGame();        // start the game loop
 
     cout << "===== GAME ENDED =====" << endl;
+    engine.~GameEngine();
+
+    cout << "\n===== Test the winning condition =====" << endl;
+
+    Map miniMap("MiniMap");
+
+    // One simple continent
+    Continent* contA = new Continent("TinyLand", 3);
+    miniMap.addContinent(contA);
+
+    // Four connected territories
+    Territory* t1 = new Territory("Alpha", contA, 0, 0, {"Beta"});
+    Territory* t2 = new Territory("Beta", contA, 1, 0, {"Alpha", "Gamma"});
+    Territory* t3 = new Territory("Gamma", contA, 2, 0, {"Beta", "Delta"});
+    Territory* t4 = new Territory("Delta", contA, 3, 0, {"Gamma"});
+
+    // Add territories to continent & map
+    contA->addTerritory(t1);
+    contA->addTerritory(t2);
+    contA->addTerritory(t3);
+    contA->addTerritory(t4);
+
+    miniMap.addTerritory(t1);
+    miniMap.addTerritory(t2);
+    miniMap.addTerritory(t3);
+    miniMap.addTerritory(t4);
+
+    // Initialize adjacency and connections
+    miniMap.initAdjMatrix();
+    miniMap.setVertice(t1, t2);
+    miniMap.setVertice(t2, t3);
+    miniMap.setVertice(t3, t4);
+
+    cout << miniMap << endl;
+
+    // Create 3 players
+    Player pA("Alice");
+    Player pB("Bob");
+    Player pC("Cathy");
+
+    // Assign initial territories
+    pA.addTerritory(t1);
+    pA.addTerritory(t2);
+    pA.addTerritory(t3);
+    pA.addTerritory(t4);
+    // t4 starts neutral
+    t1->setOwner(&pA);
+    t2->setOwner(&pA);
+    t3->setOwner(&pA);
+    t4->setOwner(&pA);
+
+    Deck deck2;
+    vector<string> cardNames1 = {"Bomb", "Airlift", "Negotiate", "Blockade"};
+    for (const auto& name : cardNames) {
+        for (int i = 0; i < 5; ++i) deck2.addCard(new Card(name));
+    }
+
+    // Give each player a couple cards
+    for (int i = 0; i < 2; ++i) {
+        pA.addCard(deck2.draw());
+        pB.addCard(deck2.draw());
+        pC.addCard(deck2.draw());
+    }
+
+    GameEngine miniEngine;
+    miniEngine.addPlayer(&pA);
+    miniEngine.addPlayer(&pB);
+    miniEngine.addPlayer(&pC);
+    miniEngine.addMap(&miniMap);
+    miniEngine.giveDeck(&deck2);
+
+    // Run the small game
+    miniEngine.runGame();
+
+    cout << "===== MINI GAME ENDED =====" << endl;
+
 }
+
+
 
 // Standard main that just calls testGameStates
 //int main() {
