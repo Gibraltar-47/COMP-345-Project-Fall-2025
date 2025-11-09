@@ -1,0 +1,6 @@
+loadmap worldMap
+validatemap
+addplayer Alyssa
+addplayer Rob
+gamestart
+quit

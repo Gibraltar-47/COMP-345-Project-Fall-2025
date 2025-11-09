@@ -1,39 +1,29 @@
-/*
 #ifndef COMMANDPROCESSING_H
 #define COMMANDPROCESSING_H
-
 #include <string>
 #include <vector>
 #include <iostream>
 #include <fstream>
-
-#include "../Logging-Observer/LoggingObserver.h"
-
+#include "LoggingObserver.h"
 using namespace std;
-
-
 //forward declaration
-// class Command;
-// class LogObserver;
-// class ILoggable;
-// class Subject;
-// class Observer;
-
-class Command{
+class Command;
+class Command: public Subject, public ILoggable{
 private:
     string command; //the command
     string effect; //the result of command
 public:
 //constructors
-    Command();
-    Command(const string& cm);
+    Command(Observer* observer, const string& cm);
     Command(const Command& other);
-    ~Command();
+    ~Command() override;
     Command& operator=(const Command& other);
     void saveEffect();
     string getCommand()const;
     string getEffect()const;
     void setEffect(const std::string& eff);
+    string stringToLog() override;
+    void notify(ILoggable& subject) override;
     friend ostream& operator<<(ostream& os, const Command& cm);
 };
 //this class is responsible for reading and storing commands
@@ -46,14 +36,14 @@ class CommandProcessor{
     CommandProcessor& operator=(const CommandProcessor& other);
     virtual ~CommandProcessor();
     //methods
-    virtual void readCommand(); //reading the command from either console or a file
-    void saveCommand(const string& cm); 
-    virtual Command* getCommand();
+    virtual Command* readCommand(); //reading the command from console
+    Command* saveCommand(const string& cm);  //saving the command in the vector
+    virtual Command* getCommand(string state); //getting the last command
     virtual bool validate(Command* cm, string state);
-    const vector<Command*>& getCommandList() const; //getter for commands vector
+    vector<Command*> getCommandList() const; //getter for commands vector
     //stream insertion operator
     friend ostream& operator<<(ostream& os, const CommandProcessor& cp);
-
+    vector<Command*> getCommands() const ; //getter for the vector, it is needed for loops in the driver
 
 
 };
@@ -64,14 +54,13 @@ private:
     string fileN; 
     
 public:
-    FileCommandProcessorAdapter(const string& filename);
+    explicit FileCommandProcessorAdapter(const string& filename);
     FileCommandProcessorAdapter(const FileCommandProcessorAdapter& other);
-    ~FileCommandProcessorAdapter();
+    ~FileCommandProcessorAdapter() override;
     FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& other);
-    void readCommand() override;
+    Command* readCommand() override;
     friend ostream& operator<<(ostream& os, const FileCommandProcessorAdapter& fcp);
 
 };
 
 #endif
-*/

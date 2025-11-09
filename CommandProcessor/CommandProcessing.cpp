@@ -1,6 +1,3 @@
-/*
-CommandProcessor/CommandProcessing.cpp
-CommandProcessor/CommandProcessing.h
 #include "CommandProcessing.h"
 #include <iostream>
 #include <string>
@@ -8,21 +5,37 @@ CommandProcessor/CommandProcessing.h
 #include <fstream>
 using namespace std;
 
-//command class implemetation, the command class represents a command entered by the player
-//each command has a name and an effect
 
-Command::Command(const string& cm){
-    command =cm;
+/*command class implemetation, the command class represents a command entered by the player
+each command has a name and an effect */
+Command::Command(Observer *observer,const string& cm){
+   command =cm;
+   Subject::addObserver(observer);
 }
-//copy constructor, deep copying other command objs
-Command::Command(const Command& other){
+
+//copy constructor shallow copy
+Command::Command(const Command& other) : Subject(other) {
     command=other.command;
     effect=other.effect;
 }
 //releasing dynamically allocated memory
-Command::~Command(){
-   
+Command::~Command()= default;
+
+void Command::notify(ILoggable& subject)
+{
+    for (Observer* o: list)
+    {
+        o->update(subject);
+    }
 }
+
+string Command::stringToLog()
+{
+    string str="Command : \n"+command+"\nEffect : \n"+effect+"\n";
+    return str;
+}
+
+
 //assignment operator
 Command& Command::operator=(const Command& other){
     if(this!=&other){ //avoids self-assignment
@@ -34,28 +47,36 @@ Command& Command::operator=(const Command& other){
 }
 //storing the given string into effect attribute
 void Command:: saveEffect(){
-if (command=="loadmap"){
-    effect="map loaded successfully";
-}
-  else if(command=="validatemap"){
-    effect="map validated ";
-  }
-  else if(command=="addplayer"){
-    effect="player added ";
-  }
-  else if(command=="gamestart"){
-    effect="game started";
-  }
-  else if(command=="replay"){
-    effect="replaying game";
-}
-  else if(command=="quit"){
-    effect="exiting the game";
+        //checks if the command starts with "loadmap" starting from position 0 in the string
+    if (command.rfind("loadmap",0)==0){
+        //if the command is longer than 8 chars it means the name of the map is provided
+        if(command.length()>8){
+            string mName=command.substr(8); //skip "loadmap "
+            effect="map "+mName+" loaded successfully";
+        } else{
+            effect="missing map name";
+        }
+    }else if(command=="validatemap"){
+        effect="map validated ";
+      }else if(command.rfind("addplayer",0)==0){
+        if(command.length()>10){
+            string playerN=command.substr(10); //skip "addplayer "
+            effect="player "+playerN+" added ";
+        }
+        else{
+            effect="missing player name";
+        }
+      }else if(command=="gamestart"){
+        effect="game started";
+      }else if(command=="replay"){
+        effect="replaying game";
+    }else if(command=="quit"){
+        effect="exiting the game";
 
-}
-else {
-    effect="invalid command";
-}
+    }
+    else {
+        effect="invalid command";
+    }
 }
 //returns the command string
 string Command::getCommand()const{
@@ -76,7 +97,7 @@ return os;
 }
 //command processor class implementation
 //default constructor
-CommandProcessor::CommandProcessor(){}
+CommandProcessor::CommandProcessor()= default;
 //copy constructor, deep copying other command processor objs
 CommandProcessor::CommandProcessor(const CommandProcessor& other){
     for(auto cm:other.commands){
@@ -102,73 +123,81 @@ CommandProcessor& CommandProcessor::operator=(const CommandProcessor& other){
             commands.push_back(new Command(*cm));
         }
     }
-return *this;
+    return *this;
 }
+//saves a new command object into the commands vector
+Command* CommandProcessor ::saveCommand(const string& cm){
+    Command *command = new Command(cm);
+    commands.push_back(command); //creates and add new command object to the vector
+    return command;
+}
+
 //reads command from console
-void CommandProcessor::readCommand(){
+Command* CommandProcessor::readCommand(){
     string input;
     cout<<"Enter command: ";
     getline(cin, input); //reads the entire line including spaces
-    saveCommand(input); // stores the new command
+    Command* com = saveCommand(input); // stores the new command
+    return com;
+}
 
-}
-//saves a new command object into the commands vector
-void CommandProcessor ::saveCommand(const string& cm){
-    commands.push_back(new Command(cm)); //creates and add new command object to the vector
-}
 //returns the most recently added command
-Command* CommandProcessor::getCommand(){
-    if(!commands.empty())
-    {
-         return commands.back(); //returning the last command object
-    }
+Command* CommandProcessor::getCommand(string state){
+    Command* com =readCommand();
+    if (validate(com, state)){return com;}
+
+    cout<<"The command is invalid! Re-enter command!"<<std::endl;
     return nullptr;
 }
-// check if the given command is valid in the current game state
-//call saveEffect() if valid to store the message and if invalid store an error message
-// returns true if valid, false otherwise
+
+/* check if the given command is valid in the current game state
+call saveEffect() if valid to store the message and if invalid store an error message
+ returns true if valid, false otherwise */
 bool CommandProcessor:: validate(Command* cm, string state){
      string cmnd=cm->getCommand();
      bool valid=false;
-     if(state=="start"){
-        if(cmnd=="loadmap"){
-            valid=true;
-        }
+     if(state=="start"&& cmnd.rfind("loadmap",0)==0){
+         valid=true;
+        cm->setEffect("map loaded successfully");
      }
-     else if(state=="maploaded"){
-        if(cmnd=="validatemap"){
-            valid=true;
-        }
+     else if(state=="maploaded"&& cmnd=="validatemap"){
+         valid=true;
+        cm->setEffect("map validated");
      }
-     else if(state=="mapvalidated"){
-        if(cmnd=="addplayer"){
-            valid=true;
-        }
+     else if((state=="mapvalidated"||state=="playersadded")&&cmnd.rfind("addplayer",0)==0){
+        valid=true;
+        string playerN=cmnd.substr(10); //skip "addplayer "
+        cm->setEffect("player "+playerN+" added ");
+        
         
      }
-     else if(state=="playersadded"){
-        if(cmnd=="gamestart"){
-            valid=true;
-        }
+     else if(state=="playersadded"&& cmnd=="gamestart"){
+        valid=true;
+        cm->setEffect("game started");
+        
      }
-     else if(state=="win"){
-        if(cmnd=="replay"){
-            valid=true;
-        }
+     else if(state=="win"&&cmnd=="replay"){
+        valid=true;
+        cm->setEffect("replaying game");
+        
      }
-     else if(cmnd=="quit") valid=true;
+     else if(cmnd=="quit"){
+        valid=true;
+        cm->setEffect("exiting the game...");
+     }
      //saving the effect
-     if(valid){
-        cm->saveEffect();
-     }
-     else{
-        cm->setEffect("invalid command"+cmnd);
-
+     if(!valid){
+        cm->setEffect("invalid command "+cmnd);
      }
 
 return valid;
 
 
+}
+
+vector<Command*> CommandProcessor::getCommandList() const
+{
+    return commands;
 }
 
 //file command processor adapter class implementation
@@ -197,11 +226,13 @@ FileCommandProcessorAdapter::~FileCommandProcessorAdapter(){
     }
 }
 //reads command from the file
-void FileCommandProcessorAdapter::readCommand(){
+Command* FileCommandProcessorAdapter::readCommand(){
     string line;
     //if the file is open and has a next line, read from it
     if(file.is_open() && getline(file, line)){
         saveCommand(line); //store the read command
+    }
+    return nullptr;
 }
-}
-*/
+
+vector<Command*> CommandProcessor::getCommands() const { return commands; } //getter for the vector, it is needed for loops in the driver

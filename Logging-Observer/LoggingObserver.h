@@ -75,21 +75,7 @@ protected:
     friend ostream& operator<<(ostream& out, const Subject& subject);
 };
 
-class Command: public Subject,public ILoggable{
-private:
-    string command; //the command
-    string effect; //the result of command
-public:
-    //constructors
-    Command(Observer* observer, const string& cm);
-    ~Command() override = default;
-    void saveEffect();
-    string stringToLog() override;
-    void notify(ILoggable& subject) override;
-    void setEffect(const std::string& eff);
-    friend ostream& operator<<(ostream& os, const Command& cm);
 
-};
 
 
 #endif
