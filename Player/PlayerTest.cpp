@@ -151,7 +151,12 @@ void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int nu
 
     switch (mode) {
         case 1: //Deploy
+            if (numArmies > numFreeArmies) {
+                cout << "Not enough free armies to deploy." << endl;
+                numArmies = numFreeArmies;
+            }
             orderList->add(new OrdersDeploy(this,sourceTerritory,numArmies));
+            numFreeArmies -= numArmies;
             break;
         case 2: //Advance
             orderList->add(new OrdersAdvance(this,sourceTerritory,targetTerritory, numArmies));
