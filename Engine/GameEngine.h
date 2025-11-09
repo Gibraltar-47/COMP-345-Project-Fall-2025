@@ -39,14 +39,15 @@ class GameEngine {
         void runGame();
         friend ostream& operator<<(ostream& out, const GameEngine& engine);
 
+
+        //Part 2 methods
         void mainGameLoop();
         void reinforcementPhase();
         void issueOrdersPhase(vector<Player*>& allPlayers , Map* map);
-        void executeOrdersPhase();
-
+        bool executeOrdersPhase();
         bool checkWinCondition(const std::vector<Player*>& players, Map* map);
-        void waitForUser();
 
+        //Debug purpose mainly and manually adding objects to the engine
         void addPlayer(Player* player);
         void removePlayer(Player* player);
         void addMap(Map* map);
