@@ -39,8 +39,8 @@ public:
 
     virtual Orders* allocateClone() const;
     virtual void printOrder(std::ostream& strm) const;
-    virtual bool validate();
-    virtual void execute();
+    virtual bool validate() = 0;
+    virtual void execute() = 0;
 };
 
 class OrdersDeploy: public Orders

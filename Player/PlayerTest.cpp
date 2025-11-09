@@ -160,18 +160,18 @@ void Player::addOrder(Orders* ord) {
 }
 
 void Player::issueOrder(){
- //create a new order
- Orders* newOrder=new Orders();
+//  //create a new order
+//  Orders* newOrder=new Orders();
 
 
- //adds it to the player's orders vector
- orderList->add(newOrder);
- //add to the OrdersList
- if (orderList) {
-  orderList->getList().push_back(newOrder);
+//  //adds it to the player's orders vector
+//  orderList->add(newOrder);
+//  //add to the OrdersList
+//  if (orderList) {
+//   orderList->getList().push_back(newOrder);
 
- }
- cout<< name<<" created a new order: "<< *newOrder <<endl;
+//  }
+//  cout<< name<<" created a new order: "<< *newOrder <<endl;
 }
 
 //returns a list of territories the player owns(to defend)

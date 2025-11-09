@@ -98,19 +98,22 @@ void Orders::setIsValid(bool isValid){
     this->isValid = isValid;
 }
 Orders* Orders::allocateClone() const{
-    return new Orders(*this);
+    //return new Orders(*this);
+    // Still requires allocate clone for Orders even though we cannot return a Order object since it is abstract
+    // This is due to polymorphism and types at comilation different from types at runtime (dynmaic binding)
+    return nullptr;
 }
 void Orders::printOrder(std::ostream& strm) const{
     strm << "An Order is the superclass of all the individual orders.\nIt has no affect since it is an abstract class.";
 }
-bool Orders::validate(){
-    cout << "Orders::validate is abstract" << endl;
-    return false;
+// bool Orders::validate(){
+//     cout << "Orders::validate is abstract" << endl;
+//     return false;
 
-}
-void Orders::execute(){
-    cout << "Orders::execute is abstract" << endl;
-}
+// }
+// void Orders::execute(){
+//     cout << "Orders::execute is abstract" << endl;
+// }
 
 
 OrdersDeploy::OrdersDeploy() : Orders(), numArmies(0) {}
@@ -214,21 +217,6 @@ void OrdersAdvance::printOrder(std::ostream& strm) const{
 bool OrdersAdvance::validate(){
     bool SourceTerritoryBelongsToPlayer = false;
     bool TargetTerritoryAdjacentToSource = false;
-    // if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr || this->getTargetTerritory() == nullptr)
-    //     return false;
-
-    // // May need to implement equals
-    // if (!(this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer()))){
-    //     // cout << "VALID ADVANCE" << endl;
-    //     return false;
-    // }
-    // string targetTerritoryName = this->getTargetTerritory()->getName();
-    // // for (int index = 0; index < this->getSourceTerritory()->getAdjTerritoriesNames().size(); index++)
-    // for (string territoryName : this->getSourceTerritory()->getAdjTerritoriesNames()){
-    //     if (territoryName == targetTerritoryName)
-    // }
-    // // cout << "INVALID ADVANCE" << endl;
-    // return false;
 
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr || this->getTargetTerritory() == nullptr)
         return false;
