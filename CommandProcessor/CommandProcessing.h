@@ -1,13 +1,15 @@
 #ifndef COMMANDPROCESSING_H
 #define COMMANDPROCESSING_H
+
 #include <string>
 #include <vector>
 #include <iostream>
 #include <fstream>
-#include "LoggingObserver.h"
+#include "../Logging-Observer/LoggingObserver.h"
+
 using namespace std;
-//forward declaration
-class Command;
+
+
 class Command: public Subject, public ILoggable{
 private:
     string command; //the command
@@ -27,25 +29,25 @@ public:
     friend ostream& operator<<(ostream& os, const Command& cm);
 };
 //this class is responsible for reading and storing commands
-class CommandProcessor{
+class CommandProcessor: public Subject, public ILoggable{
     protected:
     vector<Command*> commands;
     public:
-    CommandProcessor();
+    explicit CommandProcessor(Observer* observer);
     CommandProcessor(const CommandProcessor& other);
     CommandProcessor& operator=(const CommandProcessor& other);
-    virtual ~CommandProcessor();
+    ~CommandProcessor() override;
     //methods
     virtual Command* readCommand(); //reading the command from console
-    Command* saveCommand(const string& cm);  //saving the command in the vector
+    virtual Command* saveCommand(string cm);  //saving the command in the vector
     virtual Command* getCommand(string state); //getting the last command
     virtual bool validate(Command* cm, string state);
     vector<Command*> getCommandList() const; //getter for commands vector
     //stream insertion operator
     friend ostream& operator<<(ostream& os, const CommandProcessor& cp);
     vector<Command*> getCommands() const ; //getter for the vector, it is needed for loops in the driver
-
-
+    string stringToLog() override;
+    void notify(ILoggable& subject) override;
 };
 //FileCommandProcessorAdapter extends CommandProcessor to read commands from a file
 class FileCommandProcessorAdapter: public CommandProcessor{
@@ -54,13 +56,16 @@ private:
     string fileN; 
     
 public:
-    explicit FileCommandProcessorAdapter(const string& filename);
+    explicit FileCommandProcessorAdapter(Observer* observer,const string& filename);
     FileCommandProcessorAdapter(const FileCommandProcessorAdapter& other);
     ~FileCommandProcessorAdapter() override;
     FileCommandProcessorAdapter& operator=(const FileCommandProcessorAdapter& other);
     Command* readCommand() override;
+    Command* getCommand(string state) override;
     friend ostream& operator<<(ostream& os, const FileCommandProcessorAdapter& fcp);
 
+    string stringToLog() override;
+    void notify(ILoggable& subject) override;
 };
 
 #endif

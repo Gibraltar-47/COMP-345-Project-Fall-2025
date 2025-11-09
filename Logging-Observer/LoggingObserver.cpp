@@ -16,13 +16,13 @@ using std::ofstream;
 
 //ADDING CLASS THAT ARE/DERIVE FROM OBSERVER TO THE SET ATTRIBUTE OF SUBJECT
 void Subject::addObserver(Observer *observer) {
-    list.insert(observer);
+    observer_ = observer;
 }
 
 //REMOVING THE GIVEN OBSERVER
 void Subject::removeObserver(Observer *observer)
 {
-    list.erase(observer);
+    observer_=nullptr;
 }
 
 // METHOD NOTIFY IS NOT IMPLEMENTED IN THIS CLASS BECAUSE
@@ -31,15 +31,13 @@ void Subject::removeObserver(Observer *observer)
 //COPY CONSTRUCTOR, ASSIGNMENT OPERATOR AND STREAM INSERTION OPERATOR
 Subject::Subject(const Subject &other)
 {
-    list= other.list;
+    observer_ = other.observer_;
 }
 
 Subject& Subject::operator=(const Subject &other)
 {
-    if (this!=&other)
-    {
-        list.clear();
-        list = other.list;
+    if (this != &other){
+        observer_ = other.observer_;
     }
     return *this;
 }
@@ -47,10 +45,9 @@ Subject& Subject::operator=(const Subject &other)
 ostream& operator <<(ostream& out, const Subject& subject)
 {
     out<<"This is a Subject Object with the following observers attached :\n";
-    for (Observer* observer : subject.list)
-    {
-        out<<"\t- "<<*observer<<endl;
-    }
+
+        out<<"\t- "<<subject.observer_<<endl;
+
     return out;
 }
 

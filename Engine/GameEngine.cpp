@@ -6,16 +6,23 @@
 #include <limits>
 #include <algorithm>
 
+#include "../CommandProcessor/CommandProcessing.h"
 #include "../Orders/Orders.h"
 #include "../Part-4-Deck/Cards.h"
+#include "../part1-map/Map.h"
 
 using std::string;
 using std::cout;
 using std::endl;
 using std::cin;
 
-GameEngine::GameEngine() : state("start"), gameOver(false),map(nullptr), deck(nullptr) {}
-GameEngine::GameEngine(const GameEngine& other) {
+GameEngine::GameEngine(Observer* observer) : state("start"), gameOver(false),map(nullptr), deck(nullptr)
+{
+    Subject::addObserver(observer);
+    GameEngine::notify(*this);
+}
+
+GameEngine::GameEngine(const GameEngine& other)  : Subject(other) {
     this->state = other.state;
     this->gameOver = other.gameOver;
 
@@ -31,6 +38,7 @@ GameEngine& GameEngine::operator=(const GameEngine& other) {
     if (this != &other) {
         this->state = other.state;
         this->gameOver = other.gameOver;
+        this->observer_ = other.observer_;
 
         for (Player* player: players) {
             delete player;
@@ -43,13 +51,25 @@ GameEngine& GameEngine::operator=(const GameEngine& other) {
 
         this->map = other.map;
     }
+    return *this;
 }
 GameEngine::~GameEngine() {
-    //delete map;
-    //for (auto* player: players) {
-    //    delete player;
-    //}
-    //delete deck;
+    delete map;
+    for (auto* player: players) {
+        delete player;
+    }
+    delete deck;
+}
+
+string GameEngine::stringToLog()
+{
+    string str="The state of the game has changed!\nState:\t"+state;
+    return str;
+}
+
+void GameEngine::notify(ILoggable& subject)
+{
+    Subject::observer_->update(subject);
 }
 
 string GameEngine::getState() const {
@@ -59,12 +79,189 @@ void GameEngine::changeState(const string& newState, const string& message) {
     state = newState;
     cout << message << endl;
     cout << "Now in state: " << state << endl;
+    notify(*this);
+}
 
+void GameEngine::startupPhase()
+{
+    cout << "Welcome to the Game Engine!" << endl << endl;
+    cout << "---------------------" << endl;
+
+    int choice;
+    bool invalidInput = false;
+    gameOver = false;
+
+    while (!invalidInput){
+        cout << "Start by choosing whether you want to start the game set up through (1) Console, or through a (2) Text file"<<endl;
+        cin >> choice;
+
+        switch(choice)
+        {
+        case 1:
+            {
+                CommandProcessor* console= new CommandProcessor(this->observer_);
+                while (!gameOver)
+                {
+                    Command* command = console->getCommand(this->state);
+                    //if the command is invalid, the prompt will be run until a valid command is entered
+                    while (command==nullptr){
+                        command = console->getCommand(this->state);
+                    }
+                    //compares command input and gamestate
+                    if (command->getCommand() == "exit") { //quick exit
+                        gameOver = true;
+                    }
+                    else if (command->getCommand() == "loadmap" && (state == "start" || state == "maploaded")) {
+                        MapLoader maploader;
+
+                        string filename, prefix="loadmap ";
+                        filename = command->getCommand().substr(command->getCommand().find(prefix)+prefix.size());
+
+                        this->addMap(new Map(maploader.loadMap(filename)));
+
+                        changeState("maploaded", "Map loaded.(type 'validatemap' to proceed)");
+                    }
+                    else if (command->getCommand() == "validatemap" && state == "maploaded") {
+
+                        if(this->map->validate())
+                        {
+                            changeState("mapvalidated", "Map validated.(type 'addplayer' to proceed)");
+                        }else cout<<"Map validation failed!"<<endl;
+                    }
+                    else if (command->getCommand() == "addplayer" && (state == "mapvalidated" || state == "playersadded")) {
+                        string name, prefix="addplayer ";
+                        name = command->getCommand().substr(command->getCommand().find(prefix)+prefix.size());
+
+                        addPlayer(new Player(name));
+
+                        changeState("playersadded", "Players added.(type 'gamestart' to proceed)");
+                    }
+                    else if (command->getCommand() == "gamestart" && state == "playersadded") {
+                        changeState("maingameloop", "Game loop has begun(press 'enter' to proceed)");
+
+                        int territoryPerPlayer = map->getTerritories().size() / this->players.size();
+
+                        for (Player* player : this->players)
+                        {
+                            for (int i=0;i<territoryPerPlayer;i++)
+                            {
+                                //choose random number corresponds to index to territory
+                                bool unowned=true;
+                                int randomIndex;
+
+                                while (unowned){
+                                     randomIndex= rand() % static_cast<int>(map->getTerritories().size() + 1);
+                                    if (map->getTerritories()[randomIndex]->getOwner()==nullptr)
+                                    {
+                                        map->getTerritories()[randomIndex]->setOwner(player);
+                                        unowned=false;
+                                    }
+                                }
+                            }
+                        }
+
+                        vector <int> orderToPlayers;
+                        int random ;
+                        for (Player* player : this->players)
+                        {
+                            bool in=true;
+                            while (in)
+                            {
+                                random = rand() % static_cast<int>(this->players.size() + 1);
+                                if (std::find(orderToPlayers.begin(), orderToPlayers.end(), random) == orderToPlayers.end())
+                                {
+                                    orderToPlayers.push_back(random);
+                                    in=false;
+                                }
+                            }
+
+                            player->addNumArmies(50);
+                            //draw card from deck
+                        }
+
+
+                        mainGameLoop();
+                    }
+                    else if (command->getCommand() == "win" && (state == "maingameloop" || state == "executeorders")) {
+                        changeState("win", "Game loop has ended(type 'end' to proceed or 'replay' to start a new game)");
+                    }
+                    else if ((command->getCommand() == "replay" || command->getCommand() == "end") && state == "win") {
+                        if (command->getCommand() == "replay") {
+                            state = "start";
+                        }
+                        else {
+                            gameOver = true;
+                            cout << "Exiting game." << endl;
+                        }
+                    }
+
+                }
+
+                invalidInput = true;
+                break;
+            }
+        case 2:
+            {
+                cout << "You have chosen to use a text file for the startup phase!\nEnter the file name in the following format filename.txt :\n"<<endl;
+                string filename;
+                cin >> filename;
+                FileCommandProcessorAdapter* textFile= new FileCommandProcessorAdapter(this->observer_, filename);
+                while (!gameOver)
+                {
+                    Command* command = textFile->getCommand(this->state);
+                    //if the command is invalid, the prompt will be run until a valid command is entered
+                    while (command==nullptr){
+                        command = textFile->getCommand(this->state);
+                    }
+                    //compares command input and gamestate
+                    if (command->getCommand() == "exit") { //quick exit
+                        gameOver = true;
+                    }
+                    else if (command->getCommand() == "loadmap" && (state == "start" || state == "maploaded")) {
+                        //MAPLOADER.LOADMAP
+                        bool success = true;
+                        if (success)
+                        {
+                            changeState("maploaded", "Map loaded.(type 'validatemap' to proceed)");
+                        }
+
+                    }
+                    else if (command->getCommand() == "validatemap" && state == "maploaded") {
+                        changeState("mapvalidated", "Map validated.(type 'addplayer' to proceed)");
+                        //MAP.VALIDATE
+                    }
+                    else if (command->getCommand() == "addplayer" && (state == "mapvalidated" || state == "playersadded")) {
+                        changeState("playersadded", "Players added.(type 'gamestart' to proceed)");
+                        //GAMEENGINE.ADDPLAYER(NAME)
+                    }
+                    else if (command->getCommand() == "gamestart" && state == "playersadded") {
+                        changeState("maingameloop", "Game loop has begun(press 'enter' to proceed)");
+                        mainGameLoop();
+                    }
+                    else if (command->getCommand() == "win" && (state == "maingameloop" || state == "executeorders")) {
+                        changeState("win", "Game loop has ended(type 'end' to proceed or 'replay' to start a new game)");
+                    }
+                    else if ((command->getCommand() == "replay" || command->getCommand() == "end") && state == "win") {
+                        if (command->getCommand() == "replay") {
+                            state = "start";
+                        }
+                        else {
+                            gameOver = true;
+                            cout << "Exiting game." << endl;
+                        }
+                    }
+                }
+                invalidInput = true;
+                break;
+            }
+        default:
+            cout << "Invalid input!" << endl;
+        }
+    }
 }
 
 void GameEngine::runGame() {
-    cout << "Welcome to the Game Engine!" << endl << endl;
-    cout << "---------------------" << endl;
+    CommandProcessor* commandReader = startupPhase();
     string command;
     state = "playersadded";
     gameOver = false;
@@ -107,6 +304,8 @@ void GameEngine::runGame() {
             cout << "Invalid command for current state: " << state << endl;
         }
     }
+
+    delete commandReader;
 }
 
 ostream& operator<<(ostream& out, const GameEngine& engine) {

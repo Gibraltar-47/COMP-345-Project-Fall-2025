@@ -5,25 +5,33 @@ using namespace std;
 void testManualCommands(){
     //testing some manual commands
     cout<<"Manual command test:\n";
-    Command c1("loadmap worldmap.txt");
+    LogObserver* log=new LogObserver();
+    Command c1(log,"loadmap worldmap.txt");
+    string filename, prefix="loadmap ";
+    filename = c1.getCommand().substr(c1.getCommand().find(prefix)+prefix.size());
+    cout<<"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n";
+    cout<<filename<<endl;
+    cout<<"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n";
+
     c1.saveEffect();
     cout<<c1.getCommand()<<" -> "<<c1.getEffect()<<endl;
-    Command c2("addplayer Alice");
+    Command c2(log,"addplayer Alice");
     c2.saveEffect();
     cout<<c2.getCommand()<<" -> "<<c2.getEffect()<<endl;
-    Command c3("invalid");
+    Command c3(log,"invalid");
     c3.saveEffect();
     cout<<c3.getCommand()<<" -> "<<c3.getEffect()<<endl;
 
-    
+    delete log;
 }
 void testCommandProcessor(){
     cout<<"Command Processor test\n";
-    CommandProcessor cp;
+    LogObserver* log=new LogObserver();
+    CommandProcessor cp(log);
     string state="start";
     while(true){
         cp.readCommand();
-        Command* cmd=cp.getCommand(); //getting the last command entered
+        Command* cmd=cp.getCommand(state); //getting the last command entered
         if(!cmd) continue;
         bool valid=cp.validate(cmd,state);
         cout<<*cmd<<", Valid?"<<(valid?" Yes":" No")<<endl;
@@ -50,15 +58,15 @@ void testCommandProcessor(){
 }
 void testFileCommandProcessorAdapter(){
     cout<<"Testing File Command Processor Adapter\n";
-    FileCommandProcessorAdapter fcp("Commands.txt");
+    LogObserver* log=new LogObserver();
+    FileCommandProcessorAdapter fcp(log,"../CommandProcessor/Commands.txt");
     string fState="start";
     while(true){
-        fcp.readCommand();
-        Command* fCmnd=fcp.getCommand(); 
-        if(!fCmnd) break; //end of file reached
-        bool valid=fcp.validate(fCmnd,fState);
-        cout<<*fCmnd<<", Valid?"<<(valid?" Yes":" No")<<endl;
-        string c=fCmnd->getCommand();
+        Command* fCmnd = fcp.getCommand(fState);
+        if (!fCmnd) break; // EOF or couldn't open file
+        bool valid = fcp.validate(fCmnd, fState);
+        cout << *fCmnd << ", Valid?" << (valid ? " Yes" : " No") << endl;
+        string c = fCmnd->getCommand();
         if(fState=="start"&& c.rfind("loadmap",0)==0) fState="maploaded";
         else if(fState=="maploaded"&&c=="validatemap") fState="mapvalidated";
         else if(fState=="mapvalidated"&& c.rfind("addplayer",0)==0) fState="playersadded";
@@ -77,7 +85,7 @@ void testFileCommandProcessorAdapter(){
 }
 int main(){
     testManualCommands();
-    testCommandProcessor();
-    testFileCommandProcessorAdapter();
+    //testCommandProcessor();
+    //testFileCommandProcessorAdapter();
     return 0;
 }

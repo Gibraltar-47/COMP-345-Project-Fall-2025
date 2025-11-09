@@ -63,7 +63,7 @@ class Subject{
 //so that only derived classes can directly access them
 //without having to implement them again (except for the notify method that NEEDS to be implemented in derived classes)
 protected:
-    set <Observer*> list;
+    Observer* observer_;
     virtual void addObserver(Observer* observer) ;
     virtual void removeObserver(Observer* observer);
     virtual void notify(ILoggable& subject) =0;
