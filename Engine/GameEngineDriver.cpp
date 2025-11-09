@@ -39,31 +39,31 @@ void testGameStates() {
     testMap.addContinent(continent6);
 
 
-    // === Continent 1: Northern Reach ===
+    // === Continent A ===
     Territory* terr1  = new Territory("Territory1",  continent1, 2, 8, {"Territory2", "Territory3"});
     Territory* terr2  = new Territory("Territory2",  continent1, 4, 9, {"Territory1", "Territory4"});
     Territory* terr3  = new Territory("Territory3",  continent1, 3, 7, {"Territory1", "Territory4"});
     Territory* terr4  = new Territory("Territory4",  continent1, 5, 8, {"Territory2", "Territory3", "Territory5"}); // link to continent2
 
-    // === Continent 2: Central Empire ===
+    // === Continent B ===
     Territory* terr5  = new Territory("Territory5",  continent2, 7, 7, {"Territory4", "Territory6", "Territory7"});
     Territory* terr6  = new Territory("Territory6",  continent2, 8, 6, {"Territory5", "Territory7", "Territory8"});
     Territory* terr7  = new Territory("Territory7",  continent2, 6, 6, {"Territory5", "Territory6", "Territory8"});
     Territory* terr8  = new Territory("Territory8",  continent2, 9, 7, {"Territory6", "Territory7", "Territory9"}); // link to continent3
 
-    // === Continent 3: Southern Isles ===
+    // === Continent C ===
     Territory* terr9  = new Territory("Territory9",  continent3, 11, 5, {"Territory8", "Territory10", "Territory11"});
     Territory* terr10 = new Territory("Territory10", continent3, 13, 4, {"Territory9", "Territory11"});
     Territory* terr11 = new Territory("Territory11", continent3, 12, 6, {"Territory9", "Territory10", "Territory12"}); // link to continent4
     Territory* terr12 = new Territory("Territory12", continent3, 14, 5, {"Territory11"});
 
-    // === Continent 4: Eastern Dominion ===
+    // === Continent D ===
     Territory* terr13 = new Territory("Territory13", continent4, 16, 6, {"Territory14", "Territory15", "Territory11"});
     Territory* terr14 = new Territory("Territory14", continent4, 17, 7, {"Territory13", "Territory15", "Territory16"});
     Territory* terr15 = new Territory("Territory15", continent4, 18, 5, {"Territory13", "Territory14", "Territory16"});
     Territory* terr16 = new Territory("Territory16", continent4, 19, 6, {"Territory14", "Territory15", "Territory17"}); // link to continent5
 
-    // === Continent 5: Western Frontier ===
+    // === Continent E ===
     Territory* terr17 = new Territory("Territory17", continent5, 21, 5, {"Territory16", "Territory18", "Territory19"});
     Territory* terr18 = new Territory("Territory18", continent5, 22, 4, {"Territory17", "Territory19"});
     Territory* terr19 = new Territory("Territory19", continent5, 23, 6, {"Territory17", "Territory18"});
@@ -231,8 +231,6 @@ void testGameStates() {
     engine.runGame();        // start the game loop
 
     cout << "===== GAME ENDED =====" << endl;
-    engine.~GameEngine();
-
     //==================================================================================================================
     //==================================================================================================================
     //==================================================================================================================
