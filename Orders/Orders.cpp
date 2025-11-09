@@ -392,6 +392,9 @@ OrdersList::~OrdersList(){
 std::list<Orders*> OrdersList::getList() const{
     return this->list;
 }
+std::list<Orders*>& OrdersList::getList(){ //non-const version for modification of the orderlist
+    return this->list;
+}
 void OrdersList::setList(std::list<Orders*> list){
     for (auto order : this->list)
         delete order;

@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include "../part1-map/Map.h"
+// #include "../Orders/Orders.h"
 
 
 //4.2.6
@@ -14,6 +15,25 @@ class Hand;
 class OrdersList;
 class Player;
 class Territory;
+
+// class Order{
+// private:
+//     std::string* name;
+// public:
+//     Order(std::string& name);
+//     ~Order();
+// };
+
+// class OrderList {
+// private:
+//     std::list<Order*> olist;
+// public:
+//     OrderList();
+//     ~OrderList();
+//     void addOrder(Order* order);
+//     void resolveOrder();
+
+// };
 
 class Card {
     //The Card class is being used by both the Hand class and the Deck class
@@ -31,7 +51,8 @@ class Card {
         std::string getName() const;
         void setName(const std::string& n);
 
-        void play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory); // 4.2.4 4.2.10 line 48
+        void play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory,
+                    int mode, int numArmies, Territory* target, Player* otherPlayer);
 
         friend std::ostream& operator<<(std::ostream& os, const Card& c);
 };
@@ -77,12 +98,14 @@ class Hand {
 
         void addCard(Card* card);
         void draw(Deck& deck);
-        void playCard(Deck& deck, const std::string& cardName, OrdersList& olist,Player* p, Territory* territory); //temporary for testing
+        void playCard(Deck& deck, const std::string& cardName, OrdersList& olist,Player* p, Territory* territory, Player* p2 = nullptr, Territory* territory2 = nullptr, int numArmies =1 ); //temporary for testing
         void removeCard(Card* card);
         void returnAll(Deck& deck);
 
         bool isEmpty() const;
         friend std::ostream& operator<<(std::ostream& os, const Hand& hand);
+
+    std::vector<Card *> getCards();
 };
 
 #endif //CLIONPROJECTS_DECK_H

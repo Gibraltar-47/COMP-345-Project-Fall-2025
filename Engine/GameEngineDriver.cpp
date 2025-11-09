@@ -1,13 +1,22 @@
-//
-// Created by abede on 2025-10-04.
-//
 
 #include "GameEngine.h"
 
+#include <iostream>
 
-void testGameStates() {
-    GameEngine game;
-    std::cout << "PRINTING GAME ENGINE WITH STREAM INSERTION: "<< std::endl << game << std::endl;
-    game.play();
+//using namespace std;
 
-}
+// Free function required by the assignment
+//void testGameStates() {
+  //  cout << "===== GAME ENGINE STATE MACHINE TEST =====" << endl;
+
+//    GameEngine engine;   // create a new engine instance
+//    engine.runGame();        // start the game loop
+
+ //   cout << "===== GAME ENDED =====" << endl;
+//}
+
+// Standard main that just calls testGameStates
+//int main() {
+//    testGameStates();
+//    return 0;
+//}

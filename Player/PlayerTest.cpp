@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <algorithm>
+#include <unordered_set>
 using namespace std;
 
 
@@ -15,7 +16,7 @@ Player::Player() : name("hi") {
 }
 
 //cons with name
-Player::Player(const std:: string& playerName): name(playerName), territories(), handCards() {
+Player::Player(const std:: string& playerName): name(playerName), territories(), handCards(),numArmies(0),numFreeArmies(0), hand(name) {
     orderList=new OrdersList();
 }
 
@@ -69,8 +70,17 @@ Player& Player::operator=(const Player& other) {
 void Player::setName(const string& newName){
    name=newName;
 }
+
+void Player::setEarnedCard(bool hasEarned){
+    earnedCard = hasEarned;
+}
+
 std::vector<Territory*> Player::getTerritories() {
     return this->territories;
+}
+
+std::vector<Player*> Player::getTruceList(){
+    return this->truceList;
 }
 
 OrdersList* Player::getOrderList(){
@@ -85,11 +95,50 @@ void Player:: addTerritory(Territory* tr){
     }
 }
 
+void Player::removeTerritory(Territory* tr){
+    if (tr == nullptr) return;
+    int indexOfRemovedTerr = -1;
+    for (int index = 0; index < territories.size(); index++){
+        if (territories[index] == tr){
+            indexOfRemovedTerr = index;
+            break;
+        }
+    }
+    if (indexOfRemovedTerr != -1){
+        Territory* temp = territories[territories.size()-1];
+        territories[territories.size()-1] = tr;
+        territories[indexOfRemovedTerr] = temp;
+        territories.pop_back();
+    }
+}
+
+void Player::addTruce(Player* enemyToTruce){
+    if (enemyToTruce != nullptr){
+        truceList.push_back(enemyToTruce);
+    }
+}
+void Player::removeTruce(Player* enemy){
+    if (enemy == nullptr) return;
+    int indexOfRemovedTruce = -1;
+    for (int index = 0; index < truceList.size(); index++){
+        if (truceList[index] == enemy){
+            indexOfRemovedTruce = index;
+            break;
+        }
+    }
+    if (indexOfRemovedTruce != -1){
+        Player* temp = truceList[truceList.size()-1];
+        truceList[truceList.size()-1] = enemy;
+        truceList[indexOfRemovedTruce] = temp;
+        truceList.pop_back();
+    }
+}
+
 //add a card to the player's hand and prints a string
 void Player::addCard(Card* ca){
     if (ca!=nullptr){
-        handCards.push_back(ca);
-        cout<<name<<" has card: "<<ca->getName()<<endl;
+        hand.addCard(ca);
+        //cout<<name<<" has card: "<<ca->getName()<<endl;
    }
 }
 
@@ -98,23 +147,49 @@ void Player::addOrder(Orders* ord) {
     orderList->add(ord);
 }
 
-void Player::issueOrder(){
- //create a new order
- Orders* newOrder=new Orders();
+void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory, Player& player2) {
 
+    switch (mode) {
+        case 1: //Deploy
+            orderList->add(new OrdersDeploy(this,sourceTerritory,numArmies));
+            break;
+        case 2: //Advance
+            orderList->add(new OrdersAdvance(this,sourceTerritory,targetTerritory, numArmies));
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6: {
+            Card* matchingCard = nullptr;
+            for (Card* card: hand.getCards()) {
+                if ((mode == 3 && card->getName() == "Bomb") ||
+                    (mode == 4 && card->getName() == "Blockade") ||
+                    (mode == 5 && card->getName() == "Airlift") ||
+                    (mode == 6 && card->getName() == "Diplomacy")) {
+                    matchingCard = card;
+                    break;
+                    }
+            }
+            if (!matchingCard) {
+                cout << name << " doesn't have the card required for this order." << endl;
+                return;
+            }
+            OrdersList* olist = this->getOrderList();
 
- //adds it to the player's orders vector
- orderList->add(newOrder);
- //add to the OrdersList
- if (orderList) {
-  orderList->getList().push_back(newOrder);
+            matchingCard->play(deck, &this->hand, *olist, this, sourceTerritory,mode,numArmies,targetTerritory,&player2); //dereference problem
+            cout << name << " played a " << matchingCard->getName() << " card." << endl;
+            break;
 
- }
- cout<< name<<" created a new order: "<< *newOrder <<endl;
+        }
+        default:
+            cout << "Invalid order mode." << endl;
+
+    }
 }
 
 //returns a list of territories the player owns(to defend)
-vector<Territory*> Player::toDefend() const{
+vector<Territory*> Player::toDefend(const std::vector<Territory*>& allTerritories) const{                                                                            //Require changes to work as intended
+    /**
     //create a new empty vector defendList to store terr
     vector<Territory*> defendList;
     //loop through all the terr the player owns
@@ -124,33 +199,125 @@ vector<Territory*> Player::toDefend() const{
             defendList.push_back(tr);
         }
     }
+    for (Territory* t: territories) {
+        if (!t) continue;
+        bool isBorder = false;
+        for (const string& adjName: t->getAdjTerritoriesNames()) {
+            Continent *cont = t->getContinent();
+            if (cont) {
+                for (Territory* cand: cont->getTerritories()) {
+                    if (cand && cand->getName() == adjName) {
+                        if (cand->getOwner() != this) {
+                            isBorder = true;
+                            break;
+                        }
+                    }
+                }
+            }
+            if (isBorder) {
+                break;
+            }
+
+        }
+    }
+    std::sort(defendList.begin(), defendList.end(), [](Territory* t1, Territory* t2){return t1->getNumOfArmies(), t2->getNumOfArmies();});
     return defendList;
+    */
+    std::vector<Territory*> defendList;
+    struct Info { Territory* t; int threat; int armies; };
+
+    std::vector<Info> infos;
+    for (Territory* t : territories) {
+        if (!t) continue;
+        int threatCount = 0;
+        for (const std::string& adjName : t->getAdjTerritoriesNames()) {
+            auto it = std::find_if(allTerritories.begin(), allTerritories.end(),
+                                   [&](Territory* cand) { return cand && cand->getName() == adjName; });
+            if (it != allTerritories.end()) {
+                Territory* cand = *it;
+                if (cand->getOwner() != this) ++threatCount;
+            }
+        }
+        infos.push_back({t, threatCount, t->getNumOfArmies()});
+    }
+
+    // Sort by descending threat (border territories first), then ascending armies (weaker first)
+    std::sort(infos.begin(), infos.end(), [](const Info& a, const Info& b) {
+        if (a.threat != b.threat) return a.threat > b.threat;
+        return a.armies < b.armies;
+    });
+
+    for (auto &i : infos) defendList.push_back(i.t);
+    return defendList;
+
+
 }
 
 //returns list of territories adjacent to player's territories but owned by other player(to attack)
-vector<Territory*> Player::toAttack(const std::vector<Territory*>& allTerritories) const {
+vector<Territory*> Player::toAttack(const std::vector<Territory*>& allTerritories) const {                              //Require changes to work as intended
+
+    /**
     std::vector<Territory*> attackList;
+
 
     cout << "TO ATTACK FUNCTION" << endl;
 
-    // // Loop through each territory the player owns
-    // for (Territory* myTerritory : territories) {
-    //     if (!myTerritory) continue;
+     // Loop through each territory the player owns
+     for (Territory* myTerritory : territories) {
+         if (!myTerritory) continue;
 
-    //     // Loop through adjacent territory names
-    //     for (const std::string& adjName : myTerritory->getAdjTerritoriesNames()) {
-    //         // Find the Territory object by name in allTerritories
-    //         auto it = std::find_if(allTerritories.begin(), allTerritories.end(),[&](Territory* t) {
-    //             return t && t->getName() == adjName && t->getOwner() != this;
-    //         });
+         // Loop through adjacent territory names
+         for (const std::string& adjName : myTerritory->getAdjTerritoriesNames()) {
+             // Find the Territory object by name in allTerritories
+             auto it = std::find_if(allTerritories.begin(), allTerritories.end(),[&](Territory* t) {
+                 return t && t->getName() == adjName && t->getOwner() != this;
+             });
 
-    //         // If found and not already in attackList, add it
-    //         if (it != allTerritories.end() && std::find(attackList.begin(), attackList.end(), *it) == attackList.end()) {
-    //             attackList.push_back(*it);
-    //         }
-    //     }
-    // }
- return attackList;
+             // If found and not already in attackList, add it
+             if (it != allTerritories.end() && std::find(attackList.begin(), attackList.end(), *it) == attackList.end()) {
+                 attackList.push_back(*it);
+             }
+         }
+     }*/
+
+
+    std::vector<Territory*> attackList;
+
+    // Build quick lookup of territories this player owns (by pointer and by name)
+    std::unordered_set<Territory*> ownedPtrs;
+    unordered_set<std::string> ownedNames;
+    for (Territory* t : territories) {
+        if (t) {
+            ownedPtrs.insert(t);
+            ownedNames.insert(t->getName());
+        }
+    }
+
+    for (Territory* myT : territories) {
+        if (!myT) continue;
+        for (const std::string& adjName : myT->getAdjTerritoriesNames()) {
+            auto it = std::find_if(allTerritories.begin(), allTerritories.end(),
+                                   [&](Territory* cand) { return cand && cand->getName() == adjName; });
+            if (it == allTerritories.end()) continue;
+
+            Territory* target = *it;
+            if (!target) continue;
+
+            // Skip if target is one of this player's territories (by pointer or by matching name)
+            if (ownedPtrs.count(target) || ownedNames.count(target->getName())) continue;
+
+            // avoid duplicates
+            if (std::find(attackList.begin(), attackList.end(), target) == attackList.end()) {
+                attackList.push_back(target);
+            }
+        }
+    }
+
+    // sort by ascending defending armies (easier targets first)
+    std::sort(attackList.begin(), attackList.end(),
+              [](Territory* a, Territory* b) { return a->getNumOfArmies() < b->getNumOfArmies(); });
+
+    return attackList;
 }
 
  //print the status of the player
@@ -211,4 +378,27 @@ ostream& operator<<(std::ostream& out, const Player& p){
     out<<"Orders: ";
     out<<"none\n";
     return out;
+}
+
+
+//=====================================
+void Player::addNumArmies(int newArmies) {
+    numArmies += newArmies;
+    numFreeArmies += newArmies;
+}
+int Player::getNumArmies() {
+    return numArmies;
+}
+int Player::getNumFreeArmies() {
+    return numFreeArmies;
+}
+
+Territory* Player::findTerritoryByName(const string& name) {
+    for (auto t : territories)
+        if (t->getName() == name)
+            return t;
+    return nullptr;
+}
+Hand* Player::getHand() {
+    return &this->hand;
 }

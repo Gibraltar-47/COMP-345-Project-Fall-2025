@@ -4,6 +4,7 @@
 #include <string>
 #include <vector>
 #include <iostream>
+#include "../Part-4-Deck/Cards.h"
 
 // Forward declarations
 class Territory;
@@ -21,13 +22,20 @@ class Player {
     std::vector<Territory*> territories; //dynamic array of territory pointers
     std::vector<Card*> handCards;
     OrdersList* orderList;
+    Hand hand;
 
+    std::vector<Player*> truceList;
+    bool earnedCard;
+
+  //=====
+    int numArmies; //Total of army units
+    int numFreeArmies; //Number of free army units to deploy
 
 public:
    Player();
    Player(const std::string& playerName);
    Player(const Player& other); //copy constructor
-   Player& operator =(const Player& other); //assignemnt operator
+   Player& operator =(const Player& other); //assignment operator
    ~Player(); //destructor, clears up resources when a player obj is destroyed
    std::string getName() const;
    OrdersList* getOrderList();
@@ -37,14 +45,28 @@ public:
    void addCard(Card* ca);
    void addOrder(Orders* ord);
  //game actions
-   std::vector<Territory*> toDefend() const;
+   std::vector<Territory*> toDefend(const std::vector<Territory*>& allTerritories) const;
    std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const;
-   void issueOrder(); //execute all orders and clean up memory
-   void printStatus() const; //print player's name, territories
+  //added item
+   void issueOrder(Deck& deck, int type, Territory* source, int numArmies, Territory* target, Player& issuer);//execute all orders and clean up memory
+
+  void printStatus() const; //print player's name, territories
    bool equals(Player* player2);
   friend std::ostream& operator <<(std::ostream& out, const Player& p);
 
+  //Part 2
+  void addNumArmies(int newArmies);
+  int getNumArmies();
+  int getNumFreeArmies();
 
+  Territory* findTerritoryByName(const string& name);
+    Hand* getHand();
+    std::vector<Player*> getTruceList();
+    bool getEarnedCard();
+    void setEarnedCard(bool hasEarned);
+    void removeTerritory(Territory* tr);
+    void addTruce(Player* enemyToTruce);
+    void removeTruce(Player* enemy);
 };
 
 #endif
