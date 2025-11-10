@@ -393,6 +393,7 @@ bool GameEngine::executeOrdersPhase() {
     cout << "If you want to exit the game loop, enter 1. To continue, enter 0: ";
     cin >> exitCode;
     if (exitCode == 1) {
+        state = "win";
         return true;
     }
 
