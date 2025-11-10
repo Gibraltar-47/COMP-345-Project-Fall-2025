@@ -451,7 +451,6 @@ void GameEngine::removePlayer(Player* player) { //to be implemented
     auto it = std::find(players.begin(), players.end(), player);
     if (it != this->players.end()) {
         cout << "Player " << player->getName() << " removed." << endl;
-        //delete *it; // Free memory
         players.erase(it);
     }
 }
