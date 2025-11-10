@@ -11,11 +11,32 @@
 #include "../Orders/Orders.h"
 #include "../Part-4-Deck/Cards.h"
 #include "../part1-map/Map.h"
+#include <sstream>
+#include <tuple>
 
 using std::string;
 using std::cout;
 using std::endl;
 using std::cin;
+
+static inline std::string trim_copy(std::string s) {
+    s.erase(s.begin(), std::find_if(s.begin(), s.end(), [](unsigned char ch){ return !std::isspace(ch); }));
+    s.erase(std::find_if(s.rbegin(), s.rend(), [](unsigned char ch){ return !std::isspace(ch); }).base(), s.end());
+    return s;
+}
+// returns true if 'line' starts with 'verb' (case-sensitive) followed by either space or end
+static inline bool starts_with_verb(const std::string &line, const std::string &verb) {
+    if (line.size() < verb.size()) return false;
+    if (line.rfind(verb, 0) != 0) return false;
+    if (line.size() == verb.size()) return true;            // exact match
+    return std::isspace(static_cast<unsigned char>(line[verb.size()])); // followed by space
+}
+// returns the trimmed remainder after the verb, or empty string if none
+static inline std::string arg_after(const std::string &line, const std::string &verb) {
+    if (!starts_with_verb(line, verb)) return "";
+    std::string rest = line.substr(verb.size());
+    return trim_copy(rest);
+}
 
 GameEngine::GameEngine(Observer* observer) : state("start"), gameOver(false),map(nullptr), deck(nullptr)
 {
@@ -102,52 +123,64 @@ void GameEngine::startupPhase()
             {
                 auto* console= new CommandProcessor(this->observer_);
                 Command* command;
+                string input;
+                string filename;
+
                 while (!gameOver)
                 {
                     command = console->getCommand(this->state);
                     //if the command is invalid, the prompt will be run until a valid command is entered
                     while (command==nullptr){
+                        cout<<"The command entered was invalid, please try again!"<<endl;
                         command = console->getCommand(this->state);
                     }
 
+                    input=command->getCommand();
                     //compares command input and gamestate
-                    if (command->getCommand() == "exit") { //quick exit
+                    if (input == "exit") { //quick exit
                         gameOver = true;
                         delete console;
                         delete command;
                     }
-                    else if (command->getCommand() == "loadmap" && (state == "start" || state == "maploaded")) {
-                        MapLoader maploader;
+                    else if (starts_with_verb(input, "loadmap") && (state == "start" || state == "maploaded")) {
 
-                        string filename, prefix="loadmap ";
-                        filename = command->getCommand().substr(command->getCommand().find(prefix)+prefix.size());
-
-                        this->addMap(new Map(maploader.loadMap(filename)));
-                        command->saveEffect();
-
-                        changeState("maploaded", "Map loaded.(type 'validatemap' to proceed)");
+                        filename = arg_after(input, "loadmap");
+                        if (filename.empty()) {
+                            cout << "Missing filename for loadmap\n";
+                        } else {
+                            MapLoader maploader;
+                            cout<<filename<<endl;
+                            this->addMap(new Map(maploader.loadMap(filename)));
+                            command->saveEffect();
+                            string message = "Map "+ filename+" is now loaded!\n(Type 'validatemap' to proceed)\n\n";
+                            changeState("maploaded", message);
+                        }
                     }
-                    else if (command->getCommand() == "validatemap" && state == "maploaded") {
+                    else if (input == "validatemap" && state == "maploaded") {
 
                         if(this->map->validate())
                         {
                             command->saveEffect();
-                            changeState("mapvalidated", "Map validated.(type 'addplayer' to proceed)");
-                        }else cout<<"Map validation failed!"<<endl;
+                            string message = "Map "+ filename+" is now validated!\n(Type 'addplayer' to proceed)\n\n";
+                            changeState("mapvalidated", message);
+                        }else cout<<"Map validation failed! Please load another map again!"<<endl;
                     }
-                    else if (command->getCommand() == "addplayer" && (state == "mapvalidated" || state == "playersadded")) {
-                        string name, prefix="addplayer ";
-                        name = command->getCommand().substr(command->getCommand().find(prefix)+prefix.size());
-
-                        this->addPlayer(new Player(name));
+                    else if (starts_with_verb(input,"addplayer") && (state == "mapvalidated" || state == "playersadded")) {
+                        string name;
+                        name = arg_after(input,"addplayer");
+                        if (name.empty()) {
+                            cout << "Missing player name for addplayer\n";
+                        } else {
+                            this->addPlayer(new Player(name));
+                            command->saveEffect();
+                            string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
+                            changeState("playersadded", message);
+                        }
+                    }
+                    else if (input == "gamestart" && state == "playersadded") {
 
                         command->saveEffect();
-                        changeState("playersadded", "Players added.(type 'gamestart' to proceed)");
-                    }
-                    else if (command->getCommand() == "gamestart" && state == "playersadded") {
-
-                        command->saveEffect();
-                        changeState("maingameloop", "Game loop has begun(press 'enter' to proceed)");
+                        changeState("maingameloop", "Game loop has begun (press 'enter' to proceed)\n\n");
 
                         int numPlayer = static_cast<int>(this->players.size());
                         int numTerr = static_cast<int>(this->map->getTerritories().size());
@@ -186,6 +219,7 @@ void GameEngine::startupPhase()
                                     if (map->getTerritories()[randomIndex]->getOwner()==nullptr)
                                     {
                                         map->getTerritories()[randomIndex]->setOwner(player);
+                                        player->addTerritory(map->getTerritories()[randomIndex]);
                                         unowned=false;
                                     }
                                 }
@@ -198,6 +232,8 @@ void GameEngine::startupPhase()
                             player->getHand()->draw(*this->deck);
 
                         }
+
+                        cout<<"All players have now each received 50 units of armies, 2 cards and "<<territoryPerPlayer<<" territories!"<<endl;
 
                         //PART TO ADD WHEN MERGING WITH SHAWN'S PART, PART4 ITERATION 2
                         // //adding the neutral player
@@ -219,8 +255,8 @@ void GameEngine::startupPhase()
 
                         mainGameLoop();
                     }
-                    else if ((command->getCommand() == "replay" || command->getCommand() == "end") && state == "win") {
-                        if (command->getCommand() == "replay") {
+                    else if ((input == "replay" || input == "end") && state == "win") {
+                        if (input == "replay") {
                             state = "start";
                             command->saveEffect();
                         }
@@ -244,52 +280,61 @@ void GameEngine::startupPhase()
                 cin >> filename;
                 auto* textFile= new FileCommandProcessorAdapter(this->observer_, filename);
                 Command* command;
+                string input;
                 while (!gameOver)
                 {
                     command = textFile->getCommand(this->state);
                     //if the command is invalid, the prompt will be run until a valid command is entered
                     while (command==nullptr){
+                        cout<<"The command entered was invalid, please try again!"<<endl;
                         command = textFile->getCommand(this->state);
                     }
-
+                    input= command->getCommand();
                     //compares command input and gamestate
-                    if (command->getCommand() == "exit") { //quick exit
+                    if (input == "exit") { //quick exit
                         gameOver = true;
                         delete textFile;
                         delete command;
                     }
-                    else if (command->getCommand().find("loadmap") != string::npos && (state == "start" || state == "maploaded")) {
-                        MapLoader maploader;
+                    else if (starts_with_verb(input, "loadmap") && (state == "start" || state == "maploaded")) {
 
-                        string filename, prefix="loadmap ";
-                        filename = command->getCommand().substr(command->getCommand().find(prefix)+prefix.size());
-
-                        this->addMap(new Map(maploader.loadMap(filename)));
-                        command->saveEffect();
-
-                        changeState("maploaded", "Map loaded.(type 'validatemap' to proceed)");
+                        filename = arg_after(input, "loadmap");
+                        if (filename.empty()) {
+                            cout << "Missing filename for loadmap\n";
+                        } else {
+                            MapLoader maploader;
+                            cout<<filename<<endl;
+                            this->addMap(new Map(maploader.loadMap(filename)));
+                            command->saveEffect();
+                            string message = "Map "+ filename+" is now loaded!\n(Type 'validatemap' to proceed)\n\n";
+                            changeState("maploaded", message);
+                        }
                     }
-                    else if (command->getCommand() == "validatemap" && state == "maploaded") {
+                    else if (input == "validatemap" && state == "maploaded") {
 
                         if(this->map->validate())
                         {
                             command->saveEffect();
-                            changeState("mapvalidated", "Map validated.(type 'addplayer' to proceed)");
-                        }else cout<<"Map validation failed!"<<endl;
+                            string message = "Map "+ filename+" is now validated!\n(Type 'addplayer' to proceed)\n\n";
+                            changeState("mapvalidated", message);
+                        }else cout<<"Map validation failed! Please load another map again!"<<endl;
                     }
-                    else if (command->getCommand().find("loadmap") != string::npos && (state == "mapvalidated" || state == "playersadded")) {
-                        string name, prefix="addplayer ";
-                        name = command->getCommand().substr(command->getCommand().find(prefix)+prefix.size());
-
-                        this->addPlayer(new Player(name));
+                    else if (starts_with_verb(input,"addplayer") && (state == "mapvalidated" || state == "playersadded")) {
+                        string name;
+                        name = arg_after(input,"addplayer");
+                        if (name.empty()) {
+                            cout << "Missing player name for addplayer\n";
+                        } else {
+                            this->addPlayer(new Player(name));
+                            command->saveEffect();
+                            string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
+                            changeState("playersadded", message);
+                        }
+                    }
+                    else if (input == "gamestart" && state == "playersadded") {
 
                         command->saveEffect();
-                        changeState("playersadded", "Players added.(type 'gamestart' to proceed)");
-                    }
-                    else if (command->getCommand() == "gamestart" && state == "playersadded") {
-
-                        command->saveEffect();
-                        changeState("maingameloop", "Game loop has begun(press 'enter' to proceed)");
+                        changeState("maingameloop", "Game loop has begun (press 'enter' to proceed)\n\n");
 
                         int numPlayer = static_cast<int>(this->players.size());
                         int numTerr = static_cast<int>(this->map->getTerritories().size());
@@ -328,6 +373,7 @@ void GameEngine::startupPhase()
                                     if (map->getTerritories()[randomIndex]->getOwner()==nullptr)
                                     {
                                         map->getTerritories()[randomIndex]->setOwner(player);
+                                        player->addTerritory(map->getTerritories()[randomIndex]);
                                         unowned=false;
                                     }
                                 }
@@ -340,6 +386,8 @@ void GameEngine::startupPhase()
                             player->getHand()->draw(*this->deck);
 
                         }
+
+                        cout<<"All players have now each received 50 units of armies, 2 cards and "<<territoryPerPlayer<<" territories!"<<endl;
 
                         //PART TO ADD WHEN MERGING WITH SHAWN'S PART, PART4 ITERATION 2
                         // //adding the neutral player
@@ -361,8 +409,8 @@ void GameEngine::startupPhase()
 
                         mainGameLoop();
                     }
-                    else if ((command->getCommand() == "replay" || command->getCommand() == "end") && state == "win") {
-                        if (command->getCommand() == "replay") {
+                    else if ((input == "replay" || input == "end") && state == "win") {
+                        if (input == "replay") {
                             state = "start";
                             command->saveEffect();
                         }
@@ -374,6 +422,7 @@ void GameEngine::startupPhase()
                             delete command;
                         }
                     }
+
                 }
                 invalidInput = true;
                 break;

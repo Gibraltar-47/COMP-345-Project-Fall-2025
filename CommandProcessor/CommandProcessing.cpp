@@ -157,12 +157,33 @@ CommandProcessor& CommandProcessor::operator=(const CommandProcessor& other){
 
 //reads command from console
 Command* CommandProcessor::readCommand(){
-    string input;
-    cout<<"Enter command: ";
-    std::getline(cin, input);            // read whole line (may be empty)
-    if (input.size() == 0) return nullptr; // no input (user just hit enter)
-    Command* com = saveCommand(input); // stores the new command
-    return com;
+    std::string input;
+
+    auto trim = [](string s) -> string {
+        const char* ws = " \t\r\n";
+        auto l = s.find_first_not_of(ws);
+        if (l == string::npos) return "";
+        auto r = s.find_last_not_of(ws);
+        return s.substr(l, r - l + 1);
+    };
+
+        cout << "Enter command: ";
+    while (true) {
+        // read whole line; if stream closed/EOF, return nullptr so caller can handle it
+        if (!getline(cin, input)) return nullptr;
+
+        // remove surrounding whitespace
+        input = trim(input);
+
+        if (input.empty()) {
+            // ignore empty/whitespace-only lines and prompt again
+            continue;
+        }
+
+        // got a non-empty trimmed line -> save and return
+        Command* com = saveCommand(input);
+        return com;
+    }
 }
 
 //returns the most recently added command
@@ -194,81 +215,33 @@ bool CommandProcessor:: validate(Command* cm, string state){
     bool valid=false;
     string command = cm->getCommand();
 
-    if (command == "quit") { //quick exit
+    if (command == "exit") { //quick exit
         valid=true;
-        cm->setEffect("exiting the game...");
     }
     else if (command.find("loadmap") != string::npos && (state == "start" || state == "maploaded")) {
         valid=true;
-        cm->setEffect("map loaded successfully");
     }
     else if (command == "validatemap" && state == "maploaded") {
         valid=true;
-        cm->setEffect("map validated");
     }
     else if (command.find("addplayer") != string::npos && (state == "mapvalidated" || state == "playersadded")) {
         if (command.length()>10){
-            string playerN=command.substr(10); //skip "addplayer "
-            cm->setEffect("player "+playerN+" added ");
             valid=true;
         }else
             valid=false;
     }
     else if (command == "gamestart" && state == "playersadded") {
         valid=true;
-        cm->setEffect("Reinforcement assignment in process...");
     }
     else if (command == "win" && (state == "maingameloop" || state == "executeorders")) {
         valid=true;
-        cm->setEffect("Reinforcement assignment in process...");
     }
     else if ((command == "replay" || command == "quit") && state == "win") {
-        if (command == "replay") {
             valid=true;
-            cm->setEffect("Game Starting!");
-        }
-        else {
-            valid=true;
-            cm->setEffect("Game Starting!");
-        }
     }
     else {
         cout << "Invalid command for current state: " << state << endl;
     }
-
-
-     string cmnd=cm->getCommand();
-     if(state=="start"&& cmnd.rfind("loadmap",0)==0){
-         valid=true;
-        cm->setEffect("map loaded successfully");
-     }
-     else if(state=="maploaded"&& cmnd=="validatemap"){
-         valid=true;
-        cm->setEffect("map validated");
-     }
-     else if((state=="mapvalidated"||state=="playersadded")&&cmnd.rfind("addplayer",0)==0){
-        valid=true;
-        string playerN=cmnd.substr(10); //skip "addplayer "
-        cm->setEffect("player "+playerN+" added ");
-     }
-     else if(state=="playersadded"&& cmnd=="gamestart"){
-        valid=true;
-        cm->setEffect("game started");
-
-     }
-     else if(state=="win"&&cmnd=="replay"){
-        valid=true;
-        cm->setEffect("replaying game");
-
-     }
-     else if(cmnd=="quit"){
-        valid=true;
-        cm->setEffect("exiting the game...");
-     }
-     //saving the effect
-     if(!valid){
-        cm->setEffect("invalid command "+cmnd);
-     }
 
     return valid;
 
