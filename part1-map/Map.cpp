@@ -149,8 +149,8 @@ void Map::addTerritory(Territory* t){
 //adding Continent instances to the vector continents
 //NOTE: in this method, a deep copy is used because there is a full aggregation association between the map and its continents
 void Map::addContinent(Continent* c){
-    //continents.push_back(new Continent(*c));
-    continents.push_back(c); //Made some changes here to make the gamengine run properly
+    continents.push_back(new Continent(*c));
+    //continents.push_back(c); //Made some changes here to make the gamengine run properly
 }
 
 Continent* Map::getContinent(const string& n) const{
