@@ -44,35 +44,52 @@ Command& Command::operator=(const Command& other){
 }
 //storing the given string into effect attribute
 void Command:: saveEffect(){
-        //checks if the command starts with "loadmap" starting from position 0 in the string
-    if (command.rfind("loadmap",0)==0){
-            //if the command is longer than 8 chars it means the name of the map is provided
-            if(command.length()>8){
-                string mName=command.substr(8); //skip "loadmap "
-                effect="map "+mName+" loaded successfully";
-            } else{
-                effect="missing map name";
-            }
-        }else if(command=="validatemap"){
-            effect="map validated ";
-          }else if(command.rfind("addplayer",0)==0){
-                if(command.length()>10){
-                    string playerN=command.substr(10); //skip "addplayer "
-                    effect="player "+playerN+" added ";
-                }
-                else{
-                    effect="missing player name";
-                }
-            }else if(command=="gamestart"){
-                effect="game started";
-                }else if(command=="replay"){
-                    effect="replaying game";
-                    }else if(command=="quit")
-                    {
-                        effect="exiting the game";
-                    }else {
-                        effect="invalid command";
-                    }
+
+    if (command == "exit"||command=="quit")//quick exit
+    {
+        effect = "exiting the game";
+    }
+    else if (command.find("loadmap") != string::npos)
+    {//if the command is longer than 8 chars it means the name of the map is provided
+        if (command.length() > 8)
+        {
+            string mName = command.substr(8); //skip "loadmap "
+            effect = "map " + mName + " loaded successfully";
+        }
+        else
+        {
+            effect = "missing map name";
+        }
+    }
+    else if (command == "validatemap")
+    {
+        effect = "map validated ";
+    }
+    else if (command.find("addplayer") != string::npos)
+    {
+        if (command.length() > 10)
+        {
+            string playerN = command.substr(10); //skip "addplayer "
+            effect = "player " + playerN + " added ";
+        }
+        else
+        {
+            effect = "missing player name";
+        }
+    }
+    else if (command == "gamestart")
+    {
+        effect = "game started";
+    }
+    else if (command == "replay")
+    {
+        effect = "replaying game";
+    }
+    else
+    {
+        effect = "invalid command";
+    }
+
     notify(*this);
 }
 //returns the command string
@@ -142,7 +159,8 @@ CommandProcessor& CommandProcessor::operator=(const CommandProcessor& other){
 Command* CommandProcessor::readCommand(){
     string input;
     cout<<"Enter command: ";
-    getline(cin, input); //reads the entire line including spaces
+    std::getline(cin, input);            // read whole line (may be empty)
+    if (input.size() == 0) return nullptr; // no input (user just hit enter)
     Command* com = saveCommand(input); // stores the new command
     return com;
 }
@@ -172,8 +190,54 @@ call saveEffect() if valid to store the message and if invalid store an error me
  returns true if valid, false otherwise */
 bool CommandProcessor:: validate(Command* cm, string state){
     if (!cm) return false; // defensive: avoid crash if caller forgets to check
+
+    bool valid=false;
+    string command = cm->getCommand();
+
+    if (command == "quit") { //quick exit
+        valid=true;
+        cm->setEffect("exiting the game...");
+    }
+    else if (command.find("loadmap") != string::npos && (state == "start" || state == "maploaded")) {
+        valid=true;
+        cm->setEffect("map loaded successfully");
+    }
+    else if (command == "validatemap" && state == "maploaded") {
+        valid=true;
+        cm->setEffect("map validated");
+    }
+    else if (command.find("addplayer") != string::npos && (state == "mapvalidated" || state == "playersadded")) {
+        if (command.length()>10){
+            string playerN=command.substr(10); //skip "addplayer "
+            cm->setEffect("player "+playerN+" added ");
+            valid=true;
+        }else
+            valid=false;
+    }
+    else if (command == "gamestart" && state == "playersadded") {
+        valid=true;
+        cm->setEffect("Reinforcement assignment in process...");
+    }
+    else if (command == "win" && (state == "maingameloop" || state == "executeorders")) {
+        valid=true;
+        cm->setEffect("Reinforcement assignment in process...");
+    }
+    else if ((command == "replay" || command == "quit") && state == "win") {
+        if (command == "replay") {
+            valid=true;
+            cm->setEffect("Game Starting!");
+        }
+        else {
+            valid=true;
+            cm->setEffect("Game Starting!");
+        }
+    }
+    else {
+        cout << "Invalid command for current state: " << state << endl;
+    }
+
+
      string cmnd=cm->getCommand();
-     bool valid=false;
      if(state=="start"&& cmnd.rfind("loadmap",0)==0){
          valid=true;
         cm->setEffect("map loaded successfully");
@@ -186,8 +250,6 @@ bool CommandProcessor:: validate(Command* cm, string state){
         valid=true;
         string playerN=cmnd.substr(10); //skip "addplayer "
         cm->setEffect("player "+playerN+" added ");
-
-
      }
      else if(state=="playersadded"&& cmnd=="gamestart"){
         valid=true;

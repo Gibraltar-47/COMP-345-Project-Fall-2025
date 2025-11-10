@@ -5,6 +5,7 @@
 #include <iostream>
 #include <limits>
 #include <algorithm>
+#include <random>
 
 #include "../CommandProcessor/CommandProcessing.h"
 #include "../Orders/Orders.h"
@@ -99,17 +100,21 @@ void GameEngine::startupPhase()
         {
         case 1:
             {
-                CommandProcessor* console= new CommandProcessor(this->observer_);
+                auto* console= new CommandProcessor(this->observer_);
+                Command* command;
                 while (!gameOver)
                 {
-                    Command* command = console->getCommand(this->state);
+                    command = console->getCommand(this->state);
                     //if the command is invalid, the prompt will be run until a valid command is entered
                     while (command==nullptr){
                         command = console->getCommand(this->state);
                     }
+
                     //compares command input and gamestate
                     if (command->getCommand() == "exit") { //quick exit
                         gameOver = true;
+                        delete console;
+                        delete command;
                     }
                     else if (command->getCommand() == "loadmap" && (state == "start" || state == "maploaded")) {
                         MapLoader maploader;
@@ -118,6 +123,7 @@ void GameEngine::startupPhase()
                         filename = command->getCommand().substr(command->getCommand().find(prefix)+prefix.size());
 
                         this->addMap(new Map(maploader.loadMap(filename)));
+                        command->saveEffect();
 
                         changeState("maploaded", "Map loaded.(type 'validatemap' to proceed)");
                     }
@@ -125,6 +131,7 @@ void GameEngine::startupPhase()
 
                         if(this->map->validate())
                         {
+                            command->saveEffect();
                             changeState("mapvalidated", "Map validated.(type 'addplayer' to proceed)");
                         }else cout<<"Map validation failed!"<<endl;
                     }
@@ -132,25 +139,50 @@ void GameEngine::startupPhase()
                         string name, prefix="addplayer ";
                         name = command->getCommand().substr(command->getCommand().find(prefix)+prefix.size());
 
-                        addPlayer(new Player(name));
+                        this->addPlayer(new Player(name));
 
+                        command->saveEffect();
                         changeState("playersadded", "Players added.(type 'gamestart' to proceed)");
                     }
                     else if (command->getCommand() == "gamestart" && state == "playersadded") {
+
+                        command->saveEffect();
                         changeState("maingameloop", "Game loop has begun(press 'enter' to proceed)");
 
-                        int territoryPerPlayer = map->getTerritories().size() / this->players.size();
+                        int numPlayer = static_cast<int>(this->players.size());
+                        int numTerr = static_cast<int>(this->map->getTerritories().size());
+                        int numCards = numPlayer * 5;
+                        int randomIndex;
+                        bool unowned;
+
+                        //Add 5 * numberOfPlayer copies of each card type
+                        vector<string> cardNames = {"Bomb", "Airlift", "Negotiate", "Blockade"};
+                        for (const auto& name : cardNames) {
+                            for (int i = 0; i < numCards; ++i) {
+                                deck->addCard(new Card(name));
+                            }
+                        }
+
+                        int territoryPerPlayer = numTerr / numPlayer;
+                        int terrLeft = numTerr % numPlayer;
+
+                        std::random_device rd;
+                        std::mt19937 g(rd());
+
+                        // Shuffle the vector of players to randomize the order
+                        shuffle(this->players.begin(), this->players.end(), g);
 
                         for (Player* player : this->players)
                         {
+                            //assign the correct number of territories per player
                             for (int i=0;i<territoryPerPlayer;i++)
                             {
-                                //choose random number corresponds to index to territory
-                                bool unowned=true;
-                                int randomIndex;
+                                unowned=true;
 
+                                //choose random number corresponds to index to territory
+                                //continue to randomize the territory until an unowned territory is found
                                 while (unowned){
-                                     randomIndex= rand() % static_cast<int>(map->getTerritories().size() + 1);
+                                    randomIndex= rand() % numTerr;
                                     if (map->getTerritories()[randomIndex]->getOwner()==nullptr)
                                     {
                                         map->getTerritories()[randomIndex]->setOwner(player);
@@ -158,43 +190,48 @@ void GameEngine::startupPhase()
                                     }
                                 }
                             }
-                        }
 
-                        vector <int> orderToPlayers;
-                        int random ;
-                        for (Player* player : this->players)
-                        {
-                            bool in=true;
-                            while (in)
-                            {
-                                random = rand() % static_cast<int>(this->players.size() + 1);
-                                if (std::find(orderToPlayers.begin(), orderToPlayers.end(), random) == orderToPlayers.end())
-                                {
-                                    orderToPlayers.push_back(random);
-                                    in=false;
-                                }
-                            }
-
+                            //give every player 50 army unit
                             player->addNumArmies(50);
-                            //draw card from deck
+                            //make the player draw a card twice
+                            player->getHand()->draw(*this->deck);
+                            player->getHand()->draw(*this->deck);
+
                         }
 
+                        //PART TO ADD WHEN MERGING WITH SHAWN'S PART, PART4 ITERATION 2
+                        // //adding the neutral player
+                        // this->addPlayer(new Player("Neutral Player"));
+                        // //ORDERBLOCKADE::NEUTRALPLAYER=NEUTRALPLAYER;
+                        //
+                        // //if there are leftover territories then they are given to the neutral player
+                        // if (terrLeft != 0)
+                        // {
+                        //     for (Territory* territory : this->map->getTerritories())
+                        //     {
+                        //         if (territory->getOwner() == nullptr)
+                        //         {
+                        //             //setting the owner as the last player added to the vector (neutral player)
+                        //             territory->setOwner(this->players.back());
+                        //         }
+                        //     }
+                        // }
 
                         mainGameLoop();
-                    }
-                    else if (command->getCommand() == "win" && (state == "maingameloop" || state == "executeorders")) {
-                        changeState("win", "Game loop has ended(type 'end' to proceed or 'replay' to start a new game)");
                     }
                     else if ((command->getCommand() == "replay" || command->getCommand() == "end") && state == "win") {
                         if (command->getCommand() == "replay") {
                             state = "start";
+                            command->saveEffect();
                         }
                         else {
                             gameOver = true;
                             cout << "Exiting game." << endl;
+                            command->saveEffect();
+                            delete console; //
+                            delete command;
                         }
                     }
-
                 }
 
                 invalidInput = true;
@@ -205,49 +242,136 @@ void GameEngine::startupPhase()
                 cout << "You have chosen to use a text file for the startup phase!\nEnter the file name in the following format filename.txt :\n"<<endl;
                 string filename;
                 cin >> filename;
-                FileCommandProcessorAdapter* textFile= new FileCommandProcessorAdapter(this->observer_, filename);
+                auto* textFile= new FileCommandProcessorAdapter(this->observer_, filename);
+                Command* command;
                 while (!gameOver)
                 {
-                    Command* command = textFile->getCommand(this->state);
+                    command = textFile->getCommand(this->state);
                     //if the command is invalid, the prompt will be run until a valid command is entered
                     while (command==nullptr){
                         command = textFile->getCommand(this->state);
                     }
+
                     //compares command input and gamestate
                     if (command->getCommand() == "exit") { //quick exit
                         gameOver = true;
+                        delete textFile;
+                        delete command;
                     }
-                    else if (command->getCommand() == "loadmap" && (state == "start" || state == "maploaded")) {
-                        //MAPLOADER.LOADMAP
-                        bool success = true;
-                        if (success)
-                        {
-                            changeState("maploaded", "Map loaded.(type 'validatemap' to proceed)");
-                        }
+                    else if (command->getCommand().find("loadmap") != string::npos && (state == "start" || state == "maploaded")) {
+                        MapLoader maploader;
 
+                        string filename, prefix="loadmap ";
+                        filename = command->getCommand().substr(command->getCommand().find(prefix)+prefix.size());
+
+                        this->addMap(new Map(maploader.loadMap(filename)));
+                        command->saveEffect();
+
+                        changeState("maploaded", "Map loaded.(type 'validatemap' to proceed)");
                     }
                     else if (command->getCommand() == "validatemap" && state == "maploaded") {
-                        changeState("mapvalidated", "Map validated.(type 'addplayer' to proceed)");
-                        //MAP.VALIDATE
+
+                        if(this->map->validate())
+                        {
+                            command->saveEffect();
+                            changeState("mapvalidated", "Map validated.(type 'addplayer' to proceed)");
+                        }else cout<<"Map validation failed!"<<endl;
                     }
-                    else if (command->getCommand() == "addplayer" && (state == "mapvalidated" || state == "playersadded")) {
+                    else if (command->getCommand().find("loadmap") != string::npos && (state == "mapvalidated" || state == "playersadded")) {
+                        string name, prefix="addplayer ";
+                        name = command->getCommand().substr(command->getCommand().find(prefix)+prefix.size());
+
+                        this->addPlayer(new Player(name));
+
+                        command->saveEffect();
                         changeState("playersadded", "Players added.(type 'gamestart' to proceed)");
-                        //GAMEENGINE.ADDPLAYER(NAME)
                     }
                     else if (command->getCommand() == "gamestart" && state == "playersadded") {
+
+                        command->saveEffect();
                         changeState("maingameloop", "Game loop has begun(press 'enter' to proceed)");
+
+                        int numPlayer = static_cast<int>(this->players.size());
+                        int numTerr = static_cast<int>(this->map->getTerritories().size());
+                        int numCards = numPlayer * 5;
+                        int randomIndex;
+                        bool unowned;
+
+                        //Add 5 * numberOfPlayer copies of each card type
+                        vector<string> cardNames = {"Bomb", "Airlift", "Negotiate", "Blockade"};
+                        for (const auto& name : cardNames) {
+                            for (int i = 0; i < numCards; ++i) {
+                                deck->addCard(new Card(name));
+                            }
+                        }
+
+                        int territoryPerPlayer = numTerr / numPlayer;
+                        int terrLeft = numTerr % numPlayer;
+
+                        std::random_device rd;
+                        std::mt19937 g(rd());
+
+                        // Shuffle the vector of players to randomize the order
+                        shuffle(this->players.begin(), this->players.end(), g);
+
+                        for (Player* player : this->players)
+                        {
+                            //assign the correct number of territories per player
+                            for (int i=0;i<territoryPerPlayer;i++)
+                            {
+                                unowned=true;
+
+                                //choose random number corresponds to index to territory
+                                //continue to randomize the territory until an unowned territory is found
+                                while (unowned){
+                                    randomIndex= rand() % numTerr;
+                                    if (map->getTerritories()[randomIndex]->getOwner()==nullptr)
+                                    {
+                                        map->getTerritories()[randomIndex]->setOwner(player);
+                                        unowned=false;
+                                    }
+                                }
+                            }
+
+                            //give every player 50 army unit
+                            player->addNumArmies(50);
+                            //make the player draw a card twice
+                            player->getHand()->draw(*this->deck);
+                            player->getHand()->draw(*this->deck);
+
+                        }
+
+                        //PART TO ADD WHEN MERGING WITH SHAWN'S PART, PART4 ITERATION 2
+                        // //adding the neutral player
+                        // this->addPlayer(new Player("Neutral Player"));
+                        // //ORDERBLOCKADE::NEUTRALPLAYER=NEUTRALPLAYER;
+                        //
+                        // //if there are leftover territories then they are given to the neutral player
+                        // if (terrLeft != 0)
+                        // {
+                        //     for (Territory* territory : this->map->getTerritories())
+                        //     {
+                        //         if (territory->getOwner() == nullptr)
+                        //         {
+                        //             //setting the owner as the last player added to the vector (neutral player)
+                        //             territory->setOwner(this->players.back());
+                        //         }
+                        //     }
+                        // }
+
                         mainGameLoop();
-                    }
-                    else if (command->getCommand() == "win" && (state == "maingameloop" || state == "executeorders")) {
-                        changeState("win", "Game loop has ended(type 'end' to proceed or 'replay' to start a new game)");
                     }
                     else if ((command->getCommand() == "replay" || command->getCommand() == "end") && state == "win") {
                         if (command->getCommand() == "replay") {
                             state = "start";
+                            command->saveEffect();
                         }
                         else {
                             gameOver = true;
                             cout << "Exiting game." << endl;
+                            command->saveEffect();
+                            delete textFile; //
+                            delete command;
                         }
                     }
                 }
@@ -261,51 +385,12 @@ void GameEngine::startupPhase()
 }
 
 void GameEngine::runGame() {
-    CommandProcessor* commandReader = startupPhase();
-    string command;
-    state = "playersadded";
-    gameOver = false;
 
-    while (!gameOver) {
-        cout << "Current State: " << getState() << endl;
-        cout << "Enter a command:";
-        cin >> command;
+    Deck* deckTemp = new Deck();
+    this->deck = deckTemp;
 
-        //compares command input and gamestate
-        if (command == "exit") { //quick exit
-            gameOver = true;
-        }
-        else if (command == "loadmap" && (state == "start" || state == "maploaded")) {
-            changeState("maploaded", "Map loaded.(type 'validatemap' to proceed)");
-        }
-        else if (command == "validatemap" && state == "maploaded") {
-            changeState("mapvalidated", "Map validated.(type 'addplayer' to proceed)");
-        }
-        else if (command == "addplayer" && (state == "mapvalidated" || state == "playersadded")) {
-            changeState("playersadded", "Players added.(type 'gamestart' to proceed)");
-        }
-        else if (command == "gamestart" && state == "playersadded") {
-            changeState("maingameloop", "Game loop has begun(press 'enter' to proceed)");
-            mainGameLoop();
-        }
-        else if (command == "win" && (state == "maingameloop" || state == "executeorders")) {
-            changeState("win", "Game loop has ended(type 'end' to proceed or 'play' to start a new game)");
-        }
-        else if ((command == "play" || command == "end") && state == "win") {
-            if (command == "play") {
-                state = "start";
-            }
-            else {
-                gameOver = true;
-                cout << "Exiting game." << endl;
-            }
-        }
-        else {
-            cout << "Invalid command for current state: " << state << endl;
-        }
-    }
+    startupPhase();
 
-    delete commandReader;
 }
 
 ostream& operator<<(ostream& out, const GameEngine& engine) {

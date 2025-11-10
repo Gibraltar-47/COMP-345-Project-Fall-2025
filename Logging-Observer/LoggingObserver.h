@@ -47,6 +47,7 @@ class LogObserver : public Observer{
         ofstream outputFileStream;
     public:
         //overridden virtual method from parent class
+    //NOTE APPEND INSTEAD OF WRITE
         void update( ILoggable& s) override;
 
         //constructors, copy constructors, destructors, assignment operator and stream insertion operator

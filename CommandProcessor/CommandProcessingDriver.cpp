@@ -7,11 +7,6 @@ void testManualCommands(){
     cout<<"Manual command test:\n";
     LogObserver* log=new LogObserver();
     Command c1(log,"loadmap worldmap.txt");
-    string filename, prefix="loadmap ";
-    filename = c1.getCommand().substr(c1.getCommand().find(prefix)+prefix.size());
-    cout<<"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n";
-    cout<<filename<<endl;
-    cout<<"OOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOOO\n";
 
     c1.saveEffect();
     cout<<c1.getCommand()<<" -> "<<c1.getEffect()<<endl;
@@ -30,7 +25,6 @@ void testCommandProcessor(){
     CommandProcessor cp(log);
     string state="start";
     while(true){
-        cp.readCommand();
         Command* cmd=cp.getCommand(state); //getting the last command entered
         if(!cmd) continue;
         bool valid=cp.validate(cmd,state);
@@ -43,7 +37,7 @@ void testCommandProcessor(){
         else if(state=="maploaded"&&c=="validatemap") state="mapvalidated";
         else if((state=="mapvalidated"||state=="playersadded")&& c.rfind("addplayer",0)==0) state="playersadded";
         else if(state=="playersadded"&& c=="gamestart") state="assignreinforcement";
-        else if(state=="win"&& c=="replay") state="start";
+        else if((state=="win"||state=="assignreinforcement")&& c=="replay") state="start";
         else if(c=="quit"){
             cout<<"Exiting..."<<endl;
             break;
@@ -85,7 +79,7 @@ void testFileCommandProcessorAdapter(){
 }
 int main(){
     testManualCommands();
-    //testCommandProcessor();
-    //testFileCommandProcessorAdapter();
+    testCommandProcessor();
+    testFileCommandProcessorAdapter();
     return 0;
 }

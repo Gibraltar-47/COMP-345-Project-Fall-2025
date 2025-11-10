@@ -56,13 +56,20 @@ ostream& operator <<(ostream& out, const Subject& subject)
 LogObserver::LogObserver()
 {
     filename = "gamelog.txt";
-    outputFileStream.open(filename);
+    // open in append mode so we don't overwrite previous log entries
+    outputFileStream.open(filename, std::ios::out | std::ios::app);
+    if (!outputFileStream.is_open()) {
+        cout << "Failed to open " << filename << " for appending" << endl;
+    }
 }
 
 LogObserver::LogObserver(const LogObserver& o)
 {
-    filename = "gamelog.txt";
-    outputFileStream.open(filename);
+    filename = o.filename.empty() ? "gamelog.txt" : o.filename;
+    outputFileStream.open(filename, std::ios::out | std::ios::app);
+    if (!outputFileStream.is_open()) {
+        cout << "Failed to open " << filename << " for appending (copy ctor)" << endl;
+    }
 }
 
 LogObserver::~LogObserver()
@@ -86,8 +93,15 @@ void LogObserver::update(ILoggable& s)
 
 LogObserver& LogObserver::operator=(const LogObserver& o)
 {
-    if (this!=&o){}
-    return *this;
+    if (this != &o) {
+        if (outputFileStream.is_open()) outputFileStream.close();
+        filename = o.filename;
+        // reopen in append mode
+        outputFileStream.open(filename, std::ios::out | std::ios::app);
+        if (!outputFileStream.is_open()) {
+            cout << "Failed to open " << filename << " for appending (operator=)" << endl;
+        }
+    }
 }
 
 ostream &operator<<(ostream &out, const Observer &o)
