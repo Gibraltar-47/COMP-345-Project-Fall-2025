@@ -44,7 +44,7 @@ class GameEngine : public Subject, public ILoggable{
         void mainGameLoop();
         void reinforcementPhase();
         void issueOrdersPhase(vector<Player*>& allPlayers , Map* map);
-        void executeOrdersPhase();
+        bool executeOrdersPhase();
 
         bool checkWinCondition(const std::vector<Player*>& players, Map* map);
         void waitForUser();
