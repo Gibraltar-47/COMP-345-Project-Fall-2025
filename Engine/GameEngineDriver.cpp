@@ -17,7 +17,7 @@ void testGameStates() {
 }
 
  //Standard main that just calls testGameStates
-int main() {
-    testGameStates();
-    return 0;
-}
+// int main() {
+//     testGameStates();
+//     return 0;
+// }

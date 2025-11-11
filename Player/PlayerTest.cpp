@@ -16,7 +16,7 @@ Player::Player() : name("hi") {
 }
 
 //cons with name
-Player::Player(const std:: string& playerName): name(playerName),numArmies(0),numFreeArmies(0) {
+Player::Player(const std:: string& playerName): name(playerName),numArmies(0),numFreeArmies(0), truceList() {
     hand= new Hand(playerName);
     orderList=new OrdersList();
     territories= vector<Territory*>();
@@ -35,7 +35,8 @@ Player::Player(const Player& other)
 
     // Deep copy hand cards
     for (auto c : other.hand->getCards()) hand->addCard(c);
-
+    // Copy list of players with truce
+    for (auto p : other.truceList) truceList.push_back(p);
     // Deep copy order list
     orderList = new OrdersList(*other.orderList);
 }
@@ -54,11 +55,15 @@ Player& Player::operator=(const Player& other) {
     delete hand;
     delete orderList;
 
+    // WITH SHARED POINTER IDEA WE WOULD NOT BE DELETING THE PLAYERS
+    truceList.clear();
+
     name = other.name;
 
     // Deep copy again
     for (auto t : other.territories) territories.push_back(t);
     for (auto c : other.hand->getCards()) hand->addCard(c);
+    for (auto p: other.truceList) truceList.push_back(p);
     orderList = new OrdersList(*other.orderList);
 
     return *this;
@@ -67,6 +72,9 @@ Player& Player::operator=(const Player& other) {
 //getters and setters
  string Player::getName() const{
   return name;
+}
+bool Player::getEarnedCard(){
+    return earnedCard;
 }
 void Player::setName(const string& newName){
    name=newName;
@@ -95,7 +103,7 @@ void Player:: addTerritory(Territory* tr){
         tr->setOwner(this); //sets this player as its owner
     }
 }
-
+// removes a territory from a player's list
 void Player::removeTerritory(Territory* tr){
     if (tr == nullptr) return;
     int indexOfRemovedTerr = -1;

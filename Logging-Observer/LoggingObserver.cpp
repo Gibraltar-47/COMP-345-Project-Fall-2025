@@ -102,6 +102,7 @@ LogObserver& LogObserver::operator=(const LogObserver& o)
             cout << "Failed to open " << filename << " for appending (operator=)" << endl;
         }
     }
+    return *this;
 }
 
 ostream &operator<<(ostream &out, const Observer &o)
