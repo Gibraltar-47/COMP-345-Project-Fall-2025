@@ -4,7 +4,7 @@
 #include "./part1-map/Map.h"
 #include "./Player/Player.h"
 
-extern void testGameStates();
+extern void testMainGameLoop();
 //extern void testOrdersLists();
 //extern void testCards();
 //extern void testLoadMap();
@@ -28,6 +28,6 @@ using namespace std;
 // Free function required by the assignment
 // Standard main that just calls testGameStates
 int main() {
-    testGameStates();
+    testMainGameLoop();
     return 0;
 }
