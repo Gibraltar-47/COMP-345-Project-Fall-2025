@@ -16,7 +16,7 @@ Player::Player() : name("hi") {
 }
 
 //cons with name
-Player::Player(const std:: string& playerName): name(playerName),numArmies(0),numFreeArmies(0) {
+Player::Player(const std:: string& playerName): name(playerName), numArmies(0), numFreeArmies(0){
     hand= new Hand(playerName);
     orderList=new OrdersList();
     territories= vector<Territory*>();
@@ -32,6 +32,8 @@ Player::Player(const Player& other)
     {
         territories.push_back(t);
     }
+    numFreeArmies = other.numFreeArmies;
+    numArmies = other.numArmies;
 
     // Deep copy hand cards
     for (auto c : other.hand->getCards()) hand->addCard(c);
@@ -153,9 +155,11 @@ void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int nu
     switch (mode) {
         case 1: //Deploy
             orderList->add(new OrdersDeploy(this,sourceTerritory,numArmies));
+            this->numFreeArmies -= numArmies;
             break;
         case 2: //Advance
             orderList->add(new OrdersAdvance(this,sourceTerritory,targetTerritory, numArmies));
+            this->numFreeArmies -= numArmies;
             break;
         case 3:
         case 4:
@@ -178,6 +182,7 @@ void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int nu
             OrdersList* olist = this->getOrderList();
 
             matchingCard->play(deck, hand, *olist, this, sourceTerritory,mode,numArmies,targetTerritory,&player2); //dereference problem
+            this->numFreeArmies -= numArmies;
             cout << name << " played a " << matchingCard->getName() << " card." << endl;
             break;
 
