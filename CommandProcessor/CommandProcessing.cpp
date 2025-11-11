@@ -29,7 +29,7 @@ void Command::notify(ILoggable& subject)
 
 string Command::stringToLog()
 {
-    string str="A command's effect has been saved!\nCommand : \n"+command+"\nEffect : \n"+effect+"\n";
+    string str="A command's effect has been saved!\nCommand : \n"+command+"\nEffect : \n"+effect+"\n\n";
     return str;
 }
 

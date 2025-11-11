@@ -85,7 +85,7 @@ GameEngine::~GameEngine() {
 
 string GameEngine::stringToLog()
 {
-    string str="The state of the game has changed!\nState:\t"+state;
+    string str="The state of the game has changed!\nState:\t"+state+"\n\n";
     return str;
 }
 
@@ -199,7 +199,7 @@ void GameEngine::startupPhase()
                             }
                         }
 
-                        this->addPlayer(Player("Neutral Player"));
+                        //this->addPlayer(Player("Neutral Player"));
                         int territoryPerPlayer = numTerr / numPlayer;
                         int terrLeft = numTerr % numPlayer;
 
@@ -242,6 +242,7 @@ void GameEngine::startupPhase()
                         //PART TO ADD WHEN MERGING WITH SHAWN'S PART, PART4 ITERATION 2
                          //adding the neutral player
                          //OrdersBlockade::neutralPlayer=this->players.back();
+                        this->addPlayer(Player("Neutral Player"));
 
                          //if there are leftover territories then they are given to the neutral player
                          if (terrLeft != 0)
@@ -256,8 +257,7 @@ void GameEngine::startupPhase()
                              }
                          }
 
-                        //mainGameLoop();
-                        this->state="win";
+                        mainGameLoop();
                     }
                     else if ((input == "replay" || input == "quit") && state == "win") {
                         if (input == "replay") {
@@ -349,8 +349,6 @@ void GameEngine::startupPhase()
 
                         Deck* deckTemp = new Deck();
                         this->deck = deckTemp;
-                        cout<<this->deck->getDeckSize()<<endl;
-                        //delete deckTemp;
 
                         //Add 5 * numberOfPlayer copies of each card type
                         vector<string> cardNames = {"Bomb", "Airlift", "Negotiate", "Blockade"};
@@ -384,7 +382,6 @@ void GameEngine::startupPhase()
                                     if (map->getTerritories()[randomIndex]->getOwner()==nullptr)
                                     {
                                         map->getTerritories()[randomIndex]->setOwner(player);
-                                        player->addTerritory(map->getTerritories()[randomIndex]);
                                         unowned=false;
                                     }
                                 }
@@ -398,7 +395,7 @@ void GameEngine::startupPhase()
 
                         }
 
-                        cout<<"All players have now each received 50 units of armies, 2 cards and "<<territoryPerPlayer<<" territories!"<<endl;
+                        cout<<"\nAll players have now each received 50 units of armies, 2 cards and "<<territoryPerPlayer<<" territories!"<<endl<<endl;
 
                         //PART TO ADD WHEN MERGING WITH SHAWN'S PART, PART4 ITERATION 2
                          //adding the neutral player
@@ -420,7 +417,6 @@ void GameEngine::startupPhase()
                          }
 
                         mainGameLoop();
-                        //this->state="win";
                     }
                     else if ((input == "replay" || input == "quit") && state == "win") {
                         if (input == "replay") {
@@ -499,8 +495,7 @@ void GameEngine::reinforcementPhase() {
 
 
     for (Player* p : players) {
-        if (!p) continue; //skip if missing
-
+        if (!p||p->getName()=="Neutral Player") continue;//skip if missing
 
         int startArmies = p->getNumArmies(); //before reinforcement
         int territoryCount = static_cast<int>(p->getTerritories().size());
@@ -581,6 +576,10 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
         for (size_t i = 0; i < players.size(); i++) {
             //current turn player
             Player* player = players[i];
+            if (player && player->getName() == "Neutral Player") {
+                playerDone[i] = true;
+                continue;
+            }
             if (playerDone[i]) { //player skips check
                 continue;
             }
@@ -717,6 +716,9 @@ bool GameEngine::executeOrdersPhase() {
     //removes eliminated players
     std::vector<Player*> eliminated;
     for (auto* player : players) {
+        if (player->getName() == "Neutral Player") {
+            continue;
+        }
         if (player->getTerritories().empty()) {
             eliminated.push_back(player);
         }
@@ -807,7 +809,7 @@ void GameEngine::giveDeck(Deck* deck) {
 void GameEngine::printAllPlayerOrders(const std::vector<Player*>& players) { //shows all the orders of all players
     cout << "======= PLAYER ORDER LISTS =======" << endl;
     for (const auto& player : players) {
-        if (!player) continue;
+        if (!player ) continue;
         cout << endl;
         cout << "Player: " << player->getName() << endl;
 
