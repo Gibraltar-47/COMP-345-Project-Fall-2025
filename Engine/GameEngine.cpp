@@ -131,7 +131,6 @@ void GameEngine::startupPhase()
                     command = console->getCommand(this->state);
                     //if the command is invalid, the prompt will be run until a valid command is entered
                     while (command==nullptr){
-                        cout<<"The command entered was invalid, please try again!"<<endl;
                         command = console->getCommand(this->state);
                     }
 
@@ -382,6 +381,7 @@ void GameEngine::startupPhase()
                                     if (map->getTerritories()[randomIndex]->getOwner()==nullptr)
                                     {
                                         map->getTerritories()[randomIndex]->setOwner(player);
+                                        player->addTerritory(map->getTerritories()[randomIndex]);
                                         unowned=false;
                                     }
                                 }
@@ -411,7 +411,6 @@ void GameEngine::startupPhase()
                                  {
                                      //setting the owner as the last player added to the vector (neutral player)
                                      territory->setOwner(this->players.back());
-                                     cout<<territory->getOwner()->getName()<<endl;
                                  }
                              }
                          }
