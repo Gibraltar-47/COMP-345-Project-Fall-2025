@@ -77,9 +77,9 @@ void testFileCommandProcessorAdapter(){
 
 
 }
-int main(){
-    testManualCommands();
-    testCommandProcessor();
-    testFileCommandProcessorAdapter();
-    return 0;
-}
+// int main(){
+//     testManualCommands();
+//     testCommandProcessor();
+//     testFileCommandProcessorAdapter();
+//     return 0;
+// }

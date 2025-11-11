@@ -22,7 +22,7 @@ class Player {
     std::vector<Territory*> territories; //dynamic array of territory pointers
     std::vector<Card*> handCards;
     OrdersList* orderList;
-    Hand hand;
+    Hand* hand;
 
     std::vector<Player*> truceList;
     bool earnedCard;

@@ -7,7 +7,7 @@
 
 #include <iostream>
 
-//using namespace std;
+using namespace std;
 
 // Free function required by the assignment
 void testGameStates() {

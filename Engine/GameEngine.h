@@ -47,10 +47,9 @@ class GameEngine {
         bool executeOrdersPhase();
         bool checkWinCondition(const std::vector<Player*>& players, Map* map);
 
-        //Debug purpose mainly and manually adding objects to the engine
-        void addPlayer(Player* player);
+        void addPlayer(const Player& player);
         void removePlayer(Player* player);
-        void addMap(Map* map);
+        void addMap(const Map& othermap);
         void giveDeck(Deck* deck);
         void printAllPlayerOrders(const std::vector<Player*>& players);
 };
