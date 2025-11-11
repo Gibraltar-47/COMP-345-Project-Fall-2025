@@ -467,9 +467,6 @@ void GameEngine::mainGameLoop() {
 
         issueOrdersPhase(players,map);
         printAllPlayerOrders(players);
-        //executeOrdersPhase();
-        //printAllPlayerOrders(players);
-
 
         if (executeOrdersPhase()) {
             roundOver = true;
@@ -554,7 +551,6 @@ void GameEngine::reinforcementPhase() {
         cout << "  New army pool: " << p->getNumArmies() << endl;
     }
 
-
     cout << "=== End Reinforcement Debug ===\n" << endl;
 
 }
@@ -613,7 +609,7 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
                 }
 
                 if (player->getNumFreeArmies() > 0 && choice != 1 && choice != 7) {
-                    cout << "You still have " << player->getNumArmies()
+                    cout << "You still have " << player->getNumFreeArmies()
                          << " undeployed armies. You must deploy them before issuing other orders." << endl;
                     continue;
                 }
