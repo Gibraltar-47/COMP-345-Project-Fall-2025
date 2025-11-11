@@ -21,7 +21,8 @@ class Player {
     std::vector<Territory*> territories; //dynamic array of territory pointers
     std::vector<Card*> handCards;
     OrdersList* orderList;
-
+    std::vector<Player*> truceList;
+    bool earnedCard;
 
 public:
    Player();
@@ -32,10 +33,16 @@ public:
    std::string getName() const;
    OrdersList* getOrderList();
    std::vector<Territory*> getTerritories();
+   std::vector<Player*> getTruceList();
+   bool getEarnedCard();
    void setName(const std::string& newName);
+   void setEarnedCard(bool hasEarned);
    void addTerritory(Territory* tr);
+   void removeTerritory(Territory* tr);
    void addCard(Card* ca);
    void addOrder(Orders* ord);
+   void addTruce(Player* enemyToTruce);
+   void removeTruce(Player* enemy);
  //game actions
    std::vector<Territory*> toDefend() const;
    std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const;

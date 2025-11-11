@@ -4,6 +4,7 @@
 #include "./part1-map/Map.h"
 #include "./Player/Player.h"
 
+extern void testOrderExecution();
 extern void testGameStates();
 extern void testOrdersLists();
 extern void testCards();
@@ -12,11 +13,14 @@ extern void testPlayers();
 
 
 int main(){
-    testLoadMap();
-    testPlayers();
-    testOrdersLists();
-    testCards();
-    testGameStates();
+    // testLoadMap();
+    // testPlayers();
+    // testOrdersLists();
+    // testCards();
+    // testGameStates();
+
+    testOrderExecution();
+
 
     return 0;
 }

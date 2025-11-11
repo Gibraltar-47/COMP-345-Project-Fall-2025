@@ -2,10 +2,15 @@
 #include <list>
 #include <algorithm>
 #include <string>
+#include <stdlib.h>
+#include <time.h>
 #include "Orders.h"
 #include "../Player/Player.h"
 #include "../part1-map/Map.h"
 using namespace std;
+
+// For now the neutral player 
+Player* OrdersBlockade::neutralPlayer = nullptr;
 
 std::ostream& operator<<(std::ostream &strm, const Orders& order){
     order.printOrder(strm);
@@ -93,19 +98,22 @@ void Orders::setIsValid(bool isValid){
     this->isValid = isValid;
 }
 Orders* Orders::allocateClone() const{
-    return new Orders(*this);
+    //return new Orders(*this);
+    // Still requires allocate clone for Orders even though we cannot return a Order object since it is abstract
+    // This is due to polymorphism and types at comilation different from types at runtime (dynmaic binding)
+    return nullptr;
 }
 void Orders::printOrder(std::ostream& strm) const{
     strm << "An Order is the superclass of all the individual orders.\nIt has no affect since it is an abstract class.";
 }
-bool Orders::validate(){
-    cout << "Orders::validate is abstract" << endl;
-    return false;
+// bool Orders::validate(){
+//     cout << "Orders::validate is abstract" << endl;
+//     return false;
 
-}
-void Orders::execute(){
-    cout << "Orders::execute is abstract" << endl;
-}
+// }
+// void Orders::execute(){
+//     cout << "Orders::execute is abstract" << endl;
+// }
 
 
 OrdersDeploy::OrdersDeploy() : Orders(), numArmies(0) {}
@@ -140,14 +148,26 @@ bool OrdersDeploy::validate(){
         return false;
     // May have to add in equals functions
     if (this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer())){
-        cout << "VALID DEPLOY" << endl;
+        //cout << "VALID DEPLOY" << endl;
         return true;
     }
-    cout << "Deploying to unowned territory is invalid" << endl;
+    //cout << "Deploying to unowned territory is invalid" << endl;
     return false;
 }
 void OrdersDeploy::execute(){
-    cout << "OrdersDeploy::execute" << endl;
+    // Have to add checks for number of armies being deployed or will it be done elsewhere before calling execute?
+    bool isValid = validate();
+    if (!isValid){
+        cout << "Deploying to unowned territory " << this->getSourceTerritory()->getName() << " is invalid" << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
+        return;
+    }
+    int currentNumArmies = this->getSourceTerritory()->getNumOfArmies();
+    this->getSourceTerritory()->setNumOfArmies(currentNumArmies + this->getNumArmies());
+
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 OrdersAdvance::OrdersAdvance() : Orders(), targetTerritory(nullptr), numArmies(0) {}
@@ -195,19 +215,87 @@ void OrdersAdvance::printOrder(std::ostream& strm) const{
     strm << "Player " << this->getIssuingPlayer()->getName() << " is advancing " << this->getNumArmies() << " armies from " << *this->getSourceTerritory() << " to " << *this->getTargetTerritory();
 }
 bool OrdersAdvance::validate(){
+    bool SourceTerritoryBelongsToPlayer = false;
+    bool TargetTerritoryAdjacentToSource = false;
+
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr || this->getTargetTerritory() == nullptr)
         return false;
-
-    // May need to implement equals
-    if (this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer())){
-        cout << "VALID ADVANCE" << endl;
-        return true;
+    
+    for (Player* enemyWithTrue : this->getIssuingPlayer()->getTruceList()){
+        if (this->getTargetTerritory()->getOwner() == enemyWithTrue)
+            return false;
     }
-    cout << "INVALID ADVANCE" << endl;
-    return false;
+
+    if (this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer())){
+        SourceTerritoryBelongsToPlayer = true;
+    }
+
+    string targetTerritoryName = this->getTargetTerritory()->getName();
+    // for (int index = 0; index < this->getSourceTerritory()->getAdjTerritoriesNames().size(); index++)
+    for (string AdjacentTerrName : this->getSourceTerritory()->getAdjTerritoriesNames()){
+        if (AdjacentTerrName == targetTerritoryName){
+            TargetTerritoryAdjacentToSource = true;
+            break;
+        }
+    }
+    return (SourceTerritoryBelongsToPlayer && TargetTerritoryAdjacentToSource);
 }
 void OrdersAdvance::execute(){
-    cout << "OrdersAdvance::execute" << endl;
+    srand((unsigned) time(NULL));
+    bool isValid = this->validate();
+    int probAttackArmyKills = 60;
+    int probDefendArmyKills = 70;
+    if (!isValid){
+        cout << "Invalid advance from territory " << this->getSourceTerritory()->getName() << " to territory " <<
+            this->getTargetTerritory()->getName() << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
+        return;
+    }
+    // We are advancing armies from one of our territories to another one of our territories
+    int currentNumArmiesSource = this->getSourceTerritory()->getNumOfArmies();
+    int currentNumArmiesTarget = this->getTargetTerritory()->getNumOfArmies();
+    if (this->getTargetTerritory()->getOwner()->equals(this->getIssuingPlayer())){
+        this->getSourceTerritory()->setNumOfArmies(currentNumArmiesSource - this->getNumArmies());
+        this->getTargetTerritory()->setNumOfArmies(currentNumArmiesTarget + this->getNumArmies());
+        return;
+    }
+
+    // After validating the only other possible case is if were advancing to enemy territory
+    // Neutral territory likely has no owner and 0 armies
+    int randomNum;
+    int attackingArmies = this->getNumArmies();
+    int defendingArmies = this->getTargetTerritory()->getNumOfArmies();
+    this->getSourceTerritory()->setNumOfArmies(currentNumArmiesSource - this->getNumArmies());
+    while (true){
+        if (attackingArmies <= 0 || defendingArmies <= 0)
+            break;
+
+        randomNum = rand() % 101;
+        if (randomNum <= probAttackArmyKills)
+            defendingArmies--;
+        randomNum = rand() % 101;
+        if (randomNum <= probDefendArmyKills)
+            attackingArmies--;
+    }
+    // Defenders win
+    if (attackingArmies <= 0 && defendingArmies >= 0)
+        this->getTargetTerritory()->setNumOfArmies(defendingArmies);
+    // Attackers win
+    else if (attackingArmies > 0 && defendingArmies <= 0){
+        // Remove territory from defending playerlist of territories
+        // Change owner of territory to new territory
+        // Add territory to attacking players list of territories
+        // Set the number of armies in territory to surviving armies (attackingArmies)
+        if (this->getTargetTerritory()->getOwner() != nullptr)
+            this->getTargetTerritory()->getOwner()->removeTerritory(this->getTargetTerritory());
+        this->getTargetTerritory()->setOwner(this->getIssuingPlayer());
+        this->getIssuingPlayer()->addTerritory(this->getTargetTerritory());
+        this->getTargetTerritory()->setNumOfArmies(attackingArmies);
+        this->getIssuingPlayer()->setEarnedCard(true);
+    }
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 Orders* OrdersBomb::allocateClone() const{
@@ -217,21 +305,47 @@ void OrdersBomb::printOrder(std::ostream& strm) const{
     strm << "Player " << this->getIssuingPlayer()->getName() << " has sent a bomb to " << *this->getSourceTerritory();
 }
 bool OrdersBomb::validate(){
+    bool isBombingEnemy = false;
+    bool isTerrAdjToOwnedTerr = false;
     if (this->getSourceTerritory() == nullptr || this->getSourceTerritory()->getOwner() == nullptr || this->getIssuingPlayer() == nullptr)
         return false;
-
-    if (this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer())){
-        cout << "Bombing own territory is invalid" << endl;
-        return false;
+    
+    for (Player* enemyWithTrue : this->getIssuingPlayer()->getTruceList()){
+        if (this->getSourceTerritory()->getOwner() == enemyWithTrue)
+            return false;
     }
-    cout << "VALID BOMBING" << endl;
-    return true;
-        
+
+    if (!(this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer()))){
+        isBombingEnemy = true;
+    }
+    string terrToBomb = this->getSourceTerritory()->getName();
+    // for (int index = 0; index < this->getSourceTerritory()->getAdjTerritoriesNames().size(); index++)
+    for (Territory* ownedTerr : this->getIssuingPlayer()->getTerritories()){
+        for (string adjacentTerr : ownedTerr->getAdjTerritoriesNames()){
+            if (adjacentTerr == terrToBomb){
+                isTerrAdjToOwnedTerr = true;
+                break;
+            }
+        }
+        if (isTerrAdjToOwnedTerr) break;
+    } 
+
+    return (isBombingEnemy && isTerrAdjToOwnedTerr);     
 }
 void OrdersBomb::execute(){
-    cout << "OrdersBomb::execute" << endl;
-}
+    bool isValid = this->validate();
+    if (!isValid){
+        cout << "Cannot perform bombing of territory " << this->getSourceTerritory()->getName() << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
+        return;
+    }
+    int numArmiesBeforeBomb = this->getSourceTerritory()->getNumOfArmies();
+    this->getSourceTerritory()->setNumOfArmies(numArmiesBeforeBomb / 2);
 
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
+}
 
 Orders* OrdersBlockade::allocateClone() const{
     return new OrdersBlockade(*this);
@@ -244,14 +358,27 @@ bool OrdersBlockade::validate(){
         return false;
 
     if (this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer())){
-        cout << "VALID BLOCKADE" << endl;
+        // cout << "VALID BLOCKADE" << endl;
         return true;
     }
-    cout << "Blockade on territory that is not yours is invalid" << endl;
     return false;
 }
 void OrdersBlockade::execute(){
-    cout << "OrdersBlockade::execute" << endl;
+    bool isValid = this->validate();
+    if (!isValid){
+        cout << "Blockade on territory that is not yours is invalid" << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
+        return;
+    }
+    int currentNumArmies = this->getSourceTerritory()->getNumOfArmies();
+    this->getSourceTerritory()->setNumOfArmies(currentNumArmies * 2);
+    this->getIssuingPlayer()->removeTerritory(this->getSourceTerritory());
+    this->getSourceTerritory()->setOwner(neutralPlayer);
+    neutralPlayer->addTerritory(this->getSourceTerritory());
+
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 OrdersAirlift::OrdersAirlift() : Orders(), targetTerritory(nullptr), numArmies(0) {}
@@ -303,14 +430,29 @@ bool OrdersAirlift::validate(){
         return false;
 
     if (this->getSourceTerritory()->getOwner()->equals(this->getIssuingPlayer()) && this->getTargetTerritory()->getOwner()->equals(this->getIssuingPlayer())){
-        cout << "VALID AIRLIFT" << endl;
+        // cout << "VALID AIRLIFT" << endl;
         return true;
     }
-    cout << "INVALID AIRLIFT" << endl;
+    // cout << "INVALID AIRLIFT" << endl;
     return false;
 }
 void OrdersAirlift::execute(){
-    cout << "OrdersAirlift::execute" << endl;
+    bool isValid = this->validate();
+    if (!isValid){
+        cout << "Invalid airlift, cannot airlift from " << this->getSourceTerritory()->getName() << 
+            " to " << this->getTargetTerritory()->getName() << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
+        return;
+    }
+    int sourceNumArmies = this->getSourceTerritory()->getNumOfArmies();
+    int targetNumArmies = this->getTargetTerritory()->getNumOfArmies();
+
+    this->getSourceTerritory()->setNumOfArmies(sourceNumArmies - this->getNumArmies());
+    this->getTargetTerritory()->setNumOfArmies(targetNumArmies + this->getNumArmies());
+
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 OrdersNegotiate::OrdersNegotiate() : Orders(), enemyToTruce(nullptr) {}
@@ -351,15 +493,26 @@ bool OrdersNegotiate::validate(){
         return false;
 
     if (this->getEnemyToTruce()->equals(this->getIssuingPlayer())){
-        cout << "INVALID NEGOTIATION" << endl;
+        // cout << "INVALID NEGOTIATION" << endl;
         return false;
     }
-    cout << "VALID NEGOTIATE" << endl;
+    // cout << "VALID NEGOTIATE" << endl;
     return true;
         
 }
 void OrdersNegotiate::execute(){
-    cout << "OrdersNegotiate::execute" << endl;
+    bool isValid = this->validate();
+    if (!isValid){
+        cout << "Cannot perform a negotiation with self or null player" << endl;
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
+        return;
+    }
+    this->getIssuingPlayer()->addTruce(this->getEnemyToTruce());
+    this->getEnemyToTruce()->addTruce(this->getIssuingPlayer());
+
+    Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    delete o;
 }
 
 
@@ -411,8 +564,9 @@ Orders* OrdersList::remove(const Orders& order){
     auto it = std::find(this->list.begin(), this->list.end(), &order);
 
     if (it != this->list.end()){
-        this->list.erase(it);
-        return *it;
+        Orders* temp = *it;   // save pointer first
+        this->list.erase(it); // erase iterator
+        return temp; 
     }
     cout << "Element not found" << endl;
     return nullptr;
@@ -422,8 +576,9 @@ Orders* OrdersList::remove(const int index){
     std::advance(it, index);
 
     if (it != this->list.end()){
-        this->list.erase(it);
-        return *it;
+        Orders* temp = *it;   // save pointer first
+        this->list.erase(it); // erase iterator
+        return temp; 
     }
     cout << "Element not found" << endl;
     return nullptr;

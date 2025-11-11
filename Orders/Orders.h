@@ -5,6 +5,8 @@
 #include <list>
 #include <algorithm>
 #include <string>
+#include <stdlib.h>
+#include <time.h>
 using namespace std;
 
 class Player;
@@ -37,8 +39,8 @@ public:
 
     virtual Orders* allocateClone() const;
     virtual void printOrder(std::ostream& strm) const;
-    virtual bool validate();
-    virtual void execute();
+    virtual bool validate() = 0;
+    virtual void execute() = 0;
 };
 
 class OrdersDeploy: public Orders
@@ -101,6 +103,7 @@ class OrdersBlockade: public Orders
         using Orders::Orders;
         using Orders::operator=;
 
+        static Player* neutralPlayer;
         Orders* allocateClone() const override;
         void printOrder(std::ostream& strm) const override;
         bool validate() override;
