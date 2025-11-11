@@ -10,9 +10,6 @@
 #include <vector>
 #include "../Player/Player.h"
 #include "../part1-map/Map.h"
-#include "../Logging-Observer/LoggingObserver.h"
-#include "../CommandProcessor/CommandProcessing.h"
-#include "../part1-map/Map.h"
 
 using std::string;
 using std::cout;
@@ -21,7 +18,7 @@ using std::cin;
 
 
 
-class GameEngine : public Subject, public ILoggable{
+class GameEngine {
     private:
         string state;   //state of the engine
         vector<Player*> players;
@@ -30,11 +27,12 @@ class GameEngine : public Subject, public ILoggable{
         Deck* deck;
 
     public:
-        explicit GameEngine(Observer* observer); //Default constructor
+        GameEngine(); //Default constructor
         GameEngine(const GameEngine& other);
         GameEngine &operator=(const GameEngine &other);
-        ~GameEngine() override;
+        ~GameEngine();
 
+        void setState(string& state);
         string getState() const;
         void changeState(const string& newState, const string& message);
 
@@ -55,12 +53,6 @@ class GameEngine : public Subject, public ILoggable{
         void addMap(Map* map);
         void giveDeck(Deck* deck);
         void printAllPlayerOrders(const std::vector<Player*>& players);
-
-
-        string stringToLog() override;
-        void notify(ILoggable& subject) override;
-
-        void startupPhase();
 };
 
 
