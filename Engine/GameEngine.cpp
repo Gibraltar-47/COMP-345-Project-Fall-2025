@@ -771,6 +771,7 @@ bool GameEngine::checkWinCondition(const std::vector<Player*>& players, Map* map
         // Win condition: owns all territories
         if (ownedCount == totalTerritories) {
             cout << "Player " << player->getName() << " controls the entire map!" << endl;
+            cout << "Player " << player->getName() << " wins!" << endl;
             state = "win";
             return true;
         }
