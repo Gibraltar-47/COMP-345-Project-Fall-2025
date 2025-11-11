@@ -16,22 +16,25 @@ Player::Player() : name("hi") {
 }
 
 //cons with name
-Player::Player(const std:: string& playerName): name(playerName), territories(), handCards(),numArmies(0),numFreeArmies(0), hand(name) {
+Player::Player(const std:: string& playerName): name(playerName),numArmies(0),numFreeArmies(0) {
+    hand= new Hand(playerName);
     orderList=new OrdersList();
+    territories= vector<Territory*>();
 }
 
-Player::Player(const Player& other){
+Player::Player(const Player& other)
+{
     name = other.name;
+    hand = new Hand(this->name);
 
     // Deep copy territories
-    for (auto t : other.territories) {
-        territories.push_back(new Territory(*t));
+    for (auto t : other.territories)
+    {
+        territories.push_back(t);
     }
 
     // Deep copy hand cards
-    for (auto c : other.handCards) {
-        handCards.push_back(new Card(*c));
-    }
+    for (auto c : other.hand->getCards()) hand->addCard(c);
 
     // Deep copy order list
     orderList = new OrdersList(*other.orderList);
@@ -39,7 +42,7 @@ Player::Player(const Player& other){
 
 //asignment operator
 Player::~Player() {
-    for (auto c : handCards) delete c;
+    delete hand;
     delete orderList;
 }
 
@@ -47,17 +50,15 @@ Player& Player::operator=(const Player& other) {
     if (this == &other) return *this;
 
     // Clean up current
-    for (auto t : territories) delete t;
     territories.clear();
-    for (auto c : handCards) delete c;
-    handCards.clear();
+    delete hand;
     delete orderList;
 
     name = other.name;
 
     // Deep copy again
-    for (auto t : other.territories) territories.push_back(new Territory(*t));
-    for (auto c : other.handCards) handCards.push_back(new Card(*c));
+    for (auto t : other.territories) territories.push_back(t);
+    for (auto c : other.hand->getCards()) hand->addCard(c);
     orderList = new OrdersList(*other.orderList);
 
     return *this;
@@ -137,7 +138,7 @@ void Player::removeTruce(Player* enemy){
 //add a card to the player's hand and prints a string
 void Player::addCard(Card* ca){
     if (ca!=nullptr){
-        hand.addCard(ca);
+        hand->addCard(ca);
         //cout<<name<<" has card: "<<ca->getName()<<endl;
    }
 }
@@ -161,7 +162,7 @@ void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int nu
         case 5:
         case 6: {
             Card* matchingCard = nullptr;
-            for (Card* card: hand.getCards()) {
+            for (Card* card: hand->getCards()) {
                 if ((mode == 3 && card->getName() == "Bomb") ||
                     (mode == 4 && card->getName() == "Blockade") ||
                     (mode == 5 && card->getName() == "Airlift") ||
@@ -176,7 +177,7 @@ void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int nu
             }
             OrdersList* olist = this->getOrderList();
 
-            matchingCard->play(deck, &this->hand, *olist, this, sourceTerritory,mode,numArmies,targetTerritory,&player2); //dereference problem
+            matchingCard->play(deck, hand, *olist, this, sourceTerritory,mode,numArmies,targetTerritory,&player2); //dereference problem
             cout << name << " played a " << matchingCard->getName() << " card." << endl;
             break;
 
@@ -330,8 +331,8 @@ vector<Territory*> Player::toAttack(const std::vector<Territory*>& allTerritorie
   if(territories.empty()) cout<<"none";
   else for(Territory* t: territories) cout<<t->getName()<<" ";
   cout<<"\n Hand cards: ";
-  if(handCards.empty()) cout<<"none";
-  else for(Card* c: handCards) cout<<c->getName()<<" ";
+  if(hand->isEmpty()) cout<<"none";
+  else for(Card* c: hand->getCards()) cout<<c->getName()<<" ";
   cout<<endl;
   cout<<"Orders: ";
   const auto list=orderList->getList();
@@ -366,8 +367,8 @@ ostream& operator<<(std::ostream& out, const Player& p){
     out<<"\n";
 
     out<<"Hand: ";
-    if(!p.handCards.empty()){
-        for(auto c: p.handCards)
+    if(!p.hand->isEmpty()){
+        for(auto c: p.hand->getCards())
             out<<c->getName()<<" ";
     } 
     else{
@@ -400,5 +401,5 @@ Territory* Player::findTerritoryByName(const string& name) {
     return nullptr;
 }
 Hand* Player::getHand() {
-    return &this->hand;
+    return hand;
 }

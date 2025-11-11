@@ -49,9 +49,9 @@ class GameEngine : public Subject, public ILoggable{
         bool checkWinCondition(const std::vector<Player*>& players, Map* map);
         void waitForUser();
 
-        void addPlayer(Player* player);
+        void addPlayer(const Player& player);
         void removePlayer(Player* player);
-        void addMap(Map* map);
+        void addMap(const Map& othermap);
         void giveDeck(Deck* deck);
         void printAllPlayerOrders(const std::vector<Player*>& players);
 

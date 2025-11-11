@@ -52,8 +52,8 @@ GameEngine::GameEngine(const GameEngine& other)  : Subject(other) {
     for (Player* player: other.players) {
         this->players.push_back(new Player(*player));
     }
-    this->map = other.map;
-    this->deck = other.deck;
+    this->map = new Map(*other.map);
+    this->deck = new Deck(*other.deck);
 
 };
 GameEngine& GameEngine::operator=(const GameEngine& other) {
@@ -71,7 +71,7 @@ GameEngine& GameEngine::operator=(const GameEngine& other) {
             this->players.push_back(new Player(*player));
         }
 
-        this->map = other.map;
+        this->map = new Map(*other.map);
     }
     return *this;
 }
@@ -100,7 +100,7 @@ string GameEngine::getState() const {
 void GameEngine::changeState(const string& newState, const string& message) {
     state = newState;
     cout << message << endl;
-    cout << "Now in state: " << state << endl;
+    cout << "Now in state: " << state << endl<<endl;
     notify(*this);
 }
 
@@ -140,7 +140,6 @@ void GameEngine::startupPhase()
                     if (input == "exit") { //quick exit
                         gameOver = true;
                         delete console;
-                        delete command;
                     }
                     else if (starts_with_verb(input, "loadmap") && (state == "start" || state == "maploaded")) {
 
@@ -149,8 +148,7 @@ void GameEngine::startupPhase()
                             cout << "Missing filename for loadmap\n";
                         } else {
                             MapLoader maploader;
-                            cout<<filename<<endl;
-                            this->addMap(new Map(maploader.loadMap(filename)));
+                            this->addMap(maploader.loadMap(filename));
                             command->saveEffect();
                             string message = "Map "+ filename+" is now loaded!\n(Type 'validatemap' to proceed)\n\n";
                             changeState("maploaded", message);
@@ -171,7 +169,7 @@ void GameEngine::startupPhase()
                         if (name.empty()) {
                             cout << "Missing player name for addplayer\n";
                         } else {
-                            this->addPlayer(new Player(name));
+                            this->addPlayer(Player(name));
                             command->saveEffect();
                             string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
                             changeState("playersadded", message);
@@ -188,6 +186,11 @@ void GameEngine::startupPhase()
                         int randomIndex;
                         bool unowned;
 
+                        Deck* deckTemp = new Deck();
+                        this->deck = deckTemp;
+                        cout<<this->deck->getDeckSize()<<endl;
+                        //delete deckTemp;
+
                         //Add 5 * numberOfPlayer copies of each card type
                         vector<string> cardNames = {"Bomb", "Airlift", "Negotiate", "Blockade"};
                         for (const auto& name : cardNames) {
@@ -196,6 +199,7 @@ void GameEngine::startupPhase()
                             }
                         }
 
+                        this->addPlayer(Player("Neutral Player"));
                         int territoryPerPlayer = numTerr / numPlayer;
                         int terrLeft = numTerr % numPlayer;
 
@@ -236,36 +240,39 @@ void GameEngine::startupPhase()
                         cout<<"All players have now each received 50 units of armies, 2 cards and "<<territoryPerPlayer<<" territories!"<<endl;
 
                         //PART TO ADD WHEN MERGING WITH SHAWN'S PART, PART4 ITERATION 2
-                        // //adding the neutral player
-                        // this->addPlayer(new Player("Neutral Player"));
-                        // //ORDERBLOCKADE::NEUTRALPLAYER=NEUTRALPLAYER;
-                        //
-                        // //if there are leftover territories then they are given to the neutral player
-                        // if (terrLeft != 0)
-                        // {
-                        //     for (Territory* territory : this->map->getTerritories())
-                        //     {
-                        //         if (territory->getOwner() == nullptr)
-                        //         {
-                        //             //setting the owner as the last player added to the vector (neutral player)
-                        //             territory->setOwner(this->players.back());
-                        //         }
-                        //     }
-                        // }
+                         //adding the neutral player
+                         //OrdersBlockade::neutralPlayer=this->players.back();
 
-                        mainGameLoop();
+                         //if there are leftover territories then they are given to the neutral player
+                         if (terrLeft != 0)
+                         {
+                             for (Territory* territory : this->map->getTerritories())
+                             {
+                                 if (territory->getOwner() == nullptr)
+                                 {
+                                     //setting the owner as the last player added to the vector (neutral player)
+                                     territory->setOwner(this->players.back());
+                                 }
+                             }
+                         }
+
+                        //mainGameLoop();
+                        this->state="win";
                     }
-                    else if ((input == "replay" || input == "end") && state == "win") {
+                    else if ((input == "replay" || input == "quit") && state == "win") {
                         if (input == "replay") {
                             state = "start";
+                            this->players.clear();
+                            delete map;
+                            delete deck;
                             command->saveEffect();
                         }
                         else {
                             gameOver = true;
                             cout << "Exiting game." << endl;
                             command->saveEffect();
-                            delete console; //
-                            delete command;
+                            delete console;
+                            break;
                         }
                     }
                 }
@@ -289,12 +296,11 @@ void GameEngine::startupPhase()
                         cout<<"The command entered was invalid, please try again!"<<endl;
                         command = textFile->getCommand(this->state);
                     }
-                    input= command->getCommand();
+                    input=command->getCommand();
                     //compares command input and gamestate
                     if (input == "exit") { //quick exit
                         gameOver = true;
                         delete textFile;
-                        delete command;
                     }
                     else if (starts_with_verb(input, "loadmap") && (state == "start" || state == "maploaded")) {
 
@@ -303,8 +309,7 @@ void GameEngine::startupPhase()
                             cout << "Missing filename for loadmap\n";
                         } else {
                             MapLoader maploader;
-                            cout<<filename<<endl;
-                            this->addMap(new Map(maploader.loadMap(filename)));
+                            this->addMap(maploader.loadMap(filename));
                             command->saveEffect();
                             string message = "Map "+ filename+" is now loaded!\n(Type 'validatemap' to proceed)\n\n";
                             changeState("maploaded", message);
@@ -325,7 +330,7 @@ void GameEngine::startupPhase()
                         if (name.empty()) {
                             cout << "Missing player name for addplayer\n";
                         } else {
-                            this->addPlayer(new Player(name));
+                            this->addPlayer(Player(name));
                             command->saveEffect();
                             string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
                             changeState("playersadded", message);
@@ -342,6 +347,11 @@ void GameEngine::startupPhase()
                         int randomIndex;
                         bool unowned;
 
+                        Deck* deckTemp = new Deck();
+                        this->deck = deckTemp;
+                        cout<<this->deck->getDeckSize()<<endl;
+                        //delete deckTemp;
+
                         //Add 5 * numberOfPlayer copies of each card type
                         vector<string> cardNames = {"Bomb", "Airlift", "Negotiate", "Blockade"};
                         for (const auto& name : cardNames) {
@@ -350,6 +360,7 @@ void GameEngine::startupPhase()
                             }
                         }
 
+                        //this->addPlayer(Player("Neutral Player"));
                         int territoryPerPlayer = numTerr / numPlayer;
                         int terrLeft = numTerr % numPlayer;
 
@@ -390,36 +401,41 @@ void GameEngine::startupPhase()
                         cout<<"All players have now each received 50 units of armies, 2 cards and "<<territoryPerPlayer<<" territories!"<<endl;
 
                         //PART TO ADD WHEN MERGING WITH SHAWN'S PART, PART4 ITERATION 2
-                        // //adding the neutral player
-                        // this->addPlayer(new Player("Neutral Player"));
-                        // //ORDERBLOCKADE::NEUTRALPLAYER=NEUTRALPLAYER;
-                        //
-                        // //if there are leftover territories then they are given to the neutral player
-                        // if (terrLeft != 0)
-                        // {
-                        //     for (Territory* territory : this->map->getTerritories())
-                        //     {
-                        //         if (territory->getOwner() == nullptr)
-                        //         {
-                        //             //setting the owner as the last player added to the vector (neutral player)
-                        //             territory->setOwner(this->players.back());
-                        //         }
-                        //     }
-                        // }
+                         //adding the neutral player
+                         //OrdersBlockade::neutralPlayer=this->players.back();
 
-                        mainGameLoop();
+                         //if there are leftover territories then they are given to the neutral player
+                        this->addPlayer(Player("Neutral Player"));
+                         if (terrLeft != 0)
+                         {
+                             for (Territory* territory : this->map->getTerritories())
+                             {
+                                 if (territory->getOwner() == nullptr)
+                                 {
+                                     //setting the owner as the last player added to the vector (neutral player)
+                                     territory->setOwner(this->players.back());
+                                     cout<<territory->getOwner()->getName()<<endl;
+                                 }
+                             }
+                         }
+
+                        //mainGameLoop();
+                        this->state="win";
                     }
-                    else if ((input == "replay" || input == "end") && state == "win") {
+                    else if ((input == "replay" || input == "quit") && state == "win") {
                         if (input == "replay") {
                             state = "start";
+                            this->players.clear();
+                            delete map;
+                            delete deck;
                             command->saveEffect();
                         }
                         else {
                             gameOver = true;
                             cout << "Exiting game." << endl;
                             command->saveEffect();
-                            delete textFile; //
-                            delete command;
+                            delete textFile;
+                            break;
                         }
                     }
 
@@ -435,8 +451,6 @@ void GameEngine::startupPhase()
 
 void GameEngine::runGame() {
 
-    Deck* deckTemp = new Deck();
-    this->deck = deckTemp;
 
     startupPhase();
 
@@ -758,14 +772,15 @@ void GameEngine::waitForUser() { //line skips kinda wonky for now
     cout<< endl;
 }
 
-void GameEngine::addMap(Map* map) { //adds a map to the engine
-    this->map = map;
+void GameEngine::addMap(const Map& othermap) { //adds a map to the engine
+    this->map = new Map(othermap);
 }
-void GameEngine::addPlayer(Player *player) { //adds a player to the engine
-    this->players.push_back(player);
+void GameEngine::addPlayer(const Player& player) { //adds a player to the engine
+    this->players.push_back(new Player(player));
 }
 
 void GameEngine::removePlayer(Player* player) { //to be implemented
+    //MAYBE PROBLEM
     if (!player) return;
 
     auto it = std::find(this->players.begin(), this->players.end(), player);

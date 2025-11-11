@@ -41,7 +41,7 @@ bool isConnectedGraph(vector <vector<int>> &adjM, string n, string type){
             return false;
         }
     }
-    cout<<type<<" "<<n<<" is a connected graph"<<"\n";
+    cout<<type<<" "<<n<<" is a connected graph"<<"\n\n";
     return true;
 }
 

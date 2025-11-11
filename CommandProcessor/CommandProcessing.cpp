@@ -20,7 +20,7 @@ Command::Command(const Command& other) : Subject(other) {
     effect=other.effect;
 }
 //releasing dynamically allocated memory
-Command::~Command()= default;
+Command::~Command()=default;
 
 void Command::notify(ILoggable& subject)
 {
@@ -280,6 +280,8 @@ FileCommandProcessorAdapter::~FileCommandProcessorAdapter(){
     if(file.is_open()){
         file.close();
     }
+
+    cout<<"DELETING FILECOMMANDPROCESSOR"<<endl;
 }
 
 
