@@ -10,9 +10,6 @@
 #include <vector>
 #include "../Player/Player.h"
 #include "../part1-map/Map.h"
-#include "../Logging-Observer/LoggingObserver.h"
-#include "../CommandProcessor/CommandProcessing.h"
-#include "../part1-map/Map.h"
 
 using std::string;
 using std::cout;
@@ -21,7 +18,7 @@ using std::cin;
 
 
 
-class GameEngine : public Subject, public ILoggable{
+class GameEngine {
     private:
         string state;   //state of the engine
         vector<Player*> players;
@@ -30,36 +27,31 @@ class GameEngine : public Subject, public ILoggable{
         Deck* deck;
 
     public:
-        explicit GameEngine(Observer* observer); //Default constructor
+        GameEngine(); //Default constructor
         GameEngine(const GameEngine& other);
         GameEngine &operator=(const GameEngine &other);
-        ~GameEngine() override;
+        ~GameEngine();
 
+        void setState(string& state);
         string getState() const;
         void changeState(const string& newState, const string& message);
 
         void runGame();
         friend ostream& operator<<(ostream& out, const GameEngine& engine);
 
+
+        //Part 2 methods
         void mainGameLoop();
         void reinforcementPhase();
         void issueOrdersPhase(vector<Player*>& allPlayers , Map* map);
-        void executeOrdersPhase();
-
+        bool executeOrdersPhase();
         bool checkWinCondition(const std::vector<Player*>& players, Map* map);
-        void waitForUser();
 
         void addPlayer(const Player& player);
         void removePlayer(Player* player);
         void addMap(const Map& othermap);
         void giveDeck(Deck* deck);
         void printAllPlayerOrders(const std::vector<Player*>& players);
-
-
-        string stringToLog() override;
-        void notify(ILoggable& subject) override;
-
-        void startupPhase();
 };
 
 

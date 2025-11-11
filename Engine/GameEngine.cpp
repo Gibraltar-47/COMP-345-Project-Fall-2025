@@ -5,9 +5,7 @@
 #include <iostream>
 #include <limits>
 #include <algorithm>
-#include <random>
 
-#include "../CommandProcessor/CommandProcessing.h"
 #include "../Orders/Orders.h"
 #include "../Part-4-Deck/Cards.h"
 #include "../part1-map/Map.h"
@@ -60,7 +58,6 @@ GameEngine& GameEngine::operator=(const GameEngine& other) {
     if (this != &other) {
         this->state = other.state;
         this->gameOver = other.gameOver;
-        this->observer_ = other.observer_;
 
         for (Player* player: players) {
             delete player;
@@ -73,25 +70,14 @@ GameEngine& GameEngine::operator=(const GameEngine& other) {
 
         this->map = new Map(*other.map);
     }
-    return *this;
 }
-GameEngine::~GameEngine() {
-    delete map;
+
+GameEngine::~GameEngine() { //could use improvements (rn for testing, it is manually adding items to the engine, no need to delete)
+    map = nullptr;
     for (auto* player: players) {
-        delete player;
+        player = nullptr;
     }
-    delete deck;
-}
-
-string GameEngine::stringToLog()
-{
-    string str="The state of the game has changed!\nState:\t"+state;
-    return str;
-}
-
-void GameEngine::notify(ILoggable& subject)
-{
-    Subject::observer_->update(subject);
+    deck = nullptr;
 }
 
 string GameEngine::getState() const {
@@ -104,13 +90,11 @@ void GameEngine::changeState(const string& newState, const string& message) {
     notify(*this);
 }
 
-void GameEngine::startupPhase()
-{
+void GameEngine::runGame() {
     cout << "Welcome to the Game Engine!" << endl << endl;
     cout << "---------------------" << endl;
-
-    int choice;
-    bool invalidInput = false;
+    string command;
+    state = "playersadded"; //change it to start for actual use (start of program), this is changed for skipping the startup phase and all
     gameOver = false;
 
     while (!invalidInput){
@@ -277,8 +261,29 @@ void GameEngine::startupPhase()
                     }
                 }
 
-                invalidInput = true;
-                break;
+        //compares command input and gamestate
+        if (command == "exit") { //quick exit
+            gameOver = true;
+        }
+        else if (command == "loadmap" && (state == "start" || state == "maploaded")) {
+            changeState("maploaded", "Map loaded.(type 'validatemap' to proceed)");
+        }
+        else if (command == "validatemap" && state == "maploaded") {
+            changeState("mapvalidated", "Map validated.(type 'addplayer' to proceed)");
+        }
+        else if (command == "addplayer" && (state == "mapvalidated" || state == "playersadded")) {
+            changeState("playersadded", "Players added.(type 'gamestart' to proceed)");
+        }
+        else if (command == "gamestart" && state == "playersadded") {
+            changeState("maingameloop", "Game loop has begun(press 'enter' to proceed)");
+            mainGameLoop();
+        }
+        else if (command == "win" && (state == "maingameloop" || state == "executeorders")) {
+            changeState("win", "Game loop has ended(type 'end' to proceed or 'play' to start a new game)");
+        }
+        else if ((command == "play" || command == "end") && state == "win") {
+            if (command == "play") {
+                state = "start";
             }
         case 2:
             {
@@ -443,8 +448,9 @@ void GameEngine::startupPhase()
                 invalidInput = true;
                 break;
             }
-        default:
-            cout << "Invalid input!" << endl;
+        }
+        else {
+            cout << "Invalid command for current state: " << state << endl;
         }
     }
 }
@@ -471,23 +477,20 @@ void GameEngine::mainGameLoop() {
     while (!roundOver) {
         reinforcementPhase();
 
-
         issueOrdersPhase(players,map);
         printAllPlayerOrders(players);
+        //executeOrdersPhase();
+        //printAllPlayerOrders(players);
 
-        executeOrdersPhase();
-        printAllPlayerOrders(players);
-        if (checkWinCondition(players, map) ){
+
+        if (executeOrdersPhase()) {
             roundOver = true;
+
         }
 
     }
 }
 
-
-// =======================
-// Reinforcement Phase
-// =======================
 void GameEngine::reinforcementPhase() {
     changeState("reinforcement", "Reinforcement Phase.");
 
@@ -567,12 +570,9 @@ void GameEngine::reinforcementPhase() {
 
     cout << "=== End Reinforcement Debug ===\n" << endl;
 
-    waitForUser();
 }
 
-// =======================
-// Issue Orders Phase
-// =======================
+
 void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
 
     changeState("issueorders", "Issue Orders Phase.");
@@ -591,38 +591,53 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
             if (playerDone[i]) { //player skips check
                 continue;
             }
-            cout << "\n" << player->getName() << " territories to defend:\n";
+            cout << "\n" << player->getName() << " territories to defend: " << endl;
             for (auto* t : player->toDefend(map->getTerritories())) cout << "  - " << t->getName() << endl;
 
-            cout << player->getName() << " territories to attack:\n";
+            cout << player->getName() << " territories to attack:" << endl;
             for (auto* t : player->toAttack(map->getTerritories())) cout << "  - " << t->getName() << endl;
 
 
             //Prompts user for a choice
-            cout << "\nPlayer " << player->getName() << ", issue an order:\n";
-            cout << "1. Deploy\n2. Advance\n3. Bomb\n4. Blockade\n5. Airlift\n6. Negotiate\n7. Finish issuing\nChoice: ";
             int choice;
-            cin >> choice;
-
 
             //Done issuing Orders.int choice;
-            if (!(cin >> choice)) {
-                cin.clear();
-                cin.ignore(numeric_limits<streamsize>::max(), '\n');
-                cout << "Invalid input. Please enter a number.\n";
-                cout << "Skipping your turn.\n";
-                playerDone[i] = true;
-                continue;
+            while (true) {
+                cout << "\nPlayer " << player->getName() << " has " << player->getNumFreeArmies() << " free army units (" <<  player->getNumArmies() <<" total army units). Please issue an order:\n";
+                cout << "1. Deploy\n2. Advance\n3. Bomb\n4. Blockade\n5. Airlift\n6. Negotiate\n7. Finish issuing\nChoice: ";
+
+                if (!(cin >> choice)) {
+                    cin.clear();
+                    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                    cout << "Invalid input. Please enter a number." << endl;
+                    cout << "Skipping your turn." << endl;
+                    playerDone[i] = true;
+                    continue;
+                }
+
+                if (choice == 8) {
+                    cout << "Exiting order issuance." << endl;
+                    state = "win";
+                    return;
+                }
+
+                if (player->getNumFreeArmies() > 0 && choice != 1 && choice != 7) {
+                    cout << "You still have " << player->getNumArmies()
+                         << " undeployed armies. You must deploy them before issuing other orders." << endl;
+                    continue;
+                }
+
+                if (choice < 1 || choice > 8) {
+                    cout << "Invalid choice. Please try again." << endl;
+                    continue;
+                }
+                break;
             }
+
 
             if (choice == 7) {
                 playerDone[i] = true;
-                cout << player->getName() << " is done issuing orders.\n";
-                continue;
-            }
-
-            if (choice < 1 || choice > 7) {
-                cout << "Invalid choice. Please try again.\n";
+                cout << player->getName() << " is done issuing orders." << endl;
                 continue;
             }
 
@@ -643,7 +658,7 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
                 target = map->getTerritory(targetName);
 
                 if (!source || !target) {
-                    cout << "Invalid territories.\n";
+                    cout << "Invalid territories." << endl;
                     continue;
                 }
             } else if (choice == 1 || choice == 4) { //if requires one location
@@ -652,7 +667,7 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
                 cin >> terrName;
                 source = player->findTerritoryByName(terrName);
                 if (!source) {
-                    cout << "Invalid territory.\n";
+                    cout << "Invalid territory." << endl;
                     continue;
                 }
             } else if (choice == 6) { //if requires a 2nd player name
@@ -672,7 +687,7 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
 
             //creation of the order
             player->issueOrder(*deck,choice, source, armies, target, *targetPlayer);
-            cout << "Order issued successfully!\n";
+            cout << "Order issued successfully!" << endl;
 
             allDone = false; // player can make another action after this current one + turn order wait
 
@@ -682,12 +697,9 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
         allDone = std::all_of(playerDone.begin(), playerDone.end(), [](bool done){ return done; });
     }
     cout << "All players have finished issuing orders." << endl;
-    waitForUser();
 }
-// =======================
-// Execute Orders Phase
-// =======================
-void GameEngine::executeOrdersPhase() {
+
+bool GameEngine::executeOrdersPhase() {
     changeState("executeorders", "Execute Orders Phase.");
     bool ordersRemaining = true;
     while (ordersRemaining) {
@@ -722,22 +734,37 @@ void GameEngine::executeOrdersPhase() {
         removePlayer(player);
     }
     cout << endl;
-    waitForUser();
+
+    if (checkWinCondition(players, map)) {
+        return true;
+    }
+
+
+    int exitCode = 0;
+    //for testing and faster exits
+    cout << "If you want to exit the game loop, enter 1. To continue, enter 0: ";
+    cin >> exitCode;
+    if (exitCode == 1) {
+        state = "win";
+        return true;
+    }
+
+    return false;
 }
 //Might need to change this method, but it works for now :|
 bool GameEngine::checkWinCondition(const std::vector<Player*>& players, Map* map) { //checks to see if any player has won
-
-    cout << "\nChecking win condition..." << endl;
+    cout << endl;
+    cout << "Checking win condition..." << endl;
 
     //checks if players or map is missing
     if (players.empty() || !map) {
-        cout << "Invalid players or map.\n";
+        cout << "Invalid players or map." << endl;
         return false;
     }
     //checks if map is empty
     const vector<Territory*>& allTerritories = map->getTerritories();
     if (allTerritories.empty()) {
-        cout << "No territories in map.\n";
+        cout << "No territories in map." << endl;
         return false;
     }
     //total number of territory
@@ -753,13 +780,13 @@ bool GameEngine::checkWinCondition(const std::vector<Player*>& players, Map* map
 
         // Win condition: owns all territories
         if (ownedCount == totalTerritories) {
-            cout << "\nPlayer " << player->getName() << " controls the entire map!" << endl;
+            cout << "Player " << player->getName() << " controls the entire map!" << endl;
             state = "win";
             return true;
         }
     }
 
-    cout << "No winner yet.\n";
+    cout << "No winner yet." << endl;
     return false;
 }
 
@@ -783,10 +810,9 @@ void GameEngine::removePlayer(Player* player) { //to be implemented
     //MAYBE PROBLEM
     if (!player) return;
 
-    auto it = std::find(this->players.begin(), this->players.end(), player);
+    auto it = std::find(players.begin(), players.end(), player);
     if (it != this->players.end()) {
-        cout << "Player " << player->getName() << " removed.\n";
-
+        cout << "Player " << player->getName() << " removed." << endl;
         players.erase(it);
     }
 }
@@ -799,8 +825,8 @@ void GameEngine::printAllPlayerOrders(const std::vector<Player*>& players) { //s
     cout << "======= PLAYER ORDER LISTS =======" << endl;
     for (const auto& player : players) {
         if (!player) continue;
-
-        cout << "\nPlayer: " << player->getName() << endl;
+        cout << endl;
+        cout << "Player: " << player->getName() << endl;
 
         OrdersList* ol = player->getOrderList();
         if (!ol) {

@@ -133,7 +133,7 @@ Orders* OrdersDeploy::allocateClone() const{
     return new OrdersDeploy(*this);
 }
 void OrdersDeploy::printOrder(std::ostream& strm) const{
-    strm << "Player " << this->getIssuingPlayer()->getName() << " has deployed " <<  this->getNumArmies() << " to " << *this->getSourceTerritory();
+    strm << "Player " << this->getIssuingPlayer()->getName() << " has deployed " <<  this->getNumArmies() << " units to " << *this->getSourceTerritory(); //changed the output text a little
 }
 bool OrdersDeploy::validate(){
     if (this->getSourceTerritory() == nullptr || this->getIssuingPlayer() == nullptr || this->getSourceTerritory()->getOwner() == nullptr)
