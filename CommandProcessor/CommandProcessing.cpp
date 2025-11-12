@@ -233,9 +233,6 @@ bool CommandProcessor:: validate(Command* cm, string state){
     else if (command == "gamestart" && state == "playersadded") {
         valid=true;
     }
-    else if (command == "win" && (state == "maingameloop" || state == "executeorders")) {
-        valid=true;
-    }
     else if ((command == "replay" || command == "quit") && state == "win") {
             valid=true;
     }

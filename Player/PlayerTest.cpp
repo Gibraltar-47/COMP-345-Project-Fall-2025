@@ -32,6 +32,8 @@ Player::Player(const Player& other)
     {
         territories.push_back(t);
     }
+    numArmies = other.numArmies;
+    numFreeArmies = other.numFreeArmies;
 
     // Deep copy hand cards
     for (auto c : other.hand->getCards()) hand->addCard(c);

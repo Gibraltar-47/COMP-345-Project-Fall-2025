@@ -147,7 +147,8 @@ void GameEngine::startupPhase()
                             cout << "Missing filename for loadmap\n";
                         } else {
                             MapLoader maploader;
-                            this->addMap(maploader.loadMap(filename));
+                            Map testCase = maploader.loadMap(filename);
+                            this->map = new Map(testCase);
                             command->saveEffect();
                             string message = "Map "+ filename+" is now loaded!\n(Type 'validatemap' to proceed)\n\n";
                             changeState("maploaded", message);
@@ -211,7 +212,7 @@ void GameEngine::startupPhase()
                         for (Player* player : this->players)
                         {
                             //assign the correct number of territories per player
-                            for (int i=0;i<territoryPerPlayer;i++)
+                            for (int i = 0 ;i<territoryPerPlayer;i++)
                             {
                                 unowned=true;
 
@@ -227,7 +228,6 @@ void GameEngine::startupPhase()
                                     }
                                 }
                             }
-
                             //give every player 50 army unit
                             player->addNumArmies(50);
                             //make the player draw a card twice
@@ -241,7 +241,7 @@ void GameEngine::startupPhase()
                         //PART TO ADD WHEN MERGING WITH SHAWN'S PART, PART4 ITERATION 2
                          //adding the neutral player
                          //OrdersBlockade::neutralPlayer=this->players.back();
-                        this->addPlayer(Player("Neutral Player"));
+                        //this->addPlayer(Player("Neutral Player"));
 
                          //if there are leftover territories then they are given to the neutral player
                          if (terrLeft != 0)
@@ -262,8 +262,8 @@ void GameEngine::startupPhase()
                         if (input == "replay") {
                             state = "start";
                             this->players.clear();
-                            delete map;
-                            delete deck;
+                            //delete map;
+                            //delete deck;
                             command->saveEffect();
                         }
                         else {
@@ -308,11 +308,13 @@ void GameEngine::startupPhase()
                             cout << "Missing filename for loadmap\n";
                         } else {
                             MapLoader maploader;
-                            this->addMap(maploader.loadMap(filename));
+                            Map testCase = maploader.loadMap(filename);
+                            this->map = new Map(testCase);
                             command->saveEffect();
                             string message = "Map "+ filename+" is now loaded!\n(Type 'validatemap' to proceed)\n\n";
                             changeState("maploaded", message);
                         }
+
                     }
                     else if (input == "validatemap" && state == "maploaded") {
 
@@ -370,7 +372,7 @@ void GameEngine::startupPhase()
                         for (Player* player : this->players)
                         {
                             //assign the correct number of territories per player
-                            for (int i=0;i<territoryPerPlayer;i++)
+                            for (int i = 0;i<territoryPerPlayer;i++)
                             {
                                 unowned=true;
 
@@ -386,7 +388,6 @@ void GameEngine::startupPhase()
                                     }
                                 }
                             }
-
                             //give every player 50 army unit
                             player->addNumArmies(50);
                             //make the player draw a card twice
@@ -402,7 +403,7 @@ void GameEngine::startupPhase()
                          //OrdersBlockade::neutralPlayer=this->players.back();
 
                          //if there are leftover territories then they are given to the neutral player
-                        this->addPlayer(Player("Neutral Player"));
+                        //this->addPlayer(Player("Neutral Player"));
                          if (terrLeft != 0)
                          {
                              for (Territory* territory : this->map->getTerritories())
@@ -421,8 +422,8 @@ void GameEngine::startupPhase()
                         if (input == "replay") {
                             state = "start";
                             this->players.clear();
-                            delete map;
-                            delete deck;
+                            //delete map;
+                            //delete deck;
                             command->saveEffect();
                         }
                         else {
@@ -489,9 +490,7 @@ void GameEngine::reinforcementPhase() {
 
     // take continents by value (avoid binding to a temporary reference)
     const auto& continents = map->getContinents();
-
     cout << "\n=== Reinforcement Phase Debug ===" << endl;
-
 
     for (Player* p : players) {
         if (!p||p->getName()=="Neutral Player") continue;//skip if missing
@@ -506,7 +505,6 @@ void GameEngine::reinforcementPhase() {
         // continent control bonuses
         int continentBonus = 0;
         std::vector<std::string> ownedContinents;
-
         for (Continent* cont : continents) {
             if (!cont) continue;
 
@@ -515,7 +513,17 @@ void GameEngine::reinforcementPhase() {
 
             bool ownsAll = true;
             for (Territory* t : contTerritories) {
-                if (!t->getOwner() || (t->getOwner() != p && t->getOwner()->getName() != p->getName())) {
+                string TerritoryName = t->getName();
+
+                vector<Territory*> Territories = map->getTerritories();
+                Territory* found;
+                for (Territory* terr : Territories) {
+                    if (terr->getName() == TerritoryName) {
+                        found = terr;
+                    }
+
+                }
+                if (!found->getOwner() || (found->getOwner() != p && found->getOwner()->getName() != p->getName())) {
                     ownsAll = false;
                     break;
                 }
@@ -527,8 +535,8 @@ void GameEngine::reinforcementPhase() {
                 ownedContinents.push_back(cont->getName() + " (+" + std::to_string(bonus) + ")");
             }
         }
-
-        int totalReinforcements = baseReinforcements + continentBonus;
+        int totalReinforcement = baseReinforcements + continentBonus;
+        p->addNumArmies(totalReinforcement);
 
         // Debug output before applying
         cout << "\nPlayer: " << p->getName()
@@ -536,21 +544,6 @@ void GameEngine::reinforcementPhase() {
              << " | Start armies: " << startArmies << endl;
         cout << "  Base from territories: " << baseReinforcements << endl;
         cout << "  Continent bonus total: " << continentBonus << endl;
-        cout << "  Total reinforcements to add: " << totalReinforcements << endl;
-
-        if (!ownedContinents.empty()) {
-            cout << "  Controls continents: ";
-            for (size_t i = 0; i < ownedContinents.size(); ++i) {
-                cout << ownedContinents[i];
-                if (i < ownedContinents.size() - 1) cout << ", ";
-            }
-            cout << endl;
-        }
-
-        // add to player's reinforcement pool
-        p->addNumArmies(totalReinforcements);
-
-        // Debug after applying
         cout << "  New army pool: " << p->getNumArmies() << endl;
     }
 
@@ -702,10 +695,8 @@ bool GameEngine::executeOrdersPhase() {
 
             if (!orders.empty()) {
                 Orders* nextOrder = orders.front();
-                orders.pop_front();  // remove from the list
 
                 std::cout << player->getName() << " executing order: " << *nextOrder << std::endl;
-                //validate()
                 nextOrder->execute();
 
                 ordersRemaining = true; // we executed at least one order
