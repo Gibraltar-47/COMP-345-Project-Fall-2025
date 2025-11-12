@@ -674,7 +674,7 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
 
             //creation of the order
             player->issueOrder(*deck,choice, source, armies, target, *targetPlayer);
-            cout << "Order issued successfully!" << endl;
+            cout << "Order Issue Attempt Made!" << endl;
 
             allDone = false; // player can make another action after this current one + turn order wait
 
