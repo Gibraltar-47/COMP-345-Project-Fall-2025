@@ -28,9 +28,12 @@ std::ostream& operator<<(std::ostream &strm, Territory& territory){
     strm << "Territory: " << territory.getName();
     return strm;
 }
-Orders::Orders() : issuingPlayer(nullptr) , sourceTerritory(nullptr), isActive(false), isValid(false) {}
-Orders::Orders(Player* issuingPlayer, Territory* sourceTerritory) : issuingPlayer(issuingPlayer), sourceTerritory(sourceTerritory), isActive(false), isValid(false){}
-Orders::Orders(const Orders& order){
+Orders::Orders() : issuingPlayer(nullptr) , sourceTerritory(nullptr), isActive(false), isValid(false){}
+Orders::Orders(Player* issuingPlayer, Territory* sourceTerritory,Observer* obs) : issuingPlayer(issuingPlayer), sourceTerritory(sourceTerritory), isActive(false), isValid(false)
+{
+    Subject::addObserver(obs);
+}
+Orders::Orders(const Orders& order): Subject(order){
 
     if (order.getIssuingPlayer())
         // this->issuingPlayer = new Player(*(order.issuingPlayer)); // might be fine if player class has copy constructor and assignment operator
@@ -51,6 +54,8 @@ Orders::Orders(const Orders& order){
 Orders::~Orders(){}
 
 Orders& Orders::operator=(const Orders& order){
+    this->observer_=order.observer_;
+
     if (this != &order){
         // delete this->getSourceTerritory(); // Free old memory before assignment
         // delete this->getIssuingPlayer();
@@ -106,18 +111,10 @@ Orders* Orders::allocateClone() const{
 void Orders::printOrder(std::ostream& strm) const{
     strm << "An Order is the superclass of all the individual orders.\nIt has no affect since it is an abstract class.";
 }
-// bool Orders::validate(){
-//     cout << "Orders::validate is abstract" << endl;
-//     return false;
-
-// }
-// void Orders::execute(){
-//     cout << "Orders::execute is abstract" << endl;
-// }
 
 
 OrdersDeploy::OrdersDeploy() : Orders(), numArmies(0) {}
-OrdersDeploy::OrdersDeploy(Player* issuingPlayer, Territory* sourceTerritory, int numArmies) : Orders(issuingPlayer, sourceTerritory), numArmies(numArmies){}
+OrdersDeploy::OrdersDeploy(Player* issuingPlayer, Territory* sourceTerritory, int numArmies,Observer* obs) : Orders(issuingPlayer, sourceTerritory,obs), numArmies(numArmies){}
 OrdersDeploy::OrdersDeploy(const OrdersDeploy& order) : Orders(order) {
     this->setNumArmies(order.getNumArmies());
 }
@@ -160,18 +157,20 @@ void OrdersDeploy::execute(){
     if (!isValid){
         cout << "Deploying to unowned territory " << this->getSourceTerritory()->getName() << " is invalid" << endl;
         Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+    notify(*this);
         delete o;
         return;
     }
     int currentNumArmies = this->getSourceTerritory()->getNumOfArmies();
     this->getSourceTerritory()->setNumOfArmies(currentNumArmies + this->getNumArmies());
 
+    notify(*this);
     Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
     delete o;
 }
 
 OrdersAdvance::OrdersAdvance() : Orders(), targetTerritory(nullptr), numArmies(0) {}
-OrdersAdvance::OrdersAdvance(Player* issuingPlayer, Territory* sourceTerritory, Territory* targetTerritory, int numArmies) : Orders(issuingPlayer, sourceTerritory), targetTerritory(targetTerritory), numArmies(numArmies){}
+OrdersAdvance::OrdersAdvance(Player* issuingPlayer, Territory* sourceTerritory, Territory* targetTerritory, int numArmies,Observer* obs) : Orders(issuingPlayer, sourceTerritory,obs), targetTerritory(targetTerritory), numArmies(numArmies){}
 OrdersAdvance::OrdersAdvance(const OrdersAdvance& order) : Orders(order) {
     if (order.getTargetTerritory()){
         // this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
@@ -248,6 +247,7 @@ void OrdersAdvance::execute(){
     if (!isValid){
         cout << "Invalid advance from territory " << this->getSourceTerritory()->getName() << " to territory " <<
             this->getTargetTerritory()->getName() << endl;
+    notify(*this);
         Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
         delete o;
         return;
@@ -258,6 +258,10 @@ void OrdersAdvance::execute(){
     if (this->getTargetTerritory()->getOwner()->equals(this->getIssuingPlayer())){
         this->getSourceTerritory()->setNumOfArmies(currentNumArmiesSource - this->getNumArmies());
         this->getTargetTerritory()->setNumOfArmies(currentNumArmiesTarget + this->getNumArmies());
+
+    notify(*this);
+        Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
+        delete o;
         return;
     }
 
@@ -294,6 +298,7 @@ void OrdersAdvance::execute(){
         this->getTargetTerritory()->setNumOfArmies(attackingArmies);
         this->getIssuingPlayer()->setEarnedCard(true);
     }
+    notify(*this);
     Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
     delete o;
 }
@@ -336,6 +341,7 @@ void OrdersBomb::execute(){
     bool isValid = this->validate();
     if (!isValid){
         cout << "Cannot perform bombing of territory " << this->getSourceTerritory()->getName() << endl;
+    notify(*this);
         Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
         delete o;
         return;
@@ -343,6 +349,7 @@ void OrdersBomb::execute(){
     int numArmiesBeforeBomb = this->getSourceTerritory()->getNumOfArmies();
     this->getSourceTerritory()->setNumOfArmies(numArmiesBeforeBomb / 2);
 
+    notify(*this);
     Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
     delete o;
 }
@@ -367,6 +374,8 @@ void OrdersBlockade::execute(){
     bool isValid = this->validate();
     if (!isValid){
         cout << "Blockade on territory that is not yours is invalid" << endl;
+
+    notify(*this);
         Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
         delete o;
         return;
@@ -377,12 +386,13 @@ void OrdersBlockade::execute(){
     this->getSourceTerritory()->setOwner(neutralPlayer);
     neutralPlayer->addTerritory(this->getSourceTerritory());
 
+    notify(*this);
     Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
     delete o;
 }
 
 OrdersAirlift::OrdersAirlift() : Orders(), targetTerritory(nullptr), numArmies(0) {}
-OrdersAirlift::OrdersAirlift(Player* issuingPlayer, Territory* sourceTerritory, Territory* targetTerritory, int numArmies) : Orders(issuingPlayer, sourceTerritory), targetTerritory(targetTerritory), numArmies(numArmies) {}
+OrdersAirlift::OrdersAirlift(Player* issuingPlayer, Territory* sourceTerritory, Territory* targetTerritory, int numArmies,Observer* obs) : Orders(issuingPlayer, sourceTerritory,obs), targetTerritory(targetTerritory), numArmies(numArmies) {}
 OrdersAirlift:: OrdersAirlift(const OrdersAirlift& order) : Orders(order) {
     if (order.getTargetTerritory())
         // this->targetTerritory = new Territory(*order.targetTerritory); // might be fine if Territory class has copy constructor and assignment operator
@@ -441,6 +451,8 @@ void OrdersAirlift::execute(){
     if (!isValid){
         cout << "Invalid airlift, cannot airlift from " << this->getSourceTerritory()->getName() << 
             " to " << this->getTargetTerritory()->getName() << endl;
+
+    notify(*this);
         Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
         delete o;
         return;
@@ -451,12 +463,13 @@ void OrdersAirlift::execute(){
     this->getSourceTerritory()->setNumOfArmies(sourceNumArmies - this->getNumArmies());
     this->getTargetTerritory()->setNumOfArmies(targetNumArmies + this->getNumArmies());
 
+    notify(*this);
     Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
     delete o;
 }
 
 OrdersNegotiate::OrdersNegotiate() : Orders(), enemyToTruce(nullptr) {}
-OrdersNegotiate::OrdersNegotiate(Player* issuingPlayer, Player* enemyToTruce) : Orders(issuingPlayer, nullptr), enemyToTruce(enemyToTruce) {}
+OrdersNegotiate::OrdersNegotiate(Player* issuingPlayer, Player* enemyToTruce,Observer* obs) : Orders(issuingPlayer, nullptr, obs), enemyToTruce(enemyToTruce) {}
 OrdersNegotiate::OrdersNegotiate(const OrdersNegotiate& order) : Orders(order){
     if (order.getEnemyToTruce())
         // this->enemyToTruce = new Player(*order.enemyToTruce); // might be fine if player class has copy constructor and assignment operator
@@ -502,8 +515,11 @@ bool OrdersNegotiate::validate(){
 }
 void OrdersNegotiate::execute(){
     bool isValid = this->validate();
-    if (!isValid){
+    if (!isValid)
+    {
         cout << "Cannot perform a negotiation with self or null player" << endl;
+
+        notify(*this);
         Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
         delete o;
         return;
@@ -511,18 +527,24 @@ void OrdersNegotiate::execute(){
     this->getIssuingPlayer()->addTruce(this->getEnemyToTruce());
     this->getEnemyToTruce()->addTruce(this->getIssuingPlayer());
 
+    notify(*this);
     Orders* o = this->getIssuingPlayer()->getOrderList()->remove(0);
     delete o;
 }
 
 
-OrdersList::OrdersList() {}
-OrdersList::OrdersList(OrdersList& orderList){
+OrdersList::OrdersList(Observer* obs)
+{
+    Subject::addObserver(obs);
+}
+OrdersList::OrdersList(OrdersList& orderList,Observer* obs){
     for (auto iterator : orderList.list){
         this->list.push_back(iterator->allocateClone());
     }
 }
 OrdersList& OrdersList::operator=(const OrdersList& orderList){
+
+    this->observer_=orderList.observer_;
     if (this != &orderList){
         for (auto order : this->list)
             delete order;
@@ -545,6 +567,9 @@ OrdersList::~OrdersList(){
 std::list<Orders*> OrdersList::getList() const{
     return this->list;
 }
+std::list<Orders*>& OrdersList::getList(){ //non-const version for modification of the orderlist
+    return this->list;
+}
 void OrdersList::setList(std::list<Orders*> list){
     for (auto order : this->list)
         delete order;
@@ -558,6 +583,7 @@ Orders* OrdersList::add(Orders* order){
     if (order == nullptr)
         return nullptr;
     this->list.push_back(order);
+    notify(*this);
     return order;
 }
 Orders* OrdersList::remove(const Orders& order){
@@ -598,3 +624,90 @@ Orders* OrdersList::move(const int sourceIndex, const int targetIndex){
     return movedOrder;
 
 }
+void Orders::notify(ILoggable& subject)
+{
+    observer_->update(*this);
+};
+
+
+string OrdersDeploy::stringToLog()
+{
+    string str="Order Deploy is executed:\n\nPlayer "+this->getIssuingPlayer()->getName()+" is deploying armies to territory "+this->getSourceTerritory()->getName()+"\n\n";
+    return str;
+};
+
+
+string OrdersAdvance::stringToLog()
+{
+    string str="Order Advance is executed:\n\nPlayer "+this->getIssuingPlayer()->getName()+" is advancing armies from territory "+this->getSourceTerritory()->getName()+" to "+ targetTerritory->getName()+"\n\n";
+    return str;
+};
+
+string OrdersBomb::stringToLog()
+{
+    string str="Order Bombing is executed:\n\nPlayer "+this->getIssuingPlayer()->getName()+" is bombing territory "+this->getSourceTerritory()->getName()+"\n\n";
+    return str;
+};
+
+string OrdersBlockade::stringToLog()
+{
+    string str="Order Blockade is executed:\n\nPlayer "+this->getIssuingPlayer()->getName()+" is blockading  territory "+this->getSourceTerritory()->getName()+"\n\n";
+    return str;
+};
+
+string OrdersAirlift::stringToLog()
+{
+    string str="Order Airlift is executed:\n\nPlayer "+this->getIssuingPlayer()->getName()+" is airlifting armies from territory "+this->getSourceTerritory()->getName()+" to "+ targetTerritory->getName()+"\n\n";
+    return str;
+};
+string OrdersNegotiate::stringToLog()
+{
+    string str="Order Negotiating is executed:\n\nPlayer "+this->getIssuingPlayer()->getName()+" is negotiating with player "+enemyToTruce->getName()+"\n\n";
+    return str;
+};
+
+string OrdersDeploy::stringTo()
+{
+    string str="Order Deploy :\n\nPlayer "+this->getIssuingPlayer()->getName()+" is deploying armies to territory "+this->getSourceTerritory()->getName()+"\n\n";
+    return str;
+};
+
+
+string OrdersAdvance::stringTo()
+{
+    string str="Order Advance :\n\nPlayer "+this->getIssuingPlayer()->getName()+" is advancing armies from territory "+this->getSourceTerritory()->getName()+" to "+ targetTerritory->getName()+"\n\n";
+    return str;
+};
+
+string OrdersBomb::stringTo()
+{
+    string str="Order Bombing :\n\nPlayer "+this->getIssuingPlayer()->getName()+" is bombing territory "+this->getSourceTerritory()->getName()+"\n\n";
+    return str;
+};
+
+string OrdersBlockade::stringTo()
+{
+    string str="Order Blockade :\n\nPlayer "+this->getIssuingPlayer()->getName()+" is blockading  territory "+this->getSourceTerritory()->getName()+"\n\n";
+    return str;
+};
+
+string OrdersAirlift::stringTo()
+{
+    string str="Order Airlift :\n\nPlayer "+this->getIssuingPlayer()->getName()+" is airlifting armies from territory "+this->getSourceTerritory()->getName()+" to "+ targetTerritory->getName()+"\n\n";
+    return str;
+};
+string OrdersNegotiate::stringTo()
+{
+    string str="Order Negotiating :\n\nPlayer "+this->getIssuingPlayer()->getName()+" is negotiating with player "+enemyToTruce->getName()+"\n\n";
+    return str;
+};
+
+void OrdersList::notify(ILoggable& subject)
+{
+    observer_->update(*this);
+};
+string OrdersList::stringToLog()
+{
+    string str="An order has been added to a player's order list:\n"+list.back()->stringTo()+"\n\n";
+    return str;
+};

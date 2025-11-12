@@ -41,7 +41,7 @@ bool isConnectedGraph(vector <vector<int>> &adjM, string n, string type){
             return false;
         }
     }
-    cout<<type<<" "<<n<<" is a connected graph"<<"\n";
+    cout<<type<<" "<<n<<" is a connected graph"<<"\n\n";
     return true;
 }
 
@@ -52,13 +52,15 @@ Map::Map(const string& n):name(n){}
 Map::Map(const Map& otherMap){
     this->name = otherMap.name;
 
-    for (Territory* t: otherMap.territories) {
-        this->territories.push_back(new Territory(*t));
-    }
-
     for (Continent* c: otherMap.continents) {
         this->continents.push_back(new Continent(*c));
     }
+    for (Territory *t: otherMap.territories) {
+        this->territories.push_back(new Territory(*t));
+        this->territories.back()->setContinent(this->getContinent(t->getContinent()->getName()));
+        this->getContinent(t->getContinent()->getName())->addTerritory(getTerritories().back());
+    }
+
 
     this->adjMatrix = otherMap.adjMatrix;
 }
@@ -86,13 +88,13 @@ Map& Map::operator = (const Map& otherMap){
         delete c;
     }
     continents.clear();
-
-    for (const Territory* t: otherMap.territories) {
-        this->territories.push_back(new Territory(*t));
-    }
-
-    for (const Continent* c: otherMap.continents) {
+    for (Continent* c: otherMap.continents) {
         this->continents.push_back(new Continent(*c));
+    }
+    for (Territory *t: otherMap.territories) {
+        this->territories.push_back(new Territory(*t));
+        this->territories.back()->setContinent(this->getContinent(t->getContinent()->getName()));
+        this->getContinent(t->getContinent()->getName())->addTerritory(getTerritories().back());
     }
 
     this->adjMatrix = otherMap.adjMatrix;
@@ -397,7 +399,7 @@ ostream& operator << (ostream& out, const Continent& continent){
 //constructor
 Territory::Territory(const string& n, Continent* c, const int x_coord, const int y_coord, const vector <string>& adjT):
     name(n),
-    continent(c), 
+    continent(new Continent(*c)),
     owner(nullptr),
     numOfArmies(0),
     x(x_coord),
@@ -408,7 +410,7 @@ Territory::Territory(const string& n, Continent* c, const int x_coord, const int
 //copy constructor
 Territory::Territory(const Territory& otherTerr){
     this->name=otherTerr.name;
-    this->continent=otherTerr.continent;
+    this->continent=new Continent(*otherTerr.continent);
     this->owner=otherTerr.owner;
     this->numOfArmies=otherTerr.numOfArmies;
     this->x=otherTerr.x;

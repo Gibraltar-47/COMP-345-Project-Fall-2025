@@ -4,22 +4,20 @@
 #include "./part1-map/Map.h"
 #include "./Player/Player.h"
 
+extern void testManualCommands();
+extern void testCommandProcessor();
+extern void testFileCommandProcessorAdapter();
 extern void testOrderExecution();
 extern void testGameStates();
-extern void testOrdersLists();
-extern void testCards();
-extern void testLoadMap();
-extern void testPlayers();
-
+extern void testMainGameLoop();
+extern void testLoggingObserver();
 
 int main(){
-    // testLoadMap();
-    // testPlayers();
-    // testOrdersLists();
-    // testCards();
-    // testGameStates();
-
+    testCommandProcessor();
+    testGameStates();
+    testMainGameLoop();
     testOrderExecution();
+    testLoggingObserver();
 
 
     return 0;
