@@ -34,7 +34,9 @@ class Player {
 public:
    Player();
    Player(const std::string& playerName);
-   Player(const Player& other); //copy constructor
+    Player(Observer* obs);
+    Player(const std::string& playerName, Observer* obs);
+    Player(const Player& other); //copy constructor
    Player& operator =(const Player& other); //assignment operator
    ~Player(); //destructor, clears up resources when a player obj is destroyed
    std::string getName() const;
@@ -54,7 +56,8 @@ public:
    std::vector<Territory*> toDefend(const std::vector<Territory*>& allTerritories) const;
    std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const;
   //added item
-   void issueOrder(Deck& deck, int type, Territory* source, int numArmies, Territory* target, Player& issuer);//execute all orders and clean up memory
+   void issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory, Player& player2, Observer*
+                   obs);//execute all orders and clean up memory
 
   void printStatus() const; //print player's name, territories
    bool equals(Player* player2);

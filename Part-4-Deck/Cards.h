@@ -5,6 +5,8 @@
 #include <list>
 #include <string>
 #include <vector>
+
+#include "LoggingObserver.h"
 #include "../part1-map/Map.h"
 // #include "../Orders/Orders.h"
 
@@ -52,7 +54,7 @@ class Card {
         void setName(const std::string& n);
 
         void play(Deck& deck, Hand* hand, OrdersList& olist, Player* player, Territory* territory,
-                    int mode, int numArmies, Territory* target, Player* otherPlayer);
+                  int mode, int numArmies, Territory* target, Player* otherPlayer, Observer* obs);
 
         friend std::ostream& operator<<(std::ostream& os, const Card& c);
 };

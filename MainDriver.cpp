@@ -10,12 +10,14 @@ extern void testFileCommandProcessorAdapter();
 extern void testOrderExecution();
 extern void testGameStates();
 extern void testMainGameLoop();
+extern void testLoggingObserver();
 
 int main(){
     testCommandProcessor();
     testGameStates();
     testMainGameLoop();
     testOrderExecution();
+    testLoggingObserver();
 
 
     return 0;

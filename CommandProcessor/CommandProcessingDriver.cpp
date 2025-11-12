@@ -2,23 +2,6 @@
 #include "CommandProcessing.h"
 #include <iostream>
 using namespace std;
-// void testManualCommands(){
-//     //testing some manual commands
-//     cout<<"Manual command test:\n";
-//     LogObserver* log=new LogObserver();
-//     Command c1(log,"loadmap worldmap.txt");
-//
-//     c1.saveEffect();
-//     cout<<c1.getCommand()<<" -> "<<c1.getEffect()<<endl;
-//     Command c2(log,"addplayer Alice");
-//     c2.saveEffect();
-//     cout<<c2.getCommand()<<" -> "<<c2.getEffect()<<endl;
-//     Command c3(log,"invalid");
-//     c3.saveEffect();
-//     cout<<c3.getCommand()<<" -> "<<c3.getEffect()<<endl;
-//
-//     delete log;
-// }
 void testCommandProcessor(){
     //testing some manual commands
     cout<<"Manual command test:\n";
@@ -87,38 +70,5 @@ void testCommandProcessor(){
 
     }
    
-
+    delete log3;
 }
-void testFileCommandProcessorAdapter(){
-    cout<<"Testing File Command Processor Adapter\n";
-    LogObserver* log=new LogObserver();
-    FileCommandProcessorAdapter fcp(log,"../CommandProcessor/Commands.txt");
-    string fState="start";
-    while(true){
-        Command* fCmnd = fcp.getCommand(fState);
-        if (!fCmnd) break; // EOF or couldn't open file
-        bool valid = fcp.validate(fCmnd, fState);
-        cout << *fCmnd << ", Valid?" << (valid ? " Yes" : " No") << endl;
-        string c = fCmnd->getCommand();
-        if(fState=="start"&& c.rfind("loadmap",0)==0) fState="maploaded";
-        else if(fState=="maploaded"&&c=="validatemap") fState="mapvalidated";
-        else if(fState=="mapvalidated"&& c.rfind("addplayer",0)==0) fState="playersadded";
-        else if(fState=="playersadded"&& c=="gamestart") fState="assignreinforcement";
-        else if(fState=="win"&& c=="replay") fState="start";
-        else if(c=="quit"){
-            cout<<"Exiting..."<<endl;
-            break;
-        }
-        cout<<"Current state: "<<fState<<endl;
-
-    }
-  
-
-
-}
-// int main(){
-//     testManualCommands();
-//     testCommandProcessor();
-//     testFileCommandProcessorAdapter();
-//     return 0;
-// }

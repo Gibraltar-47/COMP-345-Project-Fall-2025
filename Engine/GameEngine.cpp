@@ -169,7 +169,7 @@ void GameEngine::startupPhase()
                         if (name.empty()) {
                             cout << "Missing player name for addplayer\n";
                         } else {
-                            this->addPlayer(Player(name));
+                            this->addPlayer(Player(name, observer_));
                             command->saveEffect();
                             string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
                             changeState("playersadded", message);
@@ -331,7 +331,7 @@ void GameEngine::startupPhase()
                         if (name.empty()) {
                             cout << "Missing player name for addplayer\n";
                         } else {
-                            this->addPlayer(Player(name));
+                            this->addPlayer(Player(name, observer_));
                             command->saveEffect();
                             string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
                             changeState("playersadded", message);
@@ -670,7 +670,7 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
             }
 
             //creation of the order
-            player->issueOrder(*deck,choice, source, armies, target, *targetPlayer);
+            player->issueOrder(*deck,choice, source, armies, target, *targetPlayer, observer_);
             cout << "Order issued successfully!" << endl;
 
             allDone = false; // player can make another action after this current one + turn order wait

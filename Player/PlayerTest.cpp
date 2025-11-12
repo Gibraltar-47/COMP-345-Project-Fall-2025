@@ -11,14 +11,14 @@ using namespace std;
 
 
 
-Player::Player() : name("hi") {
-    orderList=new OrdersList();
+Player::Player(Observer* obs) : name("hi") {
+    orderList=new OrdersList(obs);
 }
 
 //cons with name
-Player::Player(const std:: string& playerName): name(playerName),numArmies(0),numFreeArmies(0), truceList() {
+Player::Player(const std:: string& playerName,Observer* obs): name(playerName),numArmies(0),numFreeArmies(0), truceList() {
     hand= new Hand(playerName);
-    orderList=new OrdersList();
+    orderList=new OrdersList(obs);
     territories= vector<Territory*>();
 }
 
@@ -158,14 +158,14 @@ void Player::addOrder(Orders* ord) {
     orderList->add(ord);
 }
 
-void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory, Player& player2) {
+void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory, Player& player2,Observer* obs) {
 
     switch (mode) {
         case 1: //Deploy
-            orderList->add(new OrdersDeploy(this,sourceTerritory,numArmies));
+            orderList->add(new OrdersDeploy(this,sourceTerritory,numArmies,obs));
             break;
         case 2: //Advance
-            orderList->add(new OrdersAdvance(this,sourceTerritory,targetTerritory, numArmies));
+            orderList->add(new OrdersAdvance(this,sourceTerritory,targetTerritory, numArmies,obs));
             break;
         case 3:
         case 4:
@@ -187,7 +187,7 @@ void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int nu
             }
             OrdersList* olist = this->getOrderList();
 
-            matchingCard->play(deck, hand, *olist, this, sourceTerritory,mode,numArmies,targetTerritory,&player2); //dereference problem
+            matchingCard->play(deck, hand, *olist, this, sourceTerritory,mode,numArmies,targetTerritory,&player2, obs); //dereference problem
             cout << name << " played a " << matchingCard->getName() << " card." << endl;
             break;
 

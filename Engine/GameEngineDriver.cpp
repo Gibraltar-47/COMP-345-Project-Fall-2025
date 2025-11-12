@@ -14,6 +14,7 @@ void testGameStates() {
     GameEngine engine(observer);   // create a new engine instance
     engine.startupPhase();        // start the game loop
 
+    delete observer;
     cout << "===== GAME ENDED =====" << endl;
 }
 
@@ -26,12 +27,13 @@ void testMainGameLoop() {
     cout << "Testing a player removed from the game" << endl;
     cout << "Testing execution of orders and their effects on the game state." << endl;
 
+    LogObserver* observer = new LogObserver();
     Map testMap("TestMap");
-    Player p1("John");
-    Player p2("Will");
-    Player p3("Bill");
-    Player p4("Eve");
-    Player p5("Spectator");
+    Player p1("John",observer);
+    Player p2("Will",observer);
+    Player p3("Bill",observer);
+    Player p4("Eve",observer);
+    Player p5("Spectator",observer);
     // Create Continents
     Continent* continent1 = new Continent("ContinentA", 5);
     Continent* continent2 = new Continent("ContinentB", 3);
@@ -185,7 +187,6 @@ void testMainGameLoop() {
     std::cout << testMap << std::endl;
 
     Deck* deck = new Deck();
-    LogObserver* observer = new LogObserver();
     GameEngine engine(observer);
 
     engine.giveDeck(deck);
@@ -239,9 +240,9 @@ void testMainGameLoop() {
     cout << miniMap << endl;
 
     // Create 3 players
-    Player pA("Alice");
-    Player pB("Bob");
-    Player pC("Cathy");
+    Player pA("Alice",observer);
+    Player pB("Bob",observer);
+    Player pC("Cathy",observer);
 
     // t4 starts neutral
     t1->setOwner(&pA);
@@ -288,6 +289,7 @@ void testMainGameLoop() {
     // Run the small game
     miniEngine.mainGameLoop();
 
+    delete observer;
     cout << "===== MINI GAME ENDED =====" << endl;
 }
 

@@ -52,24 +52,25 @@ void Card::play(Deck& deck,
                 int mode,             //Defaults to 3 (bomb)
                 int numArmies,        //Defaults to 0
                 Territory* target,    //Defaults to nullptr
-                Player* otherPlayer   //Defaults to nullptr if not used
+                Player* otherPlayer,   //Defaults to nullptr if not used
+                Observer* obs
     ) {
     switch (mode) {
         case 3: //Bombs
-            olist.add(new OrdersBomb(player, territory));
+            olist.add(new OrdersBomb(player, territory,obs));
             break;
         case 4: //Blockade
-            olist.add(new OrdersBlockade(player, territory));
+            olist.add(new OrdersBlockade(player, territory,obs));
             break;
         case 5: //Airlift
-            olist.add(new OrdersAirlift(player, territory, target, numArmies));
+            olist.add(new OrdersAirlift(player, territory, target, numArmies,obs));
             break;
         case 6: //Negotiate
-            olist.add(new OrdersNegotiate(player, otherPlayer));
+            olist.add(new OrdersNegotiate(player, otherPlayer,obs));
             break;
         default: //Invalid mode
             cout << "Invalid mode of play, will default to Bomb" << endl;
-            olist.add(new OrdersBomb(player, territory)); //Need another placeholder
+            olist.add(new OrdersBomb(player, territory,obs)); //Need another placeholder
             break;
 
     }

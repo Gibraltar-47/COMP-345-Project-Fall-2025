@@ -26,6 +26,9 @@ void printPlayerTerrAndArmies(Player* p1, Player* p2, Player* neutralPlayer){
 
 void testOrderExecution(){
     cout << "-----------------------------------------------------------------------" << endl;
+
+    LogObserver* observer = new LogObserver();
+
     std::vector<std::string> adj(5);
     Continent* c1 = new Continent("NA", 5);
     std::string name1 = "Saskatchewan";
@@ -43,28 +46,28 @@ void testOrderExecution(){
     Territory* Ontario = new Territory(name3, c1, 5, 6, adjOntario);
     Territory* Quebec = new Territory(name4, c1, 7 ,8, adjQuebec);
 
-    Player* p1 = new Player("Shawn");
+    Player* p1 = new Player("Shawn",observer);
     p1->addTerritory(Saskatchewan);
 
-    Player* p2 = new Player("Howard");
+    Player* p2 = new Player("Howard",observer);
     p2->addTerritory(Quebec);
 
     // Define and initialize the neutral player (to be done in game engine)
-    Player* neutralPlayer = new Player("neutral");
+    Player* neutralPlayer = new Player("neutral",observer);
     OrdersBlockade::neutralPlayer = neutralPlayer;
     neutralPlayer->addTerritory(Manitoba);
     neutralPlayer->addTerritory(Ontario);
 
 
-    Orders* iorder1 = new OrdersDeploy(p2, Saskatchewan, 10);
-    Orders* iorder2 = new OrdersAdvance(p2, Saskatchewan, Quebec, 10);
-    Orders* iorder3 = new OrdersAdvance(p2, Quebec, Manitoba, 10);
-    Orders* iorder4 = new OrdersBomb(p2, Quebec);
-    Orders* iorder5 = new OrdersBomb(p2, Saskatchewan);
-    Orders* iorder6 = new OrdersBlockade(p2, Saskatchewan);
-    Orders* iorder7 = new OrdersAirlift(p2, Saskatchewan, Quebec, 10);
-    Orders* iorder8 = new OrdersAirlift(p2, Quebec, Saskatchewan, 10);
-    Orders* iorder9 = new OrdersNegotiate(p2, p2);
+    Orders* iorder1 = new OrdersDeploy(p2, Saskatchewan, 10,observer);
+    Orders* iorder2 = new OrdersAdvance(p2, Saskatchewan, Quebec, 10,observer);
+    Orders* iorder3 = new OrdersAdvance(p2, Quebec, Manitoba, 10,observer);
+    Orders* iorder4 = new OrdersBomb(p2, Quebec,observer);
+    Orders* iorder5 = new OrdersBomb(p2, Saskatchewan,observer);
+    Orders* iorder6 = new OrdersBlockade(p2, Saskatchewan,observer);
+    Orders* iorder7 = new OrdersAirlift(p2, Saskatchewan, Quebec, 10,observer);
+    Orders* iorder8 = new OrdersAirlift(p2, Quebec, Saskatchewan, 10,observer);
+    Orders* iorder9 = new OrdersNegotiate(p2, p2,observer);
 
     Orders* ilist[9] = {iorder1, iorder2, iorder3, iorder4, iorder5, iorder6, iorder7, iorder8, iorder9};
 
@@ -87,8 +90,8 @@ void testOrderExecution(){
 
     // Perform Deploys
     cout << "\nDeploying armies" << endl;
-    p1->getOrderList()->add(new OrdersDeploy(p1, Saskatchewan, 100));
-    p2->getOrderList()->add(new OrdersDeploy(p2, Quebec, 20));
+    p1->getOrderList()->add(new OrdersDeploy(p1, Saskatchewan, 100,observer));
+    p2->getOrderList()->add(new OrdersDeploy(p2, Quebec, 20,observer));
     p1->getOrderList()->getList().front()->execute();
     p2->getOrderList()->getList().front()->execute();
 
@@ -96,8 +99,8 @@ void testOrderExecution(){
 
     // Perform advances
     cout << "Advancing armies" << endl;
-    p1->getOrderList()->add(new OrdersAdvance(p1, Saskatchewan, Manitoba, 95));
-    p2->getOrderList()->add(new OrdersAdvance(p2, Quebec, Ontario, 2));
+    p1->getOrderList()->add(new OrdersAdvance(p1, Saskatchewan, Manitoba, 95,observer));
+    p2->getOrderList()->add(new OrdersAdvance(p2, Quebec, Ontario, 2,observer));
     p1->getOrderList()->getList().front()->execute();
     p2->getOrderList()->getList().front()->execute();
     // ------------------------------------------------------------------------
@@ -108,22 +111,22 @@ void testOrderExecution(){
 
     // Attempt to conquer a territory that has defenses
     cout << "Player 1 capturing Player 2 Ontario" << endl;
-    p1->getOrderList()->add(new OrdersAdvance(p1, Manitoba, Ontario, 20));
+    p1->getOrderList()->add(new OrdersAdvance(p1, Manitoba, Ontario, 20,observer));
     p1->getOrderList()->getList().front()->execute();
 
     printPlayerTerrAndArmies(p1, p2, neutralPlayer);
 
     // Perform Negotiate order
     cout << "Negotiation" << endl;
-    p1->getOrderList()->add(new OrdersNegotiate(p1, p2));
+    p1->getOrderList()->add(new OrdersNegotiate(p1, p2,observer));
     p1->getOrderList()->getList().front()->execute();
 
-    p1->getOrderList()->add(new OrdersAdvance(p1, Ontario, Quebec, 3));
-    p1->getOrderList()->add(new OrdersBomb(p1, Quebec));
+    p1->getOrderList()->add(new OrdersAdvance(p1, Ontario, Quebec, 3,observer));
+    p1->getOrderList()->add(new OrdersBomb(p1, Quebec,observer));
     p1->getOrderList()->getList().front()->execute();
     p1->getOrderList()->getList().front()->execute();
-    p2->getOrderList()->add(new OrdersAdvance(p2, Quebec, Ontario, 7));
-    p2->getOrderList()->add(new OrdersBomb(p2, Ontario));
+    p2->getOrderList()->add(new OrdersAdvance(p2, Quebec, Ontario, 7,observer));
+    p2->getOrderList()->add(new OrdersBomb(p2, Ontario,observer));
     p2->getOrderList()->getList().front()->execute();
     p2->getOrderList()->getList().front()->execute();
 
@@ -135,21 +138,21 @@ void testOrderExecution(){
 
     // Perform a blockade
     cout << "Blockade" << endl;
-    p1->getOrderList()->add(new OrdersBlockade(p1, Ontario));
+    p1->getOrderList()->add(new OrdersBlockade(p1, Ontario,observer));
     p1->getOrderList()->getList().front()->execute();
 
     printPlayerTerrAndArmies(p1, p2, neutralPlayer);
 
     // Perform Bombing
     cout << "Bomb" << endl;
-    p1->getOrderList()->add(new OrdersBomb(p1, Ontario));
+    p1->getOrderList()->add(new OrdersBomb(p1, Ontario,observer));
     p1->getOrderList()->getList().front()->execute();
 
     printPlayerTerrAndArmies(p1, p2, neutralPlayer);
 
     // Advance (Try to capture)
     cout << "Advance armies" << endl;
-    p1->getOrderList()->add(new OrdersAdvance(p1, Manitoba, Ontario, Manitoba->getNumOfArmies()));
+    p1->getOrderList()->add(new OrdersAdvance(p1, Manitoba, Ontario, Manitoba->getNumOfArmies(),observer));
     p1->getOrderList()->getList().front()->execute();
 
     printPlayerTerrAndArmies(p1, p2, neutralPlayer);
@@ -157,7 +160,7 @@ void testOrderExecution(){
 
     // Airlift (from start to a further owned territory)
     cout << "Airlift from Saskatchewan to Ontario" << endl;
-    p1->getOrderList()->add(new OrdersAirlift(p1, Saskatchewan, Ontario, Saskatchewan->getNumOfArmies()));
+    p1->getOrderList()->add(new OrdersAirlift(p1, Saskatchewan, Ontario, Saskatchewan->getNumOfArmies(),observer));
     p1->getOrderList()->getList().front()->execute();
 
     printPlayerTerrAndArmies(p1, p2, neutralPlayer);
