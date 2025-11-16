@@ -163,9 +163,11 @@ void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int nu
     switch (mode) {
         case 1: //Deploy
             orderList->add(new OrdersDeploy(this,sourceTerritory,numArmies,obs));
+            numFreeArmies -= numArmies;
             break;
         case 2: //Advance
             orderList->add(new OrdersAdvance(this,sourceTerritory,targetTerritory, numArmies,obs));
+            numFreeArmies -= numArmies;
             break;
         case 3:
         case 4:
@@ -187,7 +189,8 @@ void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int nu
             }
             OrdersList* olist = this->getOrderList();
 
-            matchingCard->play(deck, hand, *olist, this, sourceTerritory,mode,numArmies,targetTerritory,&player2, obs); //dereference problem
+            matchingCard->play(deck, hand, *olist, this, sourceTerritory,mode,numArmies,targetTerritory,&player2, obs);
+            numFreeArmies -= numArmies;
             cout << name << " played a " << matchingCard->getName() << " card." << endl;
             break;
 
