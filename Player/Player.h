@@ -6,6 +6,7 @@
 #include <iostream>
 #include "../Part-4-Deck/Cards.h"
 
+
 // Forward declarations
 class Territory;
 class Card;
@@ -13,6 +14,7 @@ class Orders;
 class OrdersList;
 class Deck;
 class Hand;
+class PlayerStrategy;
 
 using namespace std;
 
@@ -23,6 +25,8 @@ class Player {
     std::vector<Card*> handCards;
     OrdersList* orderList;
     Hand* hand;
+
+    PlayerStrategy* ps;
 
     std::vector<Player*> truceList;
     bool earnedCard;

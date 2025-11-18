@@ -5,7 +5,7 @@
 #ifndef COMP_345_PROJECT_FALL_2025_2_PLAYERSTRATEGY_H
 #define COMP_345_PROJECT_FALL_2025_2_PLAYERSTRATEGY_H
 
-#include "Player.h"
+#include "../Player/Player.h"
 
 
 class PlayerStrategy {
