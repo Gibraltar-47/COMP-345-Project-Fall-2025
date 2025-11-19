@@ -5,7 +5,7 @@
 #include <vector>
 #include <iostream>
 #include "../Part-4-Deck/Cards.h"
-
+#include "PlayerStrategy.h"
 
 // Forward declarations
 class Territory;
@@ -14,7 +14,6 @@ class Orders;
 class OrdersList;
 class Deck;
 class Hand;
-class PlayerStrategy;
 
 using namespace std;
 
@@ -25,8 +24,7 @@ class Player {
     std::vector<Card*> handCards;
     OrdersList* orderList;
     Hand* hand;
-
-    PlayerStrategy* ps;
+    PlayerStrategy* playerSt;
 
     std::vector<Player*> truceList;
     bool earnedCard;
@@ -39,7 +37,7 @@ public:
    Player();
    Player(const std::string& playerName);
     Player(Observer* obs);
-    Player(const std::string& playerName, Observer* obs);
+    Player(const std::string& playerName, Observer* obs,PlayerStrategy* plSt);
     Player(const Player& other); //copy constructor
    Player& operator =(const Player& other); //assignment operator
    ~Player(); //destructor, clears up resources when a player obj is destroyed
@@ -60,8 +58,8 @@ public:
    std::vector<Territory*> toDefend(const std::vector<Territory*>& allTerritories) const;
    std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const;
   //added item
-   void issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory, Player& player2, Observer*
-                   obs);//execute all orders and clean up memory
+   void issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory, Player& player2, Observer* obs);
+   //execute all orders and clean up memory
 
   void printStatus() const; //print player's name, territories
    bool equals(Player* player2);

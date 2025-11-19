@@ -2,6 +2,7 @@
 #include "../Orders/Orders.h"
 #include "../part1-map/Map.h"
 #include "../Part-4-Deck/Cards.h"
+#include "PlayerStrategy.h"
 
 #include <iostream>
 #include <algorithm>
@@ -16,15 +17,17 @@ Player::Player(Observer* obs) : name("hi") {
 }
 
 //cons with name
-Player::Player(const std:: string& playerName,Observer* obs): name(playerName),numArmies(0),numFreeArmies(0), truceList() {
+Player::Player(const std:: string& playerName,Observer* obs, PlayerStrategy* plSt): name(playerName),numArmies(0),numFreeArmies(0), truceList() {
     hand= new Hand(playerName);
     orderList=new OrdersList(obs);
     territories= vector<Territory*>();
+    playerSt=plSt; 
 }
 
 Player::Player(const Player& other)
 {
     name = other.name;
+    playerSt=other.playerSt;
     hand = new Hand(this->name);
 
     // Deep copy territories
@@ -61,6 +64,7 @@ Player& Player::operator=(const Player& other) {
     truceList.clear();
 
     name = other.name;
+    playerSt=other.playerSt;
 
     // Deep copy again
     for (auto t : other.territories) territories.push_back(t);
@@ -159,46 +163,9 @@ void Player::addOrder(Orders* ord) {
 }
 
 void Player::issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory, Player& player2,Observer* obs) {
+this->playerSt->issueOrder(deck,mode, sourceTerritory,numArmies,targetTerritory,player2,obs);
 
-    switch (mode) {
-        case 1: //Deploy
-            orderList->add(new OrdersDeploy(this,sourceTerritory,numArmies,obs));
-            numFreeArmies -= numArmies;
-            break;
-        case 2: //Advance
-            orderList->add(new OrdersAdvance(this,sourceTerritory,targetTerritory, numArmies,obs));
-            numFreeArmies -= numArmies;
-            break;
-        case 3:
-        case 4:
-        case 5:
-        case 6: {
-            Card* matchingCard = nullptr;
-            for (Card* card: hand->getCards()) {
-                if ((mode == 3 && card->getName() == "Bomb") ||
-                    (mode == 4 && card->getName() == "Blockade") ||
-                    (mode == 5 && card->getName() == "Airlift") ||
-                    (mode == 6 && card->getName() == "Diplomacy")) {
-                    matchingCard = card;
-                    break;
-                    }
-            }
-            if (!matchingCard) {
-                cout << name << " doesn't have the card required for this order." << endl;
-                return;
-            }
-            OrdersList* olist = this->getOrderList();
-
-            matchingCard->play(deck, hand, *olist, this, sourceTerritory,mode,numArmies,targetTerritory,&player2, obs);
-            numFreeArmies -= numArmies;
-            cout << name << " played a " << matchingCard->getName() << " card." << endl;
-            break;
-
-        }
-        default:
-            cout << "Invalid order mode." << endl;
-
-    }
+    
 }
 
 //returns a list of territories the player owns(to defend)
@@ -237,35 +204,7 @@ vector<Territory*> Player::toDefend(const std::vector<Territory*>& allTerritorie
     std::sort(defendList.begin(), defendList.end(), [](Territory* t1, Territory* t2){return t1->getNumOfArmies(), t2->getNumOfArmies();});
     return defendList;
     */
-    std::vector<Territory*> defendList;
-    struct Info { Territory* t; int threat; int armies; };
-
-    std::vector<Info> infos;
-    for (Territory* t : territories) {
-        if (!t) continue;
-        int threatCount = 0;
-        for (const std::string& adjName : t->getAdjTerritoriesNames()) {
-            auto it = std::find_if(allTerritories.begin(), allTerritories.end(),
-                                   [&](Territory* cand) { return cand && cand->getName() == adjName; });
-            if (it != allTerritories.end()) {
-                Territory* cand = *it;
-                if (cand->getOwner() != this) ++threatCount;
-            }
-        }
-        infos.push_back({t, threatCount, t->getNumOfArmies()});
-    }
-
-    // Sort by descending threat (border territories first), then ascending armies (weaker first)
-    std::sort(infos.begin(), infos.end(), [](const Info& a, const Info& b) {
-        if (a.threat != b.threat) return a.threat > b.threat;
-        return a.armies < b.armies;
-    });
-
-    for (auto &i : infos) defendList.push_back(i.t);
-    return defendList;
-
-
-}
+} 
 
 //returns list of territories adjacent to player's territories but owned by other player(to attack)
 vector<Territory*> Player::toAttack(const std::vector<Territory*>& allTerritories) const {                              //Require changes to work as intended

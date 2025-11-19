@@ -5,6 +5,7 @@
 #include "../Orders/Orders.h"
 #include "../part1-map/Map.h"
 #include "../Part-4-Deck/Cards.h"
+#include "PlayerStrategy.h"
 
 #include <iostream>
 #include <vector>
