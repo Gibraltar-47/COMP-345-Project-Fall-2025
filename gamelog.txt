@@ -1310,3 +1310,365 @@ A new command has been saved!:
 get
 
 
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validate map
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+quit
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamesart
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap worldMap
+
+
+A command's effect has been saved!
+Command : 
+loadmap worldMap
+Effect : 
+map worldMap loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer Alyssa
+
+
+A new command has been saved!:
+addplayer Rob
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+loadmap Antartica.map
+
+
+A command's effect has been saved!
+Command : 
+loadmap Antartica.map
+Effect : 
+map Antartica.map loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+loadmap Antartica.map
+
+
+A command's effect has been saved!
+Command : 
+loadmap Antartica.map
+Effect : 
+map Antartica.map loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemao
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+loadmap Andorra.map
+
+
+A command's effect has been saved!
+Command : 
+loadmap Andorra.map
+Effect : 
+map Andorra.map loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemap
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap Antartica.map
+
+
+A command's effect has been saved!
+Command : 
+loadmap Antartica.map
+Effect : 
+map Antartica.map loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap Antartica
+
+
+A command's effect has been saved!
+Command : 
+loadmap Antartica
+Effect : 
+map Antartica loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemap
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+kdjfnbdfniobrnwnegoiern
+
+
+A new command has been saved!:
+loadmap efkjbngkjefrng
+
+
+A command's effect has been saved!
+Command : 
+loadmap efkjbngkjefrng
+Effect : 
+map efkjbngkjefrng loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap Antartica.map
+
+
+A command's effect has been saved!
+Command : 
+loadmap Antartica.map
+Effect : 
+map Antartica.map loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap dfkbvsufhviowdhfviofshviohefiobhefoihbeofbhn
+
+
+A command's effect has been saved!
+Command : 
+loadmap dfkbvsufhviowdhfviofshviohefiobhefoihbeofbhn
+Effect : 
+map dfkbvsufhviowdhfviofshviohefiobhefoihbeofbhn loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemap
+
+
