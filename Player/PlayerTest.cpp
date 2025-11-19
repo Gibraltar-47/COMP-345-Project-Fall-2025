@@ -14,7 +14,11 @@ using namespace std;
 Player::Player(Observer* obs) : name("hi") {
     orderList=new OrdersList(obs);
 }
-
+Player::Player(const std:: string& playerName): name(playerName),numArmies(0),numFreeArmies(0), truceList() {
+    hand= new Hand(playerName);
+    orderList=new OrdersList();
+    territories= vector<Territory*>();
+}
 //cons with name
 Player::Player(const std:: string& playerName,Observer* obs): name(playerName),numArmies(0),numFreeArmies(0), truceList() {
     hand= new Hand(playerName);

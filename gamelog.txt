@@ -1,0 +1,1312 @@
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatempa
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Howard is deploying armies to territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Saskatchewan to Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Quebec to Manitoba
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Howard is bombing territory Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Howard is bombing territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Blockade :
+
+Player Howard is blockading  territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Airlift :
+
+Player Howard is airlifting armies from territory Saskatchewan to Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Airlift :
+
+Player Howard is airlifting armies from territory Quebec to Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Negotiating :
+
+Player Howard is negotiating with player Howard
+
+
+
+
+Order Deploy is executed:
+
+Player Howard is deploying armies to territory Saskatchewan
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Saskatchewan to Quebec
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Quebec to Manitoba
+
+
+Order Bombing is executed:
+
+Player Howard is bombing territory Quebec
+
+
+Order Bombing is executed:
+
+Player Howard is bombing territory Saskatchewan
+
+
+Order Blockade is executed:
+
+Player Howard is blockading  territory Saskatchewan
+
+
+Order Airlift is executed:
+
+Player Howard is airlifting armies from territory Saskatchewan to Quebec
+
+
+Order Airlift is executed:
+
+Player Howard is airlifting armies from territory Quebec to Saskatchewan
+
+
+Order Negotiating is executed:
+
+Player Howard is negotiating with player Howard
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Howard is deploying armies to territory Quebec
+
+
+
+
+Order Deploy is executed:
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+Order Deploy is executed:
+
+Player Howard is deploying armies to territory Quebec
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Saskatchewan to Manitoba
+
+
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Saskatchewan to Manitoba
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+An order has been added to a player's order list:
+Order Negotiating :
+
+Player Shawn is negotiating with player Howard
+
+
+
+
+Order Negotiating is executed:
+
+Player Shawn is negotiating with player Howard
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Ontario to Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Shawn is bombing territory Quebec
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Ontario to Quebec
+
+
+Order Bombing is executed:
+
+Player Shawn is bombing territory Quebec
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Howard is bombing territory Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+Order Bombing is executed:
+
+Player Howard is bombing territory Ontario
+
+
+An order has been added to a player's order list:
+Order Blockade :
+
+Player Shawn is blockading  territory Ontario
+
+
+
+
+Order Blockade is executed:
+
+Player Shawn is blockading  territory Ontario
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Shawn is bombing territory Ontario
+
+
+
+
+Order Bombing is executed:
+
+Player Shawn is bombing territory Ontario
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+An order has been added to a player's order list:
+Order Airlift :
+
+Player Shawn is airlifting armies from territory Saskatchewan to Ontario
+
+
+
+
+Order Airlift is executed:
+
+Player Shawn is airlifting armies from territory Saskatchewan to Ontario
+
+
+A command's effect has been saved!
+Command : 
+loadmap
+Effect : 
+missing map name
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+
+
+Order Deploy is executed:
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Howard is deploying armies to territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Saskatchewan to Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Quebec to Manitoba
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Howard is bombing territory Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Howard is bombing territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Blockade :
+
+Player Howard is blockading  territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Airlift :
+
+Player Howard is airlifting armies from territory Saskatchewan to Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Airlift :
+
+Player Howard is airlifting armies from territory Quebec to Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Negotiating :
+
+Player Howard is negotiating with player Howard
+
+
+
+
+Order Deploy is executed:
+
+Player Howard is deploying armies to territory Saskatchewan
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Saskatchewan to Quebec
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Quebec to Manitoba
+
+
+Order Bombing is executed:
+
+Player Howard is bombing territory Quebec
+
+
+Order Bombing is executed:
+
+Player Howard is bombing territory Saskatchewan
+
+
+Order Blockade is executed:
+
+Player Howard is blockading  territory Saskatchewan
+
+
+Order Airlift is executed:
+
+Player Howard is airlifting armies from territory Saskatchewan to Quebec
+
+
+Order Airlift is executed:
+
+Player Howard is airlifting armies from territory Quebec to Saskatchewan
+
+
+Order Negotiating is executed:
+
+Player Howard is negotiating with player Howard
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Howard is deploying armies to territory Quebec
+
+
+
+
+Order Deploy is executed:
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+Order Deploy is executed:
+
+Player Howard is deploying armies to territory Quebec
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Saskatchewan to Manitoba
+
+
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Saskatchewan to Manitoba
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+An order has been added to a player's order list:
+Order Negotiating :
+
+Player Shawn is negotiating with player Howard
+
+
+
+
+Order Negotiating is executed:
+
+Player Shawn is negotiating with player Howard
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Ontario to Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Shawn is bombing territory Quebec
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Ontario to Quebec
+
+
+Order Bombing is executed:
+
+Player Shawn is bombing territory Quebec
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Howard is bombing territory Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+Order Bombing is executed:
+
+Player Howard is bombing territory Ontario
+
+
+An order has been added to a player's order list:
+Order Blockade :
+
+Player Shawn is blockading  territory Ontario
+
+
+
+
+Order Blockade is executed:
+
+Player Shawn is blockading  territory Ontario
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Shawn is bombing territory Ontario
+
+
+
+
+Order Bombing is executed:
+
+Player Shawn is bombing territory Ontario
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+An order has been added to a player's order list:
+Order Airlift :
+
+Player Shawn is airlifting armies from territory Saskatchewan to Ontario
+
+
+
+
+Order Airlift is executed:
+
+Player Shawn is airlifting armies from territory Saskatchewan to Ontario
+
+
+A command's effect has been saved!
+Command : 
+loadmap
+Effect : 
+missing map name
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+
+
+Order Deploy is executed:
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+The state of the game has changed!
+State:	reinforcement
+
+
+The state of the game has changed!
+State:	issueorders
+
+
+The state of the game has changed!
+State:	executeorders
+
+
+The state of the game has changed!
+State:	start
+
+
+The state of the game has changed!
+State:	reinforcement
+
+
+The state of the game has changed!
+State:	issueorders
+
+
+The state of the game has changed!
+State:	executeorders
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Howard is deploying armies to territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Saskatchewan to Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Quebec to Manitoba
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Howard is bombing territory Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Howard is bombing territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Blockade :
+
+Player Howard is blockading  territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Airlift :
+
+Player Howard is airlifting armies from territory Saskatchewan to Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Airlift :
+
+Player Howard is airlifting armies from territory Quebec to Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Negotiating :
+
+Player Howard is negotiating with player Howard
+
+
+
+
+Order Deploy is executed:
+
+Player Howard is deploying armies to territory Saskatchewan
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Saskatchewan to Quebec
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Quebec to Manitoba
+
+
+Order Bombing is executed:
+
+Player Howard is bombing territory Quebec
+
+
+Order Bombing is executed:
+
+Player Howard is bombing territory Saskatchewan
+
+
+Order Blockade is executed:
+
+Player Howard is blockading  territory Saskatchewan
+
+
+Order Airlift is executed:
+
+Player Howard is airlifting armies from territory Saskatchewan to Quebec
+
+
+Order Airlift is executed:
+
+Player Howard is airlifting armies from territory Quebec to Saskatchewan
+
+
+Order Negotiating is executed:
+
+Player Howard is negotiating with player Howard
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Howard is deploying armies to territory Quebec
+
+
+
+
+Order Deploy is executed:
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+Order Deploy is executed:
+
+Player Howard is deploying armies to territory Quebec
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Saskatchewan to Manitoba
+
+
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Saskatchewan to Manitoba
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+An order has been added to a player's order list:
+Order Negotiating :
+
+Player Shawn is negotiating with player Howard
+
+
+
+
+Order Negotiating is executed:
+
+Player Shawn is negotiating with player Howard
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Ontario to Quebec
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Shawn is bombing territory Quebec
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Ontario to Quebec
+
+
+Order Bombing is executed:
+
+Player Shawn is bombing territory Quebec
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Howard is bombing territory Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Howard is advancing armies from territory Quebec to Ontario
+
+
+Order Bombing is executed:
+
+Player Howard is bombing territory Ontario
+
+
+An order has been added to a player's order list:
+Order Blockade :
+
+Player Shawn is blockading  territory Ontario
+
+
+
+
+Order Blockade is executed:
+
+Player Shawn is blockading  territory Ontario
+
+
+An order has been added to a player's order list:
+Order Bombing :
+
+Player Shawn is bombing territory Ontario
+
+
+
+
+Order Bombing is executed:
+
+Player Shawn is bombing territory Ontario
+
+
+An order has been added to a player's order list:
+Order Advance :
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+
+
+Order Advance is executed:
+
+Player Shawn is advancing armies from territory Manitoba to Ontario
+
+
+An order has been added to a player's order list:
+Order Airlift :
+
+Player Shawn is airlifting armies from territory Saskatchewan to Ontario
+
+
+
+
+Order Airlift is executed:
+
+Player Shawn is airlifting armies from territory Saskatchewan to Ontario
+
+
+A command's effect has been saved!
+Command : 
+loadmap
+Effect : 
+missing map name
+
+
+An order has been added to a player's order list:
+Order Deploy :
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+
+
+Order Deploy is executed:
+
+Player Shawn is deploying armies to territory Saskatchewan
+
+
+A new command has been saved!:
+get
+
+

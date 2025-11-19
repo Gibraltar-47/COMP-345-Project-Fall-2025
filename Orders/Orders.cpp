@@ -532,7 +532,7 @@ void OrdersNegotiate::execute(){
     delete o;
 }
 
-
+OrdersList::OrdersList() {}
 OrdersList::OrdersList(Observer* obs)
 {
     Subject::addObserver(obs);

@@ -6,8 +6,8 @@
 #include "../CommandProcessor/CommandProcessing.h"
 #include <iostream>
 
-#include "Orders.h"
-#include "Player.h"
+#include "../Orders/Orders.h"
+#include "../Player/Player.h"
 
 using std::cout;
 

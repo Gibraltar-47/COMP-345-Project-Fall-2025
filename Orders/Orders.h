@@ -44,8 +44,8 @@ public:
     virtual void execute() = 0;
 
     void notify(ILoggable& subject) override;
-    virtual string stringToLog()=0;
-    virtual string stringTo()=0;
+    virtual string stringToLog() override = 0;
+    virtual string stringTo()= 0;
 };
 
 class OrdersDeploy : public Orders
@@ -183,6 +183,7 @@ private:
     std::list<Orders*> list;
 
 public:
+    OrdersList();
     OrdersList(Observer* obs);
     OrdersList(OrdersList& orderList,Observer* obs);
     OrdersList& operator=(const OrdersList& orderList);
