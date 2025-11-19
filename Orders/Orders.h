@@ -7,7 +7,7 @@
 #include <string>
 #include <stdlib.h>
 #include <time.h>
-#include "LoggingObserver.h"
+#include "../Logging-Observer/LoggingObserver.h"
 using namespace std;
 
 class Player;
@@ -68,7 +68,7 @@ public:
     void execute() override;
 
     string stringToLog() override;
-    string stringTo();
+    string stringTo() override;
 };
 
 class OrdersAdvance : public Orders
@@ -94,7 +94,7 @@ public:
     void execute() override;
 
     string stringToLog() override;
-    string stringTo();
+    string stringTo() override;
 };
 
 class OrdersBomb : public Orders
@@ -109,7 +109,7 @@ public:
     void execute() override;
 
     string stringToLog() override;
-    string stringTo();
+    string stringTo() override;
 };
 
 class OrdersBlockade : public Orders
@@ -125,7 +125,7 @@ public:
     void execute() override;
 
     string stringToLog() override;
-    string stringTo();
+    string stringTo() override;
 };
 
 class OrdersAirlift : public Orders
@@ -151,7 +151,7 @@ public:
     void execute() override;
 
     string stringToLog() override;
-    string stringTo();
+    string stringTo() override;
 };
 
 class OrdersNegotiate : public Orders
@@ -174,7 +174,7 @@ public:
     void execute() override;
 
     string stringToLog() override;
-    string stringTo();
+    string stringTo() override;
 };
 
 class OrdersList : public Subject, public ILoggable
