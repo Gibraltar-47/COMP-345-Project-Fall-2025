@@ -36,6 +36,7 @@ class Player {
 
     //=========
     PlayerStrategy* ps;
+    bool attacked;
 
 
 public:
@@ -81,6 +82,7 @@ public:
 
 void setPlayerStrategy(PlayerStrategy* ps);
 PlayerStrategy* getPlayerStrategy();
+void isAttacked();
 
 
 #endif
