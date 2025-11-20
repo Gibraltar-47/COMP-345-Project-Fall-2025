@@ -5,6 +5,8 @@
 #include <vector>
 #include <iostream>
 #include "../Part-4-Deck/Cards.h"
+#include "../PlayerStrategy/PlayerStrategy.h"
+
 
 // Forward declarations
 class Territory;
@@ -13,6 +15,7 @@ class Orders;
 class OrdersList;
 class Deck;
 class Hand;
+class PlayerStrategy;
 
 using namespace std;
 
@@ -30,6 +33,10 @@ class Player {
   //=====
     int numArmies; //Total of army units
     int numFreeArmies; //Number of free army units to deploy
+
+    //=========
+    PlayerStrategy* ps;
+
 
 public:
    Player();
@@ -71,5 +78,9 @@ public:
   Territory* findTerritoryByName(const string& name);
     Hand* getHand();
 };
+
+void setPlayerStrategy(PlayerStrategy* ps);
+PlayerStrategy* getPlayerStrategy();
+
 
 #endif
