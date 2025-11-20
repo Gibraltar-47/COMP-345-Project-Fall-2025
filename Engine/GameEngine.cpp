@@ -292,7 +292,6 @@ void GameEngine::startupPhase()
                     command = textFile->getCommand(this->state);
                     //if the command is invalid, the prompt will be run until a valid command is entered
                     while (command==nullptr){
-                        cout<<"The command entered was invalid, please try again!"<<endl;
                         command = textFile->getCommand(this->state);
                     }
                     input=command->getCommand();
