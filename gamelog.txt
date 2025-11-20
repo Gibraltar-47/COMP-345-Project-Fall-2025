@@ -1672,3 +1672,472 @@ A new command has been saved!:
 validatemap
 
 
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap Antarctica.map
+
+
+A command's effect has been saved!
+Command : 
+loadmap Antarctica.map
+Effect : 
+map Antarctica.map loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemap
+
+
+A command's effect has been saved!
+Command : 
+validatemap
+Effect : 
+map validated 
+
+
+The state of the game has changed!
+State:	mapvalidated
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A command's effect has been saved!
+Command : 
+addplayer alice
+Effect : 
+player alice added 
+
+
+The state of the game has changed!
+State:	playersadded
+
+
+A new command has been saved!:
+gamestart
+
+
+A command's effect has been saved!
+Command : 
+gamestart
+Effect : 
+game started
+
+
+The state of the game has changed!
+State:	maingameloop
+
+
+The state of the game has changed!
+State:	reinforcement
+
+
+A command's effect has been saved!
+Command : 
+loadmap worldmap.txt
+Effect : 
+map worldmap.txt loaded successfully
+
+
+A command's effect has been saved!
+Command : 
+addplayer Alice
+Effect : 
+player Alice added 
+
+
+A command's effect has been saved!
+Command : 
+invalid
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+loadmap
+
+
+A new command has been saved!:
+validatemap
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A new command has been saved!:
+gamestart
+
+
+A new command has been saved!:
+quit
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap Antarctica.map
+
+
+A command's effect has been saved!
+Command : 
+loadmap Antarctica.map
+Effect : 
+map Antarctica.map loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemap
+
+
+A command's effect has been saved!
+Command : 
+validatemap
+Effect : 
+map validated 
+
+
+The state of the game has changed!
+State:	mapvalidated
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A command's effect has been saved!
+Command : 
+addplayer alice
+Effect : 
+player alice added 
+
+
+The state of the game has changed!
+State:	playersadded
+
+
+A new command has been saved!:
+addplayer bob
+
+
+A command's effect has been saved!
+Command : 
+addplayer bob
+Effect : 
+player bob added 
+
+
+The state of the game has changed!
+State:	playersadded
+
+
+A new command has been saved!:
+gamestart
+
+
+A command's effect has been saved!
+Command : 
+gamestart
+Effect : 
+game started
+
+
+The state of the game has changed!
+State:	maingameloop
+
+
+The state of the game has changed!
+State:	reinforcement
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap Antarctica.map
+
+
+A command's effect has been saved!
+Command : 
+loadmap Antarctica.map
+Effect : 
+map Antarctica.map loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemap
+
+
+A command's effect has been saved!
+Command : 
+validatemap
+Effect : 
+map validated 
+
+
+The state of the game has changed!
+State:	mapvalidated
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A command's effect has been saved!
+Command : 
+addplayer alice
+Effect : 
+player alice added 
+
+
+The state of the game has changed!
+State:	playersadded
+
+
+A new command has been saved!:
+gamestart
+
+
+A command's effect has been saved!
+Command : 
+gamestart
+Effect : 
+game started
+
+
+The state of the game has changed!
+State:	maingameloop
+
+
+The state of the game has changed!
+State:	reinforcement
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap Antarctica.map
+
+
+A command's effect has been saved!
+Command : 
+loadmap Antarctica.map
+Effect : 
+map Antarctica.map loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemap
+
+
+A command's effect has been saved!
+Command : 
+validatemap
+Effect : 
+map validated 
+
+
+The state of the game has changed!
+State:	mapvalidated
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A command's effect has been saved!
+Command : 
+addplayer alice
+Effect : 
+player alice added 
+
+
+The state of the game has changed!
+State:	playersadded
+
+
+A new command has been saved!:
+gamestart
+
+
+A command's effect has been saved!
+Command : 
+gamestart
+Effect : 
+game started
+
+
+The state of the game has changed!
+State:	maingameloop
+
+
+The state of the game has changed!
+State:	reinforcement
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+loadmap Antarctica.map
+
+
+A command's effect has been saved!
+Command : 
+loadmap Antarctica.map
+Effect : 
+map Antarctica.map loaded successfully
+
+
+The state of the game has changed!
+State:	maploaded
+
+
+A new command has been saved!:
+validatemap
+
+
+A command's effect has been saved!
+Command : 
+validatemap
+Effect : 
+map validated 
+
+
+The state of the game has changed!
+State:	mapvalidated
+
+
+A new command has been saved!:
+addplayer alice
+
+
+A command's effect has been saved!
+Command : 
+addplayer alice
+Effect : 
+player alice added 
+
+
+The state of the game has changed!
+State:	playersadded
+
+
+A new command has been saved!:
+gamestart
+
+
+A command's effect has been saved!
+Command : 
+gamestart
+Effect : 
+game started
+
+
+The state of the game has changed!
+State:	maingameloop
+
+
+The state of the game has changed!
+State:	reinforcement
+
+
+The state of the game has changed!
+State:	start
+
+
+The state of the game has changed!
+State:	reinforcement
+
+
+The state of the game has changed!
+State:	issueorders
+
+
+The state of the game has changed!
+State:	executeorders
+
+
+The state of the game has changed!
+State:	start
+
+
+The state of the game has changed!
+State:	reinforcement
+
+
+The state of the game has changed!
+State:	issueorders
+
+
+The state of the game has changed!
+State:	executeorders
+
+
