@@ -571,7 +571,6 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
             //current turn player
             Player* player = players[i];
 
-
             if (player->getPlayerStrategy()->getType() != StrategyType::Human) {
                 //Will need more specific implementation for playing AIs
                 switch (player->getPlayerStrategy()->getType()) {
@@ -584,10 +583,20 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
                         break;
                     }
                     case StrategyType::Neutral: {
+                        cout << "\n" << player->getName() << " territories to defend: " << endl;
+                        for (auto* t : player->toDefend(map->getTerritories())) cout << "  - " << t->getName() << endl;
+
+                        cout << player->getName() << " territories to attack:" << endl;
+                        for (auto* t : player->toAttack(map->getTerritories())) cout << "  - " << t->getName() << endl;
                         cout << "Skipping the Neutral Player";
                         break;
                     }
                     case StrategyType::Cheater: {
+                        cout << "\n" << player->getName() << " territories to defend: " << endl;
+                        for (auto* t : player->toDefend(map->getTerritories())) cout << "  - " << t->getName() << endl;
+
+                        cout << player->getName() << " territories to attack:" << endl;
+                        for (auto* t : player->toAttack(map->getTerritories())) cout << "  - " << t->getName() << endl;
                         playerDone[i] = true;
                         cout << "\nPlayer (Cheater): " << player->getName() << " does not issue any orders." << endl;
                         break;
@@ -606,7 +615,7 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
                 continue;
             }
 
-
+            //Might need to change this part so it reflects the proper functions.
             cout << "\n" << player->getName() << " territories to defend: " << endl;
             for (auto* t : player->toDefend(map->getTerritories())) cout << "  - " << t->getName() << endl;
 
