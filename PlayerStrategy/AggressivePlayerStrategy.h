@@ -11,6 +11,7 @@ class AggressivePlayerStrategy: public PlayerStrategy {
     public:
     AggressivePlayerStrategy();
     AggressivePlayerStrategy(Player* player): PlayerStrategy(player, StrategyType::Aggressive) {};
+    ~AggressivePlayerStrategy() = default;
 
     vector<Territory *> toAttack(const std::vector<Territory *> &allTerritories) override;
     vector<Territory *> toDefend(const std::vector<Territory *> &allTerritories) override;

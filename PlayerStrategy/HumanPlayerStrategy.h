@@ -9,7 +9,14 @@
 
 class HumanPlayerStrategy: public PlayerStrategy {
 
-    //Placeholder
+public:
+    HumanPlayerStrategy();
+    HumanPlayerStrategy(Player* player): PlayerStrategy(player, StrategyType::Human) {};
+    ~HumanPlayerStrategy() = default;
+
+    vector<Territory *> toAttack(const std::vector<Territory *> &allTerritories) override;
+    vector<Territory *> toDefend(const std::vector<Territory *> &allTerritories) override;
+    void issueOrder(Deck &deck, int mode, Territory *sourceTerritory, int numArmies, Territory *targetTerritory, Player &player2, Observer *obs) override;
 };
 
 
