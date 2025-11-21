@@ -29,11 +29,11 @@ void testMainGameLoop() {
 
     LogObserver* observer = new LogObserver();
     Map testMap("TestMap");
-    Player p1("John",observer);
-    Player p2("Will",observer);
-    Player p3("Bill",observer);
-    Player p4("Eve",observer);
-    Player p5("Spectator",observer);
+    Player p1("John",observer, StrategyType::Human);
+    Player p2("Will",observer, StrategyType::Human);
+    Player p3("Bill",observer, StrategyType::Cheater);
+    Player p4("Eve",observer, StrategyType::Cheater);
+    Player p5("Spectator",observer, StrategyType::Cheater);
     // Create Continents
     Continent* continent1 = new Continent("ContinentA", 5);
     Continent* continent2 = new Continent("ContinentB", 3);
@@ -240,9 +240,9 @@ void testMainGameLoop() {
     cout << miniMap << endl;
 
     // Create 3 players
-    Player pA("Alice",observer);
-    Player pB("Bob",observer);
-    Player pC("Cathy",observer);
+    Player pA("Alice",observer, StrategyType::Cheater);
+    Player pB("Bob",observer, StrategyType::Cheater);
+    Player pC("Cathy",observer, StrategyType::Cheater);
 
     // t4 starts neutral
     t1->setOwner(&pA);
