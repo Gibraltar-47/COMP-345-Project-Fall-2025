@@ -8,6 +8,7 @@
 #include <iostream>
 
 vector<Territory*> CheaterPlayerStrategy::toDefend(const std::vector<Territory*>& allTerritories) {                                                                            //Require changes to work as intended
+    //Simply display what they control at the current moment
     std::vector<Territory*> defendList;
     struct Info { Territory* t; int threat; int armies; };
 
@@ -38,6 +39,11 @@ vector<Territory*> CheaterPlayerStrategy::toDefend(const std::vector<Territory*>
 }
 
 vector<Territory *> CheaterPlayerStrategy::toAttack(const std::vector<Territory *> &allTerritories) {
+    //Auto Capture
+
+
+
+
     std::vector<Territory*> attackList;
     // Build quick lookup of territories this player owns (by pointer and by name)
     std::unordered_set<Territory*> ownedPtrs;
@@ -74,6 +80,7 @@ vector<Territory *> CheaterPlayerStrategy::toAttack(const std::vector<Territory 
               [](Territory* a, Territory* b) { return a->getNumOfArmies() < b->getNumOfArmies(); });
 
     return attackList;
+
 }
 
 void CheaterPlayerStrategy::issueOrder(Deck &deck, int mode, Territory *sourceTerritory, int numArmies, Territory *targetTerritory, Player &player2, Observer *obs) {

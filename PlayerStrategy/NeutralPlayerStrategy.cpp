@@ -12,6 +12,7 @@ vector<Territory *> NeutralPlayerStrategy::toAttack(const std::vector<Territory 
     return {};
 }
 vector<Territory *> NeutralPlayerStrategy::toDefend(const std::vector<Territory *> &allTerritories) {
+    //Doesnt do anything but to display what territories are controlled by the neutral player
     std::vector<Territory*> defendList;
     struct Info { Territory* t; int threat; int armies; };
 
