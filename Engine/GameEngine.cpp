@@ -169,7 +169,7 @@ void GameEngine::startupPhase()
                         if (name.empty()) {
                             cout << "Missing player name for addplayer\n";
                         } else {
-                            this->addPlayer(Player(name, observer_));
+                            this->addPlayer(Player(name, observer_, StrategyType::Human)); //For now testing
                             command->saveEffect();
                             string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
                             changeState("playersadded", message);
@@ -331,7 +331,7 @@ void GameEngine::startupPhase()
                         if (name.empty()) {
                             cout << "Missing player name for addplayer\n";
                         } else {
-                            this->addPlayer(Player(name, observer_));
+                            this->addPlayer(Player(name, observer_, StrategyType::Human));  //For now testing
                             command->saveEffect();
                             string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
                             changeState("playersadded", message);
@@ -722,6 +722,7 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
         //checks if all players are done issuing orders, else continue loop
         allDone = std::all_of(playerDone.begin(), playerDone.end(), [](bool done){ return done; });
     }
+
     cout << "All players have finished issuing orders." << endl;
 }
 
@@ -748,6 +749,11 @@ bool GameEngine::executeOrdersPhase() {
     //removes eliminated players
     std::vector<Player*> eliminated;
     for (auto* player : players) {
+        if (player->getPlayerStrategy()->getType() == StrategyType::Neutral) {
+            if (player->getAttacked()) {
+                player->isAttacked();
+            }
+        }
         if (player->getName() == "Neutral Player") {
             continue;
         }
