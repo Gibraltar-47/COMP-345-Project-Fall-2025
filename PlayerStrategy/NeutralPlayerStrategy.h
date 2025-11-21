@@ -7,18 +7,22 @@
 #include "PlayerStrategy.h"
 
 
+
 class NeutralPlayerStrategy: public PlayerStrategy {
     private:
         bool isAttacked;
 
     public:
     NeutralPlayerStrategy();
-    NeutralPlayerStrategy(Player* player);
-    ~NeutralPlayerStrategy();
+    NeutralPlayerStrategy(Player* player): PlayerStrategy(player, StrategyType::Neutral) {};
 
-    void toAttack() override;
-    void toDefend() override;
-    void issueOrder() override;
+    ~NeutralPlayerStrategy() = default;
+
+    std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) override;
+    std::vector<Territory*> toDefend(const std::vector<Territory*>& allTerritories) override;
+    void issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory, Player& player2,Observer* obs) override;
+
+    void attacked();
 
 };
 
