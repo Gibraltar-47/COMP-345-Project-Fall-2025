@@ -420,3 +420,5 @@ Territory* Player::findTerritoryByName(const string& name) {
 Hand* Player::getHand() {
     return hand;
 }
+
+void Player::setNumFreeArmies(int temp) {this->numFreeArmies = temp;}

@@ -51,29 +51,34 @@ public:
    void setName(const std::string& newName);
    void setEarnedCard(bool hasEarned);
    void addTerritory(Territory* tr);
-   void removeTerritory(Territory* tr);
-   void addCard(Card* ca);
-   void addOrder(Orders* ord);
-   void addTruce(Player* enemyToTruce);
-   void removeTruce(Player* enemy);
- //game actions
-   std::vector<Territory*> toDefend(const std::vector<Territory*>& allTerritories) const;
-   std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const;
-  //added item
-   void issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory, Player& player2, Observer*
-                   obs);//execute all orders and clean up memory
+    void removeTerritory(Territory* tr);
+    void addCard(Card* ca);
+    void addOrder(Orders* ord);
+    void addTruce(Player* enemyToTruce);
+    void removeTruce(Player* enemy);
+    //game actions
+    std::vector<Territory*> toDefend(const std::vector<Territory*>& allTerritories) const;
+    std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) const;
+    //added item
+    void issueOrder(Deck& deck, int mode, Territory* sourceTerritory, int numArmies, Territory* targetTerritory,
+                    Player& player2, Observer*
+                    obs); //execute all orders and clean up memory
 
-  void printStatus() const; //print player's name, territories
-   bool equals(Player* player2);
-  friend std::ostream& operator <<(std::ostream& out, const Player& p);
+    void printStatus() const; //print player's name, territories
+    bool equals(Player* player2);
+    friend std::ostream& operator <<(std::ostream& out, const Player& p);
 
-  //Part 2
-  void addNumArmies(int newArmies);
-  int getNumArmies();
-  int getNumFreeArmies();
+    //Part 2
+    void addNumArmies(int newArmies);
+    int getNumArmies();
+    int getNumFreeArmies();
 
-  Territory* findTerritoryByName(const string& name);
+    void setPlayerStrategy(PlayerStrategy* ps);
+    PlayerStrategy* getPlayerStrategy();
+
+    Territory* findTerritoryByName(const string& name);
     Hand* getHand();
+    void setNumFreeArmies(int temp);
 };
 
 #endif
