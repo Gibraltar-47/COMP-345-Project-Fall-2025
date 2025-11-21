@@ -77,6 +77,28 @@ Player::Player(const Player& other)
     orderList = new OrdersList(*other.orderList);
 
     attacked = other.attacked;
+    switch (other.ps->getType()) {
+        case StrategyType::Human: {
+            ps = new HumanPlayerStrategy(this);
+            break;
+        }
+        case StrategyType::Aggressive: {
+            ps = new AggressivePlayerStrategy(this);
+            break;
+        }
+        case StrategyType::Benevolent: {
+            ps = new BenevolentPlayerStrategy(this);
+            break;
+        }
+        case StrategyType::Neutral: {
+            ps = new NeutralPlayerStrategy(this);
+            break;
+        }
+        case StrategyType::Cheater: {
+            ps = new CheaterPlayerStrategy(this);
+            break;
+        }
+    }
 }
 
 //asignment operator
