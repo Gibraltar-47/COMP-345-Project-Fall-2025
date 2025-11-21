@@ -16,6 +16,7 @@ class OrdersList;
 class Deck;
 class Hand;
 class PlayerStrategy;
+enum class StrategyType;
 
 using namespace std;
 
@@ -43,7 +44,7 @@ public:
    Player();
    Player(const std::string& playerName);
     Player(Observer* obs);
-    Player(const std::string& playerName, Observer* obs);
+    Player(const std::string& playerName, Observer* obs, StrategyType type);
     Player(const Player& other); //copy constructor
    Player& operator =(const Player& other); //assignment operator
    ~Player(); //destructor, clears up resources when a player obj is destroyed

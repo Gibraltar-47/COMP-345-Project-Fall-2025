@@ -7,7 +7,11 @@
 #include <algorithm>
 #include <unordered_set>
 
+#include "../PlayerStrategy/BenevolentPlayerStrategy.h"
+#include "../PlayerStrategy/NeutralPlayerStrategy.h"
+#include "../PlayerStrategy/CheaterPlayerStrategy.h"
 #include "../PlayerStrategy/AggressivePlayerStrategy.h"
+#include "../PlayerStrategy/HumanPlayerStrategy.h"
 using namespace std;
 
 
@@ -23,11 +27,33 @@ Player::Player(const std:: string& playerName): name(playerName),numArmies(0),nu
     attacked = false;
 }
 //cons with name
-Player::Player(const std:: string& playerName,Observer* obs): name(playerName),numArmies(0),numFreeArmies(0), truceList() {
+Player::Player(const std:: string& playerName,Observer* obs, StrategyType type): name(playerName),numArmies(0),numFreeArmies(0), truceList() {
     hand= new Hand(playerName);
     orderList=new OrdersList(obs);
     territories= vector<Territory*>();
     attacked = false;
+    switch (type) {
+        case StrategyType::Human: {
+            ps = new HumanPlayerStrategy(this);
+            break;
+        }
+        case StrategyType::Aggressive: {
+            ps = new AggressivePlayerStrategy(this);
+            break;
+        }
+        case StrategyType::Benevolent: {
+            ps = new BenevolentPlayerStrategy(this);
+            break;
+        }
+        case StrategyType::Neutral: {
+            ps = new NeutralPlayerStrategy(this);
+            break;
+        }
+        case StrategyType::Cheater: {
+            ps = new CheaterPlayerStrategy(this);
+            break;
+        }
+    }
 }
 
 Player::Player(const Player& other)
