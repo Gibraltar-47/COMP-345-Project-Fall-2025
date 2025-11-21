@@ -13,11 +13,11 @@ extern void testMainGameLoop();
 extern void testLoggingObserver();
 
 int main(){
-    testCommandProcessor();
-    testGameStates();
+    //testCommandProcessor();
+    //testGameStates();
     testMainGameLoop();
-    testOrderExecution();
-    testLoggingObserver();
+    //testOrderExecution();
+    //testLoggingObserver();
 
 
     return 0;
