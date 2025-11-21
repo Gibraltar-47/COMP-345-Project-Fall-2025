@@ -2141,3 +2141,1666 @@ The state of the game has changed!
 State:	executeorders
 
 
+A new command has been saved!:
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+
+
+A new command has been saved!:
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+
+
+A new command has been saved!:
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <first second third>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <first second third>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <first>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <first>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+v
+
+
+A command's effect has been saved!
+Command : 
+v
+Effect : 
+invalid command
+
+
+A new command has been saved!:
+tournament -M <>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament
+
+
+A command's effect has been saved!
+Command : 
+tournament
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -
+
+
+A command's effect has been saved!
+Command : 
+tournament -
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament - M
+
+
+A command's effect has been saved!
+Command : 
+tournament - M
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament - M
+
+
+A command's effect has been saved!
+Command : 
+tournament - M
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M >
+
+
+A command's effect has been saved!
+Command : 
+tournament -M >
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <first second third>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <first second third>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <first second third>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <first second third>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <first second>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <first second>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <listofmapfiles>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <listofmapfiles>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <first second>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <first second>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <ringr.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <ringr.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map fgvrfgf.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map fgvrfgf.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <erngerong.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <erngerong.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <listofmapfiles>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <listofmapfiles>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M >
+
+
+A command's effect has been saved!
+Command : 
+tournament -M >
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -
+
+
+A command's effect has been saved!
+Command : 
+tournament -
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament - P
+
+
+A command's effect has been saved!
+Command : 
+tournament - P
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P >
+
+
+A command's effect has been saved!
+Command : 
+tournament -P >
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Neutral>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Neutral>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <H
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <H
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Human Aggressive Benevolent Neutral Cheater>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Human Aggressive Benevolent Neutral Cheater>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Aggressive Neutral Benevolent>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Aggressive Neutral Benevolent>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M Antarctica.map
+
+
+A command's effect has been saved!
+Command : 
+tournament -M Antarctica.map
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Neutral>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Neutral>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Neutral Aggressive>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Neutral Aggressive>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Neutral Aggressive>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Neutral Aggressive>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -
+
+
+A command's effect has been saved!
+Command : 
+tournament -
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map Andorra.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map Andorra.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Aldawin.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Aldawin.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Aldawin.map Antarctica.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Aldawin.map Antarctica.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map Andorra.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map Andorra.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map Andorra.map Annys Piratewelt.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map Andorra.map Annys Piratewelt.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Neutral>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Neutral>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Human Aggressive Benevolent Neutral Cheater>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Human Aggressive Benevolent Neutral Cheater>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Neutral Aggressive>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Neutral Aggressive>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map fdubd.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map fdubd.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Neutral Aggressive kk>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Neutral Aggressive kk>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Aggressive Neutral Benevolent Cheater>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Aggressive Neutral Benevolent Cheater>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -G <gg>
+
+
+A command's effect has been saved!
+Command : 
+tournament -G <gg>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -G <56f>
+
+
+A command's effect has been saved!
+Command : 
+tournament -G <56f>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -G <g7>
+
+
+A command's effect has been saved!
+Command : 
+tournament -G <g7>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -G <3f>
+
+
+A command's effect has been saved!
+Command : 
+tournament -G <3f>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -G <3f>
+
+
+A command's effect has been saved!
+Command : 
+tournament -G <3f>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -G <2phktk>
+
+
+A command's effect has been saved!
+Command : 
+tournament -G <2phktk>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -G <3y>
+
+
+A command's effect has been saved!
+Command : 
+tournament -G <3y>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -G <2>
+
+
+A command's effect has been saved!
+Command : 
+tournament -G <2>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -G <0>
+
+
+A command's effect has been saved!
+Command : 
+tournament -G <0>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <8>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <8>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <20g>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <20g>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <fgh>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <fgh>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <20j>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <20j>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <20D>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <20D>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <49>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <49>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D
+
+
+A command's effect has been saved!
+Command : 
+tournament -D
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D
+
+
+A command's effect has been saved!
+Command : 
+tournament -D
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D
+
+
+A command's effect has been saved!
+Command : 
+tournament -D
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D >
+
+
+A command's effect has been saved!
+Command : 
+tournament -D >
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <tg>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <tg>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <f20>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <f20>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D < >
+
+
+A command's effect has been saved!
+Command : 
+tournament -D < >
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <,>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <,>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Neutral,Aggressive>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Neutral,Aggressive>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P < Neutral>
+
+
+A command's effect has been saved!
+Command : 
+tournament -P < Neutral>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -P <Neutral >
+
+
+A command's effect has been saved!
+Command : 
+tournament -P <Neutral >
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D < 2>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D < 2>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <2 >
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <2 >
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <3,2>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <3,2>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -D <15 20>
+
+
+A command's effect has been saved!
+Command : 
+tournament -D <15 20>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Aggressive>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Aggressive>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Aggressive>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Aggressive>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Aggressive> -G <2>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Aggressive> -G <2>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Aggressive> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Aggressive> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -T <6>
+
+
+A command's effect has been saved!
+Command : 
+tournament -T <6>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Aggressive> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Aggressive> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -G <2> -G <3>
+
+
+A command's effect has been saved!
+Command : 
+tournament -G <2> -G <3>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Aggressive> -G <2> -D <15> -G<2>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Aggressive> -G <2> -D <15> -G<2>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Benevolent> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Benevolent> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Aggressive> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Aggressive> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Benevolent> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Benevolent> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Benevolent> -G <2> -D <15> -G <3>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Benevolent> -G <2> -D <15> -G <3>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Human> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Human> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Aggressive> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Aggressive> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Aggressive> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Aggressive> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Aggressive Cheater> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Aggressive Cheater> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Aggressive Cheater> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Aggressive Cheater> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Aggressive> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Aggressive> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <3> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <3> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map Andorra.map> -P <Aggressive Neutral Benevolent Cheater> -G <3> -D <40>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map Andorra.map> -P <Aggressive Neutral Benevolent Cheater> -G <3> -D <40>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+
+

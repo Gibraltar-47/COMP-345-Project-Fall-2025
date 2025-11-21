@@ -38,7 +38,7 @@ static inline std::string arg_after(const std::string &line, const std::string &
     return trim_copy(rest);
 }
 
-GameEngine::GameEngine(Observer* observer) : state("start"), gameOver(false),map(nullptr), deck(nullptr)
+GameEngine::GameEngine(Observer* observer) : state("start"), gameOver(false),map(nullptr), deck(nullptr), numGames(0), numTurns(0)
 {
     Subject::addObserver(observer);
     GameEngine::notify(*this);
@@ -52,8 +52,17 @@ GameEngine::GameEngine(const GameEngine& other)  : Subject(other) {
     for (Player* player: other.players) {
         this->players.push_back(new Player(*player));
     }
+    for (string map: other.MapsToUse) {
+        this->MapsToUse.push_back(map);
+    }
+    for (string strategy: other.StrategiesToUse) {
+        this->StrategiesToUse.push_back(strategy);
+    }
+
     this->map = new Map(*other.map);
     this->deck = new Deck(*other.deck);
+    this->numGames = other.numGames;
+    this->numTurns = other.numTurns;
 
 };
 GameEngine& GameEngine::operator=(const GameEngine& other) {
@@ -66,9 +75,17 @@ GameEngine& GameEngine::operator=(const GameEngine& other) {
             delete player;
         }
         players.clear();
+        MapsToUse.clear();
+        StrategiesToUse.clear();
         delete map;
         for (const Player* player: other.players) {
             this->players.push_back(new Player(*player));
+        }
+        for (string map: other.MapsToUse) {
+            this->MapsToUse.push_back(map);
+        }
+        for (string strategy: other.StrategiesToUse) {
+            this->StrategiesToUse.push_back(strategy);
         }
 
         this->map = new Map(*other.map);
@@ -824,4 +841,29 @@ void GameEngine::printAllPlayerOrders(const std::vector<Player*>& players) { //s
         }
     }
     cout << "===================================" << endl;
+}
+
+vector<string>& GameEngine::getMapsToUse(){
+    return MapsToUse;
+}
+void GameEngine::setMapsToUse(const vector<string> maps){
+    MapsToUse = maps;
+}
+vector<string>& GameEngine::getStrategiesToUse(){
+    return StrategiesToUse;
+}
+void GameEngine::setStrategiesToUse(const vector<string> strategies){
+    StrategiesToUse = strategies;
+}
+int GameEngine::getNumGames(){
+    return numGames;
+}
+void GameEngine::setNumGames(int games){
+    numGames = games;
+}
+int GameEngine::getNumTurns(){
+    return numTurns;
+}
+void GameEngine::setNumTurns(int turns){
+    numTurns = turns;
 }

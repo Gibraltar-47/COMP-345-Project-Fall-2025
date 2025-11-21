@@ -29,6 +29,11 @@ class GameEngine : public Subject, public ILoggable{
         Map* map;
         Deck* deck;
 
+        vector<string> MapsToUse;
+        vector<string> StrategiesToUse;
+        int numGames;
+        int numTurns;
+
     public:
         explicit GameEngine(Observer* observer); //Default constructor
         GameEngine(const GameEngine& other);
@@ -60,6 +65,18 @@ class GameEngine : public Subject, public ILoggable{
         void notify(ILoggable& subject) override;
 
         void startupPhase();
+
+        vector<string>& getMapsToUse();
+        void setMapsToUse(const vector<string> maps);
+
+        vector<string>& getStrategiesToUse();
+        void setStrategiesToUse(const vector<string> strategies);
+
+        int getNumGames();
+        void setNumGames(int games);
+
+        int getNumTurns();
+        void setNumTurns(int turns);
 };
 
 
