@@ -78,11 +78,17 @@ public:
 
   Territory* findTerritoryByName(const string& name);
     Hand* getHand();
+
+    //part 3
+    void setPlayerStrategy(PlayerStrategy* ps);
+    PlayerStrategy* getPlayerStrategy();
+    void isAttacked();
+    void setAttacked(bool newAttacked);
+
+    bool getAttacked();
+
 };
 
-void setPlayerStrategy(PlayerStrategy* ps);
-PlayerStrategy* getPlayerStrategy();
-void isAttacked();
 
 
 #endif
