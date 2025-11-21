@@ -553,6 +553,8 @@ void GameEngine::reinforcementPhase() {
 }
 
 
+
+
 void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
 
     changeState("issueorders", "Issue Orders Phase.");
@@ -568,6 +570,34 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
         for (size_t i = 0; i < players.size(); i++) {
             //current turn player
             Player* player = players[i];
+
+
+            if (player->getPlayerStrategy()->getType() != StrategyType::Human) {
+                //Will need more specific implementation for playing AIs
+                switch (player->getPlayerStrategy()->getType()) {
+                    case StrategyType::Aggressive: {
+                        //logic
+                        break;
+                    }
+                    case StrategyType::Benevolent: {
+                        //logic
+                        break;
+                    }
+                    case StrategyType::Neutral: {
+                        cout << "Skipping the Neutral Player";
+                        break;
+                    }
+                    case StrategyType::Cheater: {
+                        playerDone[i] = true;
+                        cout << "\nPlayer (Cheater): " << player->getName() << " does not issue any orders." << endl;
+                        break;
+                    }
+                        //neutral player is skipped normally, therefore no need to check the type
+                }
+                continue;
+            }
+
+
             if (player && player->getName() == "Neutral Player") {
                 playerDone[i] = true;
                 continue;
@@ -575,6 +605,8 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
             if (playerDone[i]) { //player skips check
                 continue;
             }
+
+
             cout << "\n" << player->getName() << " territories to defend: " << endl;
             for (auto* t : player->toDefend(map->getTerritories())) cout << "  - " << t->getName() << endl;
 
