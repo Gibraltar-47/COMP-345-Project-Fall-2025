@@ -571,8 +571,9 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
             //current turn player
             Player* player = players[i];
 
+            //Part 3
             if (player->getPlayerStrategy()->getType() != StrategyType::Human) {
-                //Will need more specific implementation for playing AIs
+                //Will need more specific implementation for computer players
                 switch (player->getPlayerStrategy()->getType()) {
                     case StrategyType::Aggressive: {
                         //logic
