@@ -7,11 +7,8 @@
 #include <algorithm>
 #include <unordered_set>
 
-#include "../PlayerStrategy/BenevolentPlayerStrategy.h"
-#include "../PlayerStrategy/NeutralPlayerStrategy.h"
-#include "../PlayerStrategy/CheaterPlayerStrategy.h"
-#include "../PlayerStrategy/AggressivePlayerStrategy.h"
-#include "../PlayerStrategy/HumanPlayerStrategy.h"
+#include "../PlayerStrategy/PlayerStrategy.h"
+
 using namespace std;
 
 
@@ -345,7 +342,9 @@ Hand* Player::getHand() {
 //===========================================
 
 void Player::setPlayerStrategy(PlayerStrategy* ps) {
-    delete ps;
+    if (this->ps) {
+        delete this->ps;
+    }
     this->ps = ps;
 }
 PlayerStrategy* Player::getPlayerStrategy() {

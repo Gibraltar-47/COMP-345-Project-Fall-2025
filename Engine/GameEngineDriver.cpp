@@ -29,7 +29,7 @@ void testMainGameLoop() {
 
     LogObserver* observer = new LogObserver();
     Map testMap("TestMap");
-    Player p1("John",observer, StrategyType::Neutral);
+    Player p1("John",observer, StrategyType::Human);
     Player p2("Will",observer, StrategyType::Neutral);
     Player p3("Cheater",observer, StrategyType::Cheater);
     Player p4("Eve",observer, StrategyType::Neutral);

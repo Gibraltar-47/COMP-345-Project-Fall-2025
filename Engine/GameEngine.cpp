@@ -12,7 +12,7 @@
 #include "../Part-4-Deck/Cards.h"
 #include "../part1-map/Map.h"
 #include <sstream>
-#include <tuple>
+#include "../PlayerStrategy/PlayerStrategy.h"
 
 using std::string;
 using std::cout;
@@ -169,7 +169,7 @@ void GameEngine::startupPhase()
                         if (name.empty()) {
                             cout << "Missing player name for addplayer\n";
                         } else {
-                            //this->addPlayer(Player(name, observer_, StrategyType::Human)); //For now testing
+                            this->addPlayer(new Player(name, observer_, StrategyType::Human)); //For now testing
                             command->saveEffect();
                             string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
                             changeState("playersadded", message);
@@ -331,7 +331,13 @@ void GameEngine::startupPhase()
                         if (name.empty()) {
                             cout << "Missing player name for addplayer\n";
                         } else {
-                            //this->addPlayer(Player(name, observer_, StrategyType::Human));  //For now testing
+                            if (this->players.size() == 1) {
+                                this->addPlayer(new Player(name, observer_, StrategyType::Cheater));  //For now testing
+                            }
+                            else {
+                                this->addPlayer(new Player(name, observer_, StrategyType::Neutral));  //For now testing
+                            }
+
                             command->saveEffect();
                             string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
                             changeState("playersadded", message);
@@ -562,14 +568,19 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
     bool allDone = false;
     vector<bool> playerDone(players.size(),false); //needed for player skips
 
-
-
     while (!allDone) {
         allDone = true; //assumes no action taken by player until proven otherwise
 
         for (size_t i = 0; i < players.size(); i++) {
             //current turn player
             Player* player = players[i];
+            if (player && player->getName() == "Neutral Player") {
+                playerDone[i] = true;
+                continue;
+            }
+            if (playerDone[i]) { //player skips check
+                continue;
+            }
 
             //Part 3
             if (player->getPlayerStrategy()->getType() != StrategyType::Human) {
@@ -578,44 +589,36 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
                     case StrategyType::Aggressive: {
                         //logic
                         cout << "Aggressive Player acted." << endl;
+                        //flow statement to stop the computer from doing nothing if nothing else is left to do
+                        playerDone[i] = true;
                         break;
                     }
                     case StrategyType::Benevolent: {
                         //logic
                         cout << "Benevolent Player acted." << endl;
+                        //flow statement to stop the computer from doing nothing if nothing else is left to do
+                        playerDone[i] = true;
                         break;
                     }
                     case StrategyType::Neutral: {
                         cout << "\n" << player->getName() << " territories to defend: " << endl;
                         for (auto* t : player->toDefend(map->getTerritories())) cout << "  - " << t->getName() << endl;
 
-                        cout << player->getName() << " territories to attack:" << endl;
-                        for (auto* t : player->toAttack(map->getTerritories())) cout << "  - " << t->getName() << endl;
-                        cout << "Skipping the Neutral Player";
+                        cout << "Skipping the Neutral Player" << endl;
                         playerDone[i] = true;
                         break;
                     }
                     case StrategyType::Cheater: {
+
+                        player->toAttack(map->getTerritories());
+
                         cout << "\n" << player->getName() << " territories to defend: " << endl;
                         for (auto* t : player->toDefend(map->getTerritories())) cout << "  - " << t->getName() << endl;
-
-                        cout << player->getName() << " territories to attack:" << endl;
-                        for (auto* t : player->toAttack(map->getTerritories())) cout << "  - " << t->getName() << endl;
                         playerDone[i] = true;
                         cout << "\nPlayer (Cheater): " << player->getName() << " does not issue any orders." << endl;
                         break;
                     }
-                        //neutral player is skipped normally, therefore no need to check the type
                 }
-                continue;
-            }
-
-
-            if (player && player->getName() == "Neutral Player") {
-                playerDone[i] = true;
-                continue;
-            }
-            if (playerDone[i]) { //player skips check
                 continue;
             }
 
@@ -752,9 +755,11 @@ bool GameEngine::executeOrdersPhase() {
     //removes eliminated players
     std::vector<Player*> eliminated;
     for (auto* player : players) {
+
+        //Checked every turn if a neutral player has been attacked or not.
         if (player->getPlayerStrategy()->getType() == StrategyType::Neutral) {
-            if (player->getAttacked()) {
-                player->isAttacked();
+            if (auto* neutral = dynamic_cast<NeutralPlayerStrategy*>(player->getPlayerStrategy())) {
+                neutral->attacked();
             }
         }
         if (player->getName() == "Neutral Player") {
