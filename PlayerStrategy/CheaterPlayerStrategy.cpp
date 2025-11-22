@@ -8,42 +8,44 @@
 #include <iostream>
 
 vector<Territory*> CheaterPlayerStrategy::toDefend(const std::vector<Territory*>& allTerritories) {                                                                            //Require changes to work as intended
-    //Simply display what they control at the current moment
-    std::vector<Territory*> defendList;
-    struct Info { Territory* t; int threat; int armies; };
 
-    std::vector<Info> infos;
-    for (Territory* t : this->getPlayer()->getTerritories()) {
-        if (!t) continue;
-        int threatCount = 0;
-        for (const std::string& adjName : t->getAdjTerritoriesNames()) {
-            auto it = std::find_if(allTerritories.begin(), allTerritories.end(),
-                                   [&](Territory* cand) { return cand && cand->getName() == adjName; });
-            if (it != allTerritories.end()) {
-                Territory* cand = *it;
-                if (cand->getOwner() != this->getPlayer()) ++threatCount;
-            }
-        }
-        infos.push_back({t, threatCount, t->getNumOfArmies()});
-    }
-
-    // Sort by descending threat (border territories first), then ascending armies (weaker first)
-    std::sort(infos.begin(), infos.end(), [](const Info& a, const Info& b) {
-        if (a.threat != b.threat) return a.threat > b.threat;
-        return a.armies < b.armies;
-    });
-
-    for (auto &i : infos) defendList.push_back(i.t);
-    return defendList;
+    return this->getPlayer()->getTerritories();
 
 }
 
 vector<Territory *> CheaterPlayerStrategy::toAttack(const std::vector<Territory *> &allTerritories) {
     //Auto Capture
+    for (Territory* myTerr : this->getPlayer()->getTerritories()) {
+        for (const std::string& adjName : myTerr->getAdjTerritoriesNames()) {
+            Territory* adj = nullptr;
+
+            for (Territory* t: allTerritories) {
+                if (t->getName() == adjName && t->getOwner() != this->getPlayer()) {
+                    adj = t;
+                    t->getOwner()->removeTerritory(t);
+
+                }
+
+            }
+            if (adj && adj->getOwner() != this->getPlayer()) {
+                adj->setOwner(this->getPlayer());
+                this->getPlayer()->addTerritory(adj);
+                cout << this->getPlayer()->getName() << " has captured " << adj->getName() << " through cheats!" << endl;
+            }
+        }
+    }
 
 
 
+    return {};
 
+
+}
+
+void CheaterPlayerStrategy::issueOrder(Deck &deck, int mode, Territory *sourceTerritory, int numArmies, Territory *targetTerritory, Player &player2, Observer *obs) {
+    //Does not actually issue orders
+}
+/**
     std::vector<Territory*> attackList;
     // Build quick lookup of territories this player owns (by pointer and by name)
     std::unordered_set<Territory*> ownedPtrs;
@@ -80,12 +82,7 @@ vector<Territory *> CheaterPlayerStrategy::toAttack(const std::vector<Territory 
               [](Territory* a, Territory* b) { return a->getNumOfArmies() < b->getNumOfArmies(); });
 
     return attackList;
-
-}
-
-void CheaterPlayerStrategy::issueOrder(Deck &deck, int mode, Territory *sourceTerritory, int numArmies, Territory *targetTerritory, Player &player2, Observer *obs) {
-    //Does not actually issue orders
-}
+    */
 
 
 
