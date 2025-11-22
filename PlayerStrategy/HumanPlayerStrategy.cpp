@@ -4,11 +4,51 @@
 
 
 #include "HumanPlayerStrategy.h"
+#include "../Orders/Orders.h"
 #include <unordered_set>
 #include <algorithm>
 
 void HumanPlayerStrategy::issueOrder(Deck &deck, int mode, Territory *sourceTerritory, int numArmies, Territory *targetTerritory, Player &player2, Observer *obs) {
-    cout<< "Nothing to see here" << endl;
+
+    switch (mode) {
+        case 1: //Deploy
+            this->getPlayer()->getOrderList()->add(new OrdersDeploy(this->getPlayer(),sourceTerritory,numArmies,obs));
+            this->getPlayer()->removeNumFreeArmies(numArmies);
+            break;
+        case 2: //Advance
+            this->getPlayer()->getOrderList()->add(new OrdersAdvance(this->getPlayer(),sourceTerritory,targetTerritory, numArmies,obs));
+            this->getPlayer()->removeNumFreeArmies(numArmies);
+            break;
+        case 3:
+        case 4:
+        case 5:
+        case 6: {
+            Card* matchingCard = nullptr;
+            for (Card* card: this->getPlayer()->getHand()->getCards()) {
+                if ((mode == 3 && card->getName() == "Bomb") ||
+                    (mode == 4 && card->getName() == "Blockade") ||
+                    (mode == 5 && card->getName() == "Airlift") ||
+                    (mode == 6 && card->getName() == "Diplomacy")) {
+                    matchingCard = card;
+                    break;
+                    }
+            }
+            if (!matchingCard) {
+                cout << this->getPlayer()->getName() << " doesn't have the card required for this order." << endl;
+                return;
+            }
+            OrdersList* olist = this->getPlayer()->getOrderList();
+
+            matchingCard->play(deck, this->getPlayer()->getHand(), *olist, this->getPlayer(), sourceTerritory,mode,numArmies,targetTerritory,&player2, obs); //dereference problem
+            cout << this->getPlayer()->getName() << " played a " << matchingCard->getName() << " card." << endl;
+            this->getPlayer()->removeNumFreeArmies(numArmies);
+            break;
+
+        }
+        default:
+            cout << "Invalid order mode." << endl;
+
+    }
 }
 
 
