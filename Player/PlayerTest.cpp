@@ -165,6 +165,7 @@ void Player:: addTerritory(Territory* tr){
 }
 // removes a territory from a player's list
 void Player::removeTerritory(Territory* tr){
+    /**
     if (tr == nullptr) return;
     int indexOfRemovedTerr = -1;
     for (int index = 0; index < territories.size(); index++){
@@ -178,6 +179,21 @@ void Player::removeTerritory(Territory* tr){
         territories[territories.size()-1] = tr;
         territories[indexOfRemovedTerr] = temp;
         territories.pop_back();
+    }
+    */
+    if (!tr) return;
+
+    auto it = std::find_if(territories.begin(), territories.end(),
+        [tr](Territory* t) {
+            // Compare by pointer OR by unique name
+            return t == tr || (t && tr && t->getName() == tr->getName());
+        });
+
+    if (it != territories.end()) {
+        territories.erase(it);
+        cout << "Removed territory " << tr->getName() << " from player " << name << endl;
+    } else {
+        cout << "Warning: territory " << tr->getName() << " not found in player " << name << "'s list" << endl;
     }
 }
 
