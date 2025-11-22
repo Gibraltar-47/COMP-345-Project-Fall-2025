@@ -37,7 +37,7 @@ class Player {
 
     //=========
     PlayerStrategy* ps;
-    bool attacked;
+
 
 
 public:
@@ -74,6 +74,7 @@ public:
 
   //Part 2
   void addNumArmies(int newArmies);
+  void removeNumFreeArmies(int newArmies);
   int getNumArmies();
   int getNumFreeArmies();
 

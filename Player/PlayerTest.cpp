@@ -24,14 +24,14 @@ Player::Player(const std:: string& playerName): name(playerName),numArmies(0),nu
     hand= new Hand(playerName);
     orderList=new OrdersList();
     territories= vector<Territory*>();
-    attacked = false;
+
 }
 //cons with name
 Player::Player(const std:: string& playerName,Observer* obs, StrategyType type): name(playerName),numArmies(0),numFreeArmies(0), truceList() {
     hand= new Hand(playerName);
     orderList=new OrdersList(obs);
     territories= vector<Territory*>();
-    attacked = false;
+
     switch (type) {
         case StrategyType::Human: {
             ps = new HumanPlayerStrategy(this);
@@ -76,7 +76,7 @@ Player::Player(const Player& other)
     // Deep copy order list
     orderList = new OrdersList(*other.orderList);
 
-    attacked = other.attacked;
+
     switch (other.ps->getType()) {
         case StrategyType::Human: {
             ps = new HumanPlayerStrategy(this);
@@ -322,6 +322,15 @@ int Player::getNumArmies() {
 int Player::getNumFreeArmies() {
     return numFreeArmies;
 }
+void Player::removeNumFreeArmies(int newArmies) {
+    if (this->numFreeArmies < newArmies) {
+        cout << "Not enough army units, attributing " << numFreeArmies << " armies." << endl;
+        this->numFreeArmies -= numFreeArmies;
+    }
+    else {
+        numFreeArmies -= newArmies;
+    }
+}
 
 Territory* Player::findTerritoryByName(const string& name) {
     for (auto t : territories)
@@ -343,22 +352,6 @@ PlayerStrategy* Player::getPlayerStrategy() {
     return ps;
 }
 
-void Player::isAttacked() {
-    if (ps->getType() == StrategyType::Neutral && attacked == true) {
-        delete ps;
-        this->ps = new AggressivePlayerStrategy(this);
-
-        cout << "Neutral Player has become aggressive!" << endl;
-        this->name = "Neutral Player (Aggressive)";
-    }
-}
-void Player::setAttacked(bool newAttacked) {
-    attacked = newAttacked;
-}
-
-bool Player::getAttacked() {
-    return attacked;
-}
 
 
 
