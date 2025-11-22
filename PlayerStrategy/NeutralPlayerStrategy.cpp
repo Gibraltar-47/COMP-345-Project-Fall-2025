@@ -7,6 +7,11 @@
 #include "AggressivePlayerStrategy.h"
 #include <algorithm>
 
+
+NeutralPlayerStrategy::NeutralPlayerStrategy() {
+    isAttacked = false;
+}
+
 vector<Territory *> NeutralPlayerStrategy::toAttack(const std::vector<Territory *> &allTerritories) {
     //Do nothing since it wont attack anything
     return {};
@@ -20,7 +25,9 @@ void NeutralPlayerStrategy::issueOrder(Deck &deck, int mode, Territory *sourceTe
 }
 
 void NeutralPlayerStrategy::attacked() {
-    this->getPlayer()->setPlayerStrategy(new AggressivePlayerStrategy(this->getPlayer()));
+    if (isAttacked) {
+        this->getPlayer()->setPlayerStrategy(new AggressivePlayerStrategy(this->getPlayer()));
+    }
 }
 
 

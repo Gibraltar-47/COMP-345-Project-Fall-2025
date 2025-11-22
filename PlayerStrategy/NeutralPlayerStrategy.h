@@ -14,7 +14,7 @@ class NeutralPlayerStrategy: public PlayerStrategy {
 
     public:
     NeutralPlayerStrategy();
-    NeutralPlayerStrategy(Player* player): PlayerStrategy(player, StrategyType::Neutral) {};
+    NeutralPlayerStrategy(Player* player): PlayerStrategy(player, StrategyType::Neutral), isAttacked(false) {};
 
     ~NeutralPlayerStrategy() = default;
 
