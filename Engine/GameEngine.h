@@ -49,7 +49,7 @@ class GameEngine : public Subject, public ILoggable{
         bool checkWinCondition(const std::vector<Player*>& players, Map* map);
         void waitForUser();
 
-        void addPlayer(const Player& player);
+        void addPlayer( Player* player);
         void removePlayer(Player* player);
         void addMap(const Map& othermap);
         void giveDeck(Deck* deck);

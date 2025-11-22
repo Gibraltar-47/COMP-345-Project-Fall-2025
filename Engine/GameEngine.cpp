@@ -77,9 +77,9 @@ GameEngine& GameEngine::operator=(const GameEngine& other) {
 }
 GameEngine::~GameEngine() {
     delete map;
-    for (auto* player: players) {
-        delete player;
-    }
+    //for (auto* player: players) {
+    //    delete player;
+    //}
     delete deck;
 }
 
@@ -169,7 +169,7 @@ void GameEngine::startupPhase()
                         if (name.empty()) {
                             cout << "Missing player name for addplayer\n";
                         } else {
-                            this->addPlayer(Player(name, observer_, StrategyType::Human)); //For now testing
+                            //this->addPlayer(Player(name, observer_, StrategyType::Human)); //For now testing
                             command->saveEffect();
                             string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
                             changeState("playersadded", message);
@@ -331,7 +331,7 @@ void GameEngine::startupPhase()
                         if (name.empty()) {
                             cout << "Missing player name for addplayer\n";
                         } else {
-                            this->addPlayer(Player(name, observer_, StrategyType::Human));  //For now testing
+                            //this->addPlayer(Player(name, observer_, StrategyType::Human));  //For now testing
                             command->saveEffect();
                             string message = "Player "+ name+" is now added!\n(Type 'gamestart' to proceed)\n\n";
                             changeState("playersadded", message);
@@ -577,10 +577,12 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
                 switch (player->getPlayerStrategy()->getType()) {
                     case StrategyType::Aggressive: {
                         //logic
+                        cout << "Aggressive Player acted." << endl;
                         break;
                     }
                     case StrategyType::Benevolent: {
                         //logic
+                        cout << "Benevolent Player acted." << endl;
                         break;
                     }
                     case StrategyType::Neutral: {
@@ -590,6 +592,7 @@ void GameEngine::issueOrdersPhase(vector<Player*>& players , Map* map) {
                         cout << player->getName() << " territories to attack:" << endl;
                         for (auto* t : player->toAttack(map->getTerritories())) cout << "  - " << t->getName() << endl;
                         cout << "Skipping the Neutral Player";
+                        playerDone[i] = true;
                         break;
                     }
                     case StrategyType::Cheater: {
@@ -794,6 +797,7 @@ bool GameEngine::checkWinCondition(const std::vector<Player*>& players, Map* map
         cout << "Invalid players or map." << endl;
         return false;
     }
+
     //checks if map is empty
     const vector<Territory*>& allTerritories = map->getTerritories();
     if (allTerritories.empty()) {
@@ -818,6 +822,11 @@ bool GameEngine::checkWinCondition(const std::vector<Player*>& players, Map* map
             return true;
         }
     }
+    if (players.size() == 1) {
+        cout << "Player " << players[0]->getName() << " controls the entire map!" << endl;
+        state = "win";
+        return true;
+    }
 
     cout << "No winner yet." << endl;
     return false;
@@ -826,8 +835,8 @@ bool GameEngine::checkWinCondition(const std::vector<Player*>& players, Map* map
 void GameEngine::addMap(const Map& map) { //adds a map to the engine
     this->map = new Map(map);
 }
-void GameEngine::addPlayer(const Player& player) { //adds a player to the engine
-    this->players.push_back(new Player(player));
+void GameEngine::addPlayer(Player* player) { //adds a player to the engine
+    this->players.push_back(player);
 }
 
 void GameEngine::removePlayer(Player* player) { //to be implemented
