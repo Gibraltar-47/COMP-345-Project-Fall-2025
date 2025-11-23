@@ -33,6 +33,7 @@ class GameEngine : public Subject, public ILoggable{
         vector<string> StrategiesToUse;
         int numGames;
         int numTurns;
+        int counter;
 
     public:
         explicit GameEngine(Observer* observer); //Default constructor
