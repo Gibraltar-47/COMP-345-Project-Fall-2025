@@ -292,7 +292,6 @@ void GameEngine::startupPhase()
                     command = textFile->getCommand(this->state);
                     //if the command is invalid, the prompt will be run until a valid command is entered
                     while (command==nullptr){
-                        cout<<"The command entered was invalid, please try again!"<<endl;
                         command = textFile->getCommand(this->state);
                     }
                     input=command->getCommand();
@@ -828,7 +827,7 @@ bool GameEngine::checkWinCondition(const std::vector<Player*>& players, Map* map
         }
     }
     if (players.size() == 1) {
-        cout << "Player " << players[0]->getName() << " controls the entire map!" << endl;
+        cout << "Player " << players[0]->getName() << " is the only player left!" << endl;
         state = "win";
         return true;
     }
