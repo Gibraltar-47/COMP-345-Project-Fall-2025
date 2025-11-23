@@ -150,6 +150,7 @@ void GameEngine::startupPhase()
         case 1:
             {
                 auto* console= new CommandProcessor(this->observer_);
+                CommandProcessor::engine = this;
                 Command* command;
                 string input;
                 string filename;
@@ -301,6 +302,14 @@ void GameEngine::startupPhase()
                             delete console;
                             break;
                         }
+                    }
+                    else if (input == "tournament" && state == "start"){
+                        cout << "START TOURNAMENT" << endl;
+
+                        // Enter tournament logic or tournament function call here
+
+                        gameOver = true;
+
                     }
                 }
 

@@ -104,6 +104,9 @@ void Command:: saveEffect(){
 string Command::getCommand()const{
     return command;
 }
+void Command::setCommand(string cmd){
+    this->command = cmd;
+}
 
 //returns the effect string
 string Command::getEffect() const{
@@ -249,6 +252,8 @@ bool CommandProcessor:: validate(Command* cm, string state){
     else if (firstWord == "tournament" && state == "start"){
         size_t firstDashPos = command.find('-');
         valid = validateTournamentParameters(command);
+
+        if (valid) cm->setCommand("tournament");
     }
     else {
         cout << "Invalid command for current state: " << state << endl;
@@ -502,6 +507,7 @@ bool CommandProcessor::validateTournamentParameters(const string& cmd){
         CommandProcessor::engine->setStrategiesToUse(StrategiesToUse);
         CommandProcessor::engine->setNumGames(numGames);
         CommandProcessor::engine->setNumTurns(numTurns);
+        cout << "VALID TOURNAMENT" << endl;
         return true;
     }
     return false;

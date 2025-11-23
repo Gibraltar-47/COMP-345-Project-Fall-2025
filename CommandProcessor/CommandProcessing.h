@@ -22,6 +22,7 @@ public:
     Command& operator=(const Command& other);
     void saveEffect();
     string getCommand()const;
+    void setCommand(string cmd);
     string getEffect()const;
     void setEffect(const std::string& eff);
     string stringToLog() override;

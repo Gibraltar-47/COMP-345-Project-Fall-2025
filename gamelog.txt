@@ -3804,3 +3804,154 @@ A new command has been saved!:
 tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
 
 
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <ejgnoer>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Cheater> -G <2>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Aldawin.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Cheater Neutral> -G <3> -D <15>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+A command's effect has been saved!
+Command : 
+tournament -M <Antarctica.map Aldawin.map> -P <Neutral Cheater> -G <2> -D <15>
+Effect : 
+Attempting tournament
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Neutral Cheater> -G <2> -D <15>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Cheater Neutral> -G <3> -D <25>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Cheater Neutral> -G <2> -D <20>
+
+
+The state of the game has changed!
+State:	start
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map> -P <Cheater Neutral> -G <3> -D <20>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Aldawin.map> -P <Cheater Neutral> -G <2> -D <20>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Aldawin.map> -P <Cheater Neutral> -G <3> -D <20>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -M <Antarctica.map Aldawin.map> -P <Cheater Neutral> -G <2> -D <20>
+
+
+The state of the game has changed!
+State:	start
+
+
+A new command has been saved!:
+tournament -G <ggrb>
+
+
+A new command has been saved!:
+tournament -M <Aldawin.map> -P <Neutral Cheater> -G <2> -D <20>
+
+

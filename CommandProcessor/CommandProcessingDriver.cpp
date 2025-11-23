@@ -77,9 +77,10 @@ void testCommandProcessor(){
 int main(){
     LogObserver* log= new LogObserver();
     CommandProcessor cmdpc(log);
-    GameEngine* gameEngine = new GameEngine(log);
 
-    CommandProcessor::engine = gameEngine;
+    GameEngine* gameEngine = new GameEngine(log);
+    // CommandProcessor::engine = gameEngine;
+    gameEngine->runGame();
 
 
     // Command* cmd = cmdpc.readCommand();
@@ -90,23 +91,23 @@ int main(){
 
     // cout << "IS VALID: " << cmdpc.validate(cmd, "start") << endl;
 
-    cmdpc.getCommand("start");
+    // cmdpc.getCommand("start");
 
-    cout << "MAPS" << endl;
-    for (string map : gameEngine->getMapsToUse()){
-        cout << map << endl;
-    }
+    // cout << "MAPS" << endl;
+    // for (string map : gameEngine->getMapsToUse()){
+    //     cout << map << endl;
+    // }
 
-    cout << "\nSTRATEGIES" << endl;
-    for (string strategy : gameEngine->getStrategiesToUse()){
-        cout << strategy << endl;
-    }
+    // cout << "\nSTRATEGIES" << endl;
+    // for (string strategy : gameEngine->getStrategiesToUse()){
+    //     cout << strategy << endl;
+    // }
 
-    cout << "\nNUM GAMES" << endl;
-    cout << gameEngine->getNumGames();
+    // cout << "\nNUM GAMES" << endl;
+    // cout << gameEngine->getNumGames();
 
-    cout << "\nNUM TURNS" << endl;
-    cout << gameEngine->getNumTurns() << endl;
+    // cout << "\nNUM TURNS" << endl;
+    // cout << gameEngine->getNumTurns() << endl;
 
     return 0;
 }
