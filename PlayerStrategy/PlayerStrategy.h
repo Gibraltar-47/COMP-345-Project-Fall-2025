@@ -45,7 +45,6 @@ public:
     virtual std::vector<Territory*> toAttack(const std::vector<Territory*>& allTerritories) = 0;
     virtual std::vector<Territory*> toDefend(const std::vector<Territory*>& allTerritories) = 0;
 
-    void attacked();
 };
 
 class HumanPlayerStrategy: public PlayerStrategy {
