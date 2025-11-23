@@ -121,6 +121,17 @@ void GameEngine::changeState(const string& newState, const string& message) {
     notify(*this);
 }
 
+void GameEngine::runTournament() {
+    Map* tMap;
+    for (int n = 0; getMapsToUse().size(); n++) {
+    tMap = new Map(getMapsToUse()[n]);
+
+        for (int i = 0; i < getNumGames(); i++) {
+
+        }
+    }
+}
+
 void GameEngine::startupPhase()
 {
     cout << "Welcome to the Game Engine!" << endl << endl;

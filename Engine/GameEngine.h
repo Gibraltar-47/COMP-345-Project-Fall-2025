@@ -77,6 +77,7 @@ class GameEngine : public Subject, public ILoggable{
 
         int getNumTurns();
         void setNumTurns(int turns);
+        void runTournament();
 };
 
 
